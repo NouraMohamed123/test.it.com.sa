@@ -13,44 +13,6 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
 
-
-// public function login(Request $request)
-// {
-//     $validator = Validator::make($request->all(), [
-//         'email' => 'required|email',
-//         'password' => 'required|string|min:6',
-//     ]);
-
-//     if ($validator->fails()) {
-//         return response()->json([
-//             "status" =>  false,
-//             "message" =>  $validator->errors(),
-//             "response" => null,
-//         ]);
-//     }
-
-//     if (!$token = auth()->attempt($validator->validated())) {
-//         return response()->json([
-//             "status" =>  false,
-//             "message" => "من فضلك تاكد من البريد الالكتروني او كلمة المرور",
-//             "response" => null,
-//         ]);
-//     }
-
-//     $user = auth()->user();
-//     $id = $user->id;
-//     $name = $user->name;
-//    $roles = $user->roles;
-
-//     return response()->json([
-//         "id" => $id,
-//         "status" => true,
-//         "message" => "تم تسجيل الدخول بنجاح",
-//         "access_token" => $token,
-//         "roles" => $roles,
-//         "name" => $name,
-//     ]);
-// }
 public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -98,7 +60,7 @@ public function login(Request $request)
             ], 400);
         }
 
-        $user = AppUsers::create([
+        $user = User::create([
             'name' => $request->name,
             'phone' => "009665" . $request->phone,
             'email' => $request->email,
