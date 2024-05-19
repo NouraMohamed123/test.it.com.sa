@@ -20,7 +20,7 @@ class CompanyController extends Controller
         $user_auth = auth()->user();
 		if ($user_auth->can('company_view')){
 
-            $companies = Company::where('deleted_at', '=', null) 
+            $companies = Company::where('deleted_at', '=', null)
             ->orderBy('id', 'desc')
             ->get();
             return view('core_company.company.company_list', compact('companies'));
@@ -79,7 +79,7 @@ class CompanyController extends Controller
                 'trade_register' => 'nullable|max:255',
                 'email' => 'nullable|string|email|max:255',
                 'phone' => 'nullable|string|max:255',
-               
+
             ]);
 
             if ($request->hasFile('logo')) {
@@ -158,7 +158,7 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        
+
     }
 
     /**
@@ -333,7 +333,7 @@ class CompanyController extends Controller
         $user_auth = auth()->user();
         if($user_auth->can('company_delete')){
             $selectedIds = $request->selectedIds;
-    
+
             foreach ($selectedIds as $company_id) {
                 Company::whereId($company_id)->update([
                     'deleted_at' => Carbon::now(),

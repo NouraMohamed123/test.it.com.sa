@@ -42,7 +42,7 @@ class JobsController extends Controller
      */
     public function index()
     {
-        dd(66);
+
         $user_auth = Auth::guard('api')->user();
         // if ($user_auth->can('employee_view')) {
             $jops = Jop::all();
