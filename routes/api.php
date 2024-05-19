@@ -29,6 +29,7 @@ Route::group([
     'middleware' => 'auth:api',
 
 ], function ($router) {
+    Route::apiResource('jobs', 'App\Http\Controllers\Api\JobsController');
     Route::get('/user',function (Request $request) {
         return $request->user();
     });
