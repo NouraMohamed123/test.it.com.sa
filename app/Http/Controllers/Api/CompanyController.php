@@ -54,7 +54,7 @@ class CompanyController extends Controller
             $filename = time() . '.' . $image->extension();
             $image->move(public_path('/assets/images/companies/logo'), $filename);
         } else {
-            $filename =  null;
+            $filename =  'no_avatar.png';
         }
         if ($request->hasFile('tax_number_photo')) {
 
@@ -62,7 +62,7 @@ class CompanyController extends Controller
             $filename1 = time() . '.' . $image->extension();
             $image->move(public_path('/assets/images/companies/tax_number_photo'), $filename);
         } else {
-            $filename1 =  null;
+            $filename1 =   'no_avatar.png';
         }
         if ($request->hasFile('job_classification')) {
 
@@ -70,7 +70,7 @@ class CompanyController extends Controller
             $filename2 = time() . '.' . $image->extension();
             $image->move(public_path('/assets/images/companies/job_classification'), $filename);
         } else {
-            $filename2 =  null;
+            $filename2 =   'no_avatar.png';
         }
         if ($request->hasFile('trade_register')) {
 
@@ -78,7 +78,7 @@ class CompanyController extends Controller
             $filename3 = time() . '.' . $image->extension();
             $image->move(public_path('/assets/images/companies/trade_register'), $filename);
         } else {
-            $filename3 =  null;
+            $filename3 =   'no_avatar.png';
         }
 
         Company::create([

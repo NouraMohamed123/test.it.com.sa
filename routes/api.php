@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\JobsController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\TasksController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\Auth\AuthController;
@@ -68,6 +69,14 @@ Route::group([
     Route::delete("task_discussions/{id}", [TasksController::class, 'destroy_task_discussion']);
     Route::post("task_documents", [TasksController::class, 'Create_task_documents']);
     Route::delete("task_documents/{id}", [TasksController::class, 'destroy_task_documents']);
+    //------------------------------- users --------------------------\\
+    //----------------------------------------------------------------\\
+    Route::get('users', [UserController::class, 'index']);
+    Route::post('users', [UserController::class, 'store']);
+    Route::post('/users/{user}', [UserController::class, 'update']);
+    Route::delete('/users/{user}',  [UserController::class, 'destroy']);
+    Route::post('assignRole', [UserController::class, 'assignRole']);
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
