@@ -717,6 +717,7 @@ class EmployeeController extends Controller
 
     public function Get_employees_by_department(Request $request)
     {
+
         $employees = Employee::where('department_id', $request->id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'username']);
 
         return response()->json($employees);

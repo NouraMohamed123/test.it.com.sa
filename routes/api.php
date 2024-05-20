@@ -88,7 +88,7 @@ Route::group([
     Route::get("Get_employees_by_company", [EmployeeController::class, 'Get_employees_by_company'] );
     Route::get("Get_employees_by_department", [EmployeeController::class, 'Get_employees_by_department'] );
     Route::get("Get_office_shift_by_company", [EmployeeController::class, 'Get_office_shift_by_company'] );
-    Route::put("update_social_profile/{id}",  [EmployeeController::class, 'update_social_profile']);
+    // Route::put("update_social_profile/{id}",  [EmployeeController::class, 'update_social_profile']);
     Route::post("employees/delete/by_selection", [EmployeeController::class, 'delete_by_selection'] );
 
     Route::get('/user', function (Request $request) {
