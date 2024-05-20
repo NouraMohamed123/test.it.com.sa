@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\JobsController;
+use App\Http\Controllers\Api\TasksController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\CandidateController;
@@ -26,35 +27,48 @@ Route::group([
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
-
 });
 
 Route::group([
     'middleware' => 'auth:api',
 
 ], function ($router) {
-    /////////////jobs
-    Route::get('jobs',[JobsController::class, 'index'] );
-    Route::post('jobs',[JobsController::class, 'store'] );
+    //------------------------------- Jobs -----------------------\\
+    //----------------------------------------------------------------\\
+
+    Route::get('jobs', [JobsController::class, 'index']);
+    Route::post('jobs', [JobsController::class, 'store']);
     Route::post('/jobs/{jop}', [JobsController::class, 'update']);
     Route::delete('/jobs/{jop}', [JobsController::class, 'destroy']);
     Route::post('jobs/delete/by_selection', [JobsController::class, 'delete_by_selection']);
-    ////////companies
-    Route::get('companies',[CompanyController::class, 'index'] );
-    Route::post('companies',[CompanyController::class, 'store'] );
+     //------------------------------- Companies -----------------------\\
+    //----------------------------------------------------------------\\
+    Route::get('companies', [CompanyController::class, 'index']);
+    Route::post('companies', [CompanyController::class, 'store']);
     Route::post('/companies/{company}', [CompanyController::class, 'update']);
     Route::delete('/companies/{company}', [CompanyController::class, 'destroy']);
     Route::post('companies/delete/by_selection', [CompanyController::class, 'delete_by_selection']);
-    ////////////////candidates
-    Route::get('candidates',[CandidateController::class, 'index'] );
-    Route::post('candidates',[CandidateController::class, 'store'] );
+      //------------------------------- candidates -----------------------\\
+    //----------------------------------------------------------------\\
+    Route::get('candidates', [CandidateController::class, 'index']);
+    Route::post('candidates', [CandidateController::class, 'store']);
     Route::post('/candidates/{candidate}', [CandidateController::class, 'update']);
     Route::delete('/candidates/{candidate}', [CandidateController::class, 'destroy']);
     Route::post('candidates/delete/by_selection', [CandidateController::class, 'delete_by_selection']);
-
-    Route::get('/user',function (Request $request) {
+    //------------------------------- Task -----------------------\\
+    //----------------------------------------------------------------\\
+    Route::get('tasks', [TasksController::class, 'index']);
+    Route::post('tasks', [TasksController::class, 'store']);
+    Route::post('/tasks/{task}', [TasksController::class, 'update']);
+    Route::delete('/tasks/{task}', [TasksController::class, 'destroy']);
+    Route::post("tasks/delete/by_selection", [TasksController::class, 'delete_by_selection']);
+    Route::post("update_task_status/{id}", [TasksController::class, 'update_task_status']);
+    Route::get("tasks_kanban", [TasksController::class, 'tasks_kanban']);
+    Route::post("task_discussions", [TasksController::class, 'Create_task_discussions']);
+    Route::delete("task_discussions/{id}", [TasksController::class, 'destroy_task_discussion']);
+    Route::post("task_documents", [TasksController::class, 'Create_task_documents']);
+    Route::delete("task_documents/{id}", [TasksController::class, 'destroy_task_documents']);
+    Route::get('/user', function (Request $request) {
         return $request->user();
     });
 });
-
-

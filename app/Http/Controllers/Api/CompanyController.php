@@ -52,7 +52,7 @@ class CompanyController extends Controller
 
             $image = $request->file('logo');
             $filename = time() . '.' . $image->extension();
-            $image->move(public_path('/assets/images/logo'), $filename);
+            $image->move(public_path('/assets/images/companies/logo'), $filename);
         } else {
             $filename =  null;
         }
@@ -60,7 +60,7 @@ class CompanyController extends Controller
 
             $image = $request->file('tax_number_photo');
             $filename1 = time() . '.' . $image->extension();
-            $image->move(public_path('/assets/images/tax_number_photo'), $filename);
+            $image->move(public_path('/assets/images/companies/tax_number_photo'), $filename);
         } else {
             $filename1 =  null;
         }
@@ -68,7 +68,7 @@ class CompanyController extends Controller
 
             $image = $request->file('job_classification');
             $filename2 = time() . '.' . $image->extension();
-            $image->move(public_path('/assets/images/job_classification'), $filename);
+            $image->move(public_path('/assets/images/companies/job_classification'), $filename);
         } else {
             $filename2 =  null;
         }
@@ -76,7 +76,7 @@ class CompanyController extends Controller
 
             $image = $request->file('trade_register');
             $filename3 = time() . '.' . $image->extension();
-            $image->move(public_path('/assets/images/trade_register'), $filename);
+            $image->move(public_path('/assets/images/companies/trade_register'), $filename);
         } else {
             $filename3 =  null;
         }
@@ -122,7 +122,7 @@ class CompanyController extends Controller
 
             $image = $request->file('logo');
             $filename = time() . '.' . $image->extension();
-            $image->move(public_path('/assets/images/logo'), $filename);
+            $image->move(public_path('/assets/images/companies/logo'), $filename);
         } else {
             $filename =  $company->logo;
         }
@@ -130,7 +130,7 @@ class CompanyController extends Controller
 
             $image = $request->file('tax_number_photo');
             $filename1 = time() . '.' . $image->extension();
-            $image->move(public_path('/assets/images/tax_number_photo'), $filename);
+            $image->move(public_path('/assets/images/companies/tax_number_photo'), $filename);
         } else {
             $filename1 = $company->tax_number_photo;
         }
@@ -138,7 +138,7 @@ class CompanyController extends Controller
 
             $image = $request->file('job_classification');
             $filename2 = time() . '.' . $image->extension();
-            $image->move(public_path('/assets/images/job_classification'), $filename);
+            $image->move(public_path('/assets/images/companies/job_classification'), $filename);
         } else {
             $filename2 =  $company->job_classification;
         }
@@ -146,7 +146,7 @@ class CompanyController extends Controller
 
             $image = $request->file('trade_register');
             $filename3 = time() . '.' . $image->extension();
-            $image->move(public_path('/assets/images/trade_register'), $filename);
+            $image->move(public_path('/assets/images/companies/trade_register'), $filename);
         } else {
             $filename3 =  $company->trade_register;
         }
