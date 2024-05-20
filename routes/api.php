@@ -6,8 +6,10 @@ use App\Http\Controllers\Api\JobsController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\TasksController;
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\CandidateController;
+use App\Http\Controllers\Api\EmployeesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +78,18 @@ Route::group([
     Route::post('/users/{user}', [UserController::class, 'update']);
     Route::delete('/users/{user}',  [UserController::class, 'destroy']);
     Route::post('assignRole', [UserController::class, 'assignRole']);
+       //------------------------------- Employee --------------------------\\
+     //--------------------------------------------------------------------\\
+     Route::get('employees', [EmployeeController::class, 'index']);
+    Route::post('employees', [EmployeeController::class, 'store']);
+    Route::post('/employees/{employee}', [EmployeeController::class, 'update']);
+    Route::delete('/employees/{employee}',  [EmployeeController::class, 'destroy']);
+    // Route::get("Get_all_employees",  [EmployeeController::class, 'Get_all_employees']);
+    Route::get("Get_employees_by_company", [EmployeeController::class, 'Get_employees_by_company'] );
+    Route::get("Get_employees_by_department", [EmployeeController::class, 'Get_employees_by_department'] );
+    Route::get("Get_office_shift_by_company", [EmployeeController::class, 'Get_office_shift_by_company'] );
+    Route::put("update_social_profile/{id}",  [EmployeeController::class, 'update_social_profile']);
+    Route::post("employees/delete/by_selection", [EmployeeController::class, 'delete_by_selection'] );
 
     Route::get('/user', function (Request $request) {
         return $request->user();
