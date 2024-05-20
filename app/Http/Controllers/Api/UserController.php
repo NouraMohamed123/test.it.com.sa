@@ -117,8 +117,8 @@ class UserController extends Controller
 
                     $image = $request->file('avatar');
                     $filename = time().'.'.$image->extension();
-                    $image->move(public_path('/assets/mages/users'), $filename);
-                    $path = public_path() . '/assets/mages/users';
+                    $image->move(public_path('/assets/images/users'), $filename);
+                    $path = public_path() . '/assets/images/users';
                     $userPhoto = $path . '/' . $currentAvatar;
                     if (file_exists($userPhoto)) {
                         if ($user->avatar != 'no_avatar.png') {

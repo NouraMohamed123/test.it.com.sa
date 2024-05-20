@@ -132,16 +132,16 @@ class EmployeeController extends Controller
 
 
             if ($request->file('avatar')) {
-                $avatar = $request->file('avatar');
-                $avatar->store('uploads/avatar/', 'public');
-                $avatar = $avatar->hashName();
+                $image = $request->file('avatar');
+                $avatar= time() . '.' . $image->extension();
+                $image->move(public_path('/assets/images/employees/avatar'),  $avatar);
             } else {
                 $avatar = null;
             }
             if ($request->file('scene_image')) {
-                $avatar = $request->file('scene_image');
-                $avatar->store('uploads/scene_image/', 'public');
-                $scene_image = $avatar->hashName();
+                $image = $request->file('scene_image');
+                $scene_image= time() . '.' . $image->extension();
+                $image->move(public_path('/assets/images/employees/scene_image'),  $scene_image);
             } else {
                 $scene_image = null;
             }
@@ -413,20 +413,20 @@ class EmployeeController extends Controller
             ], [
                 'email.unique' => 'This Email already taken.',
             ]);
-
-            // if ($request->file('avatar')) {
-            //     $avatar = $request->file('avatar');
-            //     $avatar->store('uploads/avatar/', 'public');
-            //     $avatar = $avatar->hashName();
-            // } else {
-            //     $avatar = null;
-            // }
-            if ($request->file('scene_image')) {
-                $avatar = $request->file('scene_image');
-                $avatar->store('uploads/scene_image/', 'public');
-                $scene_image = $avatar->hashName();
+           $employee = Employee::find($id);
+            if ($request->file('avatar')) {
+                $image = $request->file('avatar');
+                $avatar= time() . '.' . $image->extension();
+                $image->move(public_path('/assets/images/employees/avatar'),  $avatar);
             } else {
-                $scene_image = null;
+                $avatar =  $employee->avatar;
+            }
+            if ($request->file('scene_image')) {
+                $image = $request->file('scene_image');
+                $scene_image= time() . '.' . $image->extension();
+                $image->move(public_path('/assets/images/employees/scene_image'),  $scene_image);
+            } else {
+                $scene_image =  $employee->scene_image;
             }
 
 
@@ -699,9 +699,6 @@ class EmployeeController extends Controller
         // }
         // return abort('403', __('You are not authorized'));
     }
-
-
-
     public function Get_all_employees()
     {
         $employees = Employee::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'username']);
