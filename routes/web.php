@@ -391,10 +391,10 @@ if ($installed === true) {
 
 } else {
 
-        Route::get('/{vue?}',
-        function () {
-                return redirect('/setup');
-        })->where('vue', '^(?!setup).*$');
+        // Route::get('/{vue?}',
+        // function () {
+        //         return redirect('/setup');
+        // })->where('vue', '^(?!setup).*$');
 
 
     Route::get('/setup', [
