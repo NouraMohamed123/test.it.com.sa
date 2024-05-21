@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Candidate extends Model
 {
     use HasFactory;
+    protected $dates = ['deleted_at'];
      protected $guarded = [];
 
     public function jop()

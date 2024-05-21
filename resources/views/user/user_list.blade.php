@@ -163,21 +163,19 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="phone" class="ul-form__label">{{ __('translate.Status') }}</label>
-                                    <div style="display: flex; gap: 20px">
-                                    <div style="display: flex; align-items: center; gap: 2px;">
-                                        <input type="radio" v-model="company.status" value="active" />
-                                        <p class="mb-0">نشط</p>
-                                    </div>
-                                    <div style="display: flex; align-items: center; gap: 2px;">
-                                        <input type="radio" v-model="company.status" value="inactive" />
-                                        <p class="mb-0">غير نشط</p>
-                                    </div>
-                                    </div>
-                                    <span class="error" v-if="errors && errors.phone">
-                                        @{{ errors.phone[0] }}
+                                    <label class="ul-form__label">{{ __('translate.Status') }} <span
+                                            class="field_required">*</span></label>
+                                    <v-select @input="Selected_Status" placeholder="{{ __('translate.Choose_status') }}"
+                                        v-model="user.status" :reduce="(option) => option.value" :options="
+                                                [
+                                                    {label: 'Active', value: 1},
+                                                    {label: 'Inactive', value: 0},
+                                                ]">
+                                    </v-select>
+
+                                    <span class="error" v-if="errors && errors.status">
+                                        @{{ errors.status[0] }}
                                     </span>
-                                </div>
                                 </div>
 
                                 <div class="col-md-6">

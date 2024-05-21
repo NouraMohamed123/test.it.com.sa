@@ -45,7 +45,9 @@ class JobsController extends Controller
 
         $user_auth = Auth::guard('api')->user();
         // if ($user_auth->can('employee_view')) {
-            $jops = Jop::all();
+            $jops = Jop::where('deleted_at', '=', null)
+            ->orderBy('id', 'desc')
+            ->get();
             return response()->json(['success' => true,'data' => $jops]);
 
         // }
@@ -171,7 +173,9 @@ class JobsController extends Controller
         $user_auth = Auth::guard('api')->user();
         // if ($user_auth->can('employee_delete')) {
 
-            Jop::whereId($id)->delete();
+            Jop::whereId($id)->update([
+                'deleted_at' => Carbon::now(),
+            ]);
 
 
             return response()->json(['success' => true]);
@@ -188,7 +192,9 @@ class JobsController extends Controller
             $selectedIds = $request->selectedIds;
 
             foreach ($selectedIds as $employee_id) {
-                Jop::whereId($employee_id)->delete();
+                Jop::whereId($employee_id)->update([
+                    'deleted_at' => Carbon::now(),
+                ]);
 
 
             }

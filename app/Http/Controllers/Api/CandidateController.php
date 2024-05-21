@@ -44,7 +44,9 @@ class CandidateController extends Controller
     {
         $user_auth = Auth::guard('api')->user();
         // if ($user_auth->can('employee_view')){
-        $candidates = Candidate::all();
+        $candidates = Candidate::with('jop')->where('deleted_at', '=', null)
+        ->orderBy('id', 'desc')
+        ->get();
 
         return response()->json(['success' => true, 'data' => $candidates]);
 
@@ -59,11 +61,13 @@ class CandidateController extends Controller
         // if($user_auth->can('employee_add')){
         $this->validate($request, [
             'jop_id'     => 'required',
+            'cv'         =>'nullable'
+
         ]);
         if ($request->hasFile('avatar')) {
             $image = $request->file('avatar');
             $filename = time() . '.' . $image->extension();
-            $image->move(public_path('/assets/images/avatar'), $filename);
+            $image->move(public_path('/assets/images/candidates'), $filename);
         } else {
             $filename = null;
         }
@@ -91,11 +95,12 @@ class CandidateController extends Controller
 
         $this->validate($request, [
             'jop_id'     => 'required',
+            'cv'         =>'nullable'
         ]);
         if ($request->hasFile('cv')) {
             $image = $request->file('cv');
             $filename = time() . '.' . $image->extension();
-            $image->move(public_path('/assets/images/avatar'), $filename);
+            $image->move(public_path('/assets/images/candidates'), $filename);
         } else {
             $filename = $candidate->cv;
         }
@@ -114,7 +119,9 @@ class CandidateController extends Controller
         $user_auth = Auth::guard('api')->user();
         // if($user_auth->can('employee_delete')){
 
-        Candidate::whereId($id)->delete();
+        Candidate::whereId($id)->update([
+            'deleted_at' => Carbon::now(),
+        ]);
 
         return response()->json(['success' => true]);
         // }
@@ -129,8 +136,10 @@ class CandidateController extends Controller
         // if($user_auth->can('employee_delete')){
         $selectedIds = $request->selectedIds;
 
-        foreach ($selectedIds as $employee_id) {
-            Candidate::whereId($employee_id)->delete();
+        foreach ($selectedIds as $id) {
+            Candidate::whereId($id)->update([
+                'deleted_at' => Carbon::now(),
+            ]);
         }
         return response()->json(['success' => true]);
         // }
