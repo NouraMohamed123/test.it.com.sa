@@ -9,6 +9,9 @@ use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\CandidateController;
+use App\Http\Controllers\Api\DepartmentsController;
+use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\EmployeesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,8 +62,62 @@ Route::group([
     Route::post('/candidates/{candidate}', [CandidateController::class, 'update']);
     Route::delete('/candidates/{candidate}', [CandidateController::class, 'destroy']);
     Route::post('candidates/delete/by_selection', [CandidateController::class, 'delete_by_selection']);
+     ////////////////project
+     Route::get('projects',[ProjectController::class, 'index'] );
+     Route::get('projects/{id}',[ProjectController::class, 'show'] );
+     Route::post('projects',[ProjectController::class, 'store'] );
+     Route::post('projects/{id}',[ProjectController::class, 'update'] );
+     Route::post('projects/delete/by_selection', [ProjectController::class, 'delete_by_selection']);
+     Route::post('create/project/discussions',[ProjectController::class, 'Create_project_discussions'] );
+     Route::post('destroy/project/discussions/{id}',[ProjectController::class, 'destroy_project_discussion'] );
+     Route::post('create/project/issues',[ProjectController::class, 'Create_project_issues'] );
+     Route::post('update/project/issues/{id}',[ProjectController::class, 'update_project_issues'] );
+     Route::post('delete/project/issues/{id}',[ProjectController::class, 'destroy_project_issues'] );
+     Route::post('create/project/documents',[ProjectController::class, 'Create_project_documents'] );
+     Route::post('delete/project/documents/{id}',[ProjectController::class, 'destroy_project_documents'] );
+     //departments
+     Route::get('departments',[DepartmentsController::class, 'index'] );
+     Route::post('departments',[DepartmentsController::class, 'store'] );
+     Route::post('departments/{id}',[DepartmentsController::class, 'update'] );
+     Route::post('/delete/departments/{id}',[DepartmentsController::class, 'destroy'] );
+     Route::post('departments/delete/by_selection', [ProjectController::class, 'delete_by_selection']);
+     Route::get('departments/company',[DepartmentsController::class, 'Get_departments_by_company'] );
+     Route::get('departments/all',[DepartmentsController::class, 'Get_all_Departments'] );
 
-    Route::get('/user',function (Request $request) {
+    //------------------------------- Task -----------------------\\
+    //----------------------------------------------------------------\\
+    Route::get('tasks', [TasksController::class, 'index']);
+    Route::post('tasks', [TasksController::class, 'store']);
+    Route::post('/tasks/{task}', [TasksController::class, 'update']);
+    Route::delete('/tasks/{task}', [TasksController::class, 'destroy']);
+    Route::post("tasks/delete/by_selection", [TasksController::class, 'delete_by_selection']);
+    Route::post("update_task_status/{id}", [TasksController::class, 'update_task_status']);
+    Route::get("tasks_kanban", [TasksController::class, 'tasks_kanban']);
+    Route::post("task_discussions", [TasksController::class, 'Create_task_discussions']);
+    Route::delete("task_discussions/{id}", [TasksController::class, 'destroy_task_discussion']);
+    Route::post("task_documents", [TasksController::class, 'Create_task_documents']);
+    Route::delete("task_documents/{id}", [TasksController::class, 'destroy_task_documents']);
+    //------------------------------- users --------------------------\\
+    //----------------------------------------------------------------\\
+    Route::get('users', [UserController::class, 'index']);
+    Route::post('users', [UserController::class, 'store']);
+    Route::post('/users/{user}', [UserController::class, 'update']);
+    Route::delete('/users/{user}',  [UserController::class, 'destroy']);
+    Route::post('assignRole', [UserController::class, 'assignRole']);
+       //------------------------------- Employee --------------------------\\
+     //--------------------------------------------------------------------\\
+     Route::get('employees', [EmployeeController::class, 'index']);
+    Route::post('employees', [EmployeeController::class, 'store']);
+    Route::post('/employees/{employee}', [EmployeeController::class, 'update']);
+    Route::delete('/employees/{employee}',  [EmployeeController::class, 'destroy']);
+    // Route::get("Get_all_employees",  [EmployeeController::class, 'Get_all_employees']);
+    Route::get("Get_employees_by_company", [EmployeeController::class, 'Get_employees_by_company'] );
+    Route::get("Get_employees_by_department", [EmployeeController::class, 'Get_employees_by_department'] );
+    Route::get("Get_office_shift_by_company", [EmployeeController::class, 'Get_office_shift_by_company'] );
+    // Route::put("update_social_profile/{id}",  [EmployeeController::class, 'update_social_profile']);
+    Route::post("employees/delete/by_selection", [EmployeeController::class, 'delete_by_selection'] );
+
+    Route::get('/user', function (Request $request) {
         return $request->user();
     });
 });
