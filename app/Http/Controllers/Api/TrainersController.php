@@ -22,30 +22,13 @@ class TrainersController extends Controller
 		// if ($user_auth->can('trainer')){
 
             $trainers = Trainer::where('deleted_at', '=', null)->with('company:id,name')->orderBy('id', 'desc')->get();
-            return view('training.trainers_list', compact('trainers'));
+            return response()->json(['success' => true, 'trainers' => $trainers]);
 
         // }
         // return abort('403', __('You are not authorized'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('trainer')){
 
-            $companies = Company::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id','name']);
-            return response()->json([
-                'companies' =>$companies,
-            ]);
-
-        // }
-        // return abort('403', __('You are not authorized'));
-    }
 
     /**
      * Store a newly created resource in storage.

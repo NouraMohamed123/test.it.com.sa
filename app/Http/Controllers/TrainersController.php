@@ -164,7 +164,7 @@ class TrainersController extends Controller
          $user_auth = auth()->user();
          if($user_auth->can('trainer')){
              $selectedIds = $request->selectedIds;
-     
+
              foreach ($selectedIds as $trainer_id) {
                 Trainer::whereId($trainer_id)->update([
                     'deleted_at' => Carbon::now(),
@@ -177,7 +177,7 @@ class TrainersController extends Controller
 
 
 
-    
+
     public function Get_all_trainers()
     {
         $trainers = Trainer::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id','name']);

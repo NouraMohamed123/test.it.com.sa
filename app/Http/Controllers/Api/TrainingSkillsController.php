@@ -21,7 +21,8 @@ class TrainingSkillsController extends Controller
 		// if ($user_auth->can('training_skills')){
 
             $training_skills = TrainingSkill::where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
-            return view('training.training_skills_list', compact('training_skills'));
+            return response()->json(['success' => true, 'training_skills' => $training_skills]);
+
 
         // }
         // return abort('403', __('You are not authorized'));

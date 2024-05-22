@@ -143,7 +143,7 @@ Route::group([
     Route::post('/trainings/{training}', [TrainingController::class, 'update']);
     Route::delete('/trainings/{training}',  [TrainingController::class, 'destroy']);
     Route::post("trainings/delete/by_selection", "TrainingController@delete_by_selection");
-    Route::resource('trainings', 'TrainingController');
+
     //------------------------------- trainers ----------------------\\
     Route::get('trainers', [TrainersController::class, 'index']);
     Route::post('trainers', [TrainersController::class, 'store']);
