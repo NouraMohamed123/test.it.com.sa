@@ -29,31 +29,13 @@ class TrainingController extends Controller
             ->with('company:id,name','trainer:id,name','TrainingSkill:id,training_skill')
             ->orderBy('id', 'desc')
             ->get();
-            return view('training.training_list', compact('trainings'));
+            return response()->json(['success' => true, 'trainings' => $trainings]);
 
         // }
         // return abort('403', __('You are not authorized'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-          $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('training_add')){
 
-            $trainers = Trainer::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id','name']);
-            $training_skills = TrainingSkill::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id','training_skill']);
-            $companies = Company::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id','name']);
-
-            return view('training.create_training', compact('trainers','training_skills','companies'));
-
-        // }
-        // return abort('403', __('You are not authorized'));
-    }
 
     /**
      * Store a newly created resource in storage.
