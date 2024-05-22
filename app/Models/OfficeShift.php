@@ -9,7 +9,7 @@ class OfficeShift extends Model
 {
     use HasFactory;
 
-    protected $dates = ['deleted_at'];
+    // protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'name','company_id','monday_in','monday_out',

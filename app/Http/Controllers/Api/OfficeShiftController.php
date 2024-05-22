@@ -248,12 +248,14 @@ class OfficeShiftController extends Controller
      public function delete_by_selection(Request $request)
      {
 
+
             $selectedIds = $request->selectedIds;
 
             foreach ($selectedIds as $office_shift_id) {
-                OfficeShift::whereId($office_shift_id)->update([
+             $officeShift =   OfficeShift::whereId($office_shift_id)->update([
                     'deleted_at' => Carbon::now(),
                 ]);
+
             }
             return response()->json(['success' => true]);
 
