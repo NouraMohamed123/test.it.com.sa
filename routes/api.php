@@ -194,4 +194,7 @@ Route::group([
     Route::delete('/events/{id}', [EventController::class, 'destroy']);
 
     Route::post('/events/delete/selection', [EventController::class, 'delete_by_selection']);
+    // Route::post('office_shifts/delete_by_selection', [OfficeShiftController::class, 'delete_by_selection']);
+    Route::post("office_shifts/delete/by_selection", [OfficeShiftController::class, 'delete_by_selection']);
 });
+

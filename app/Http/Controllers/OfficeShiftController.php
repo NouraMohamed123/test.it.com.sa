@@ -299,7 +299,7 @@ class OfficeShiftController extends Controller
         $user_auth = auth()->user();
         if($user_auth->can('office_shift_delete')){
             $selectedIds = $request->selectedIds;
-    
+
             foreach ($selectedIds as $office_shift_id) {
                 OfficeShift::whereId($office_shift_id)->update([
                     'deleted_at' => Carbon::now(),
