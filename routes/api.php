@@ -183,7 +183,7 @@ Route::group([
     Route::post('/office_shifts', [OfficeShiftController::class, 'store']);
     Route::post('/office_shifts/{id}', [OfficeShiftController::class, 'update']);
     Route::delete('/office_shifts/{id}', [OfficeShiftController::class, 'destroy']);
-    Route::post('/office_shifts/delete_by_selection', [OfficeShiftController::class, 'delete_by_selection']);
+
     //event
     Route::get('/events', [EventController::class, 'index']);
 
