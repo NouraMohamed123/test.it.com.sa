@@ -48,7 +48,7 @@ class CandidateController extends Controller
         ->orderBy('id', 'desc')
         ->get();
 
-        return response()->json(['success' => true, 'data' => $candidates]);
+        return response()->json(['success' => true, 'candidates' => $candidates]);
 
         // }
         // return abort('403', __('You are not authorized'));
