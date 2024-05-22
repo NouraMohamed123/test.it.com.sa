@@ -237,8 +237,7 @@ class TasksController extends Controller
 
     public function Create_task_discussions(Request $request)
     {
-         $user_auth = Auth::guard('api')->user();
-		if ($user_auth->can('task_details')){
+
 
             $request->validate([
                 'message'           => 'required|string',
@@ -252,8 +251,7 @@ class TasksController extends Controller
 
             return response()->json(['success' => true]);
 
-        }
-        return abort('403', __('You are not authorized'));
+        
     }
 
     public function destroy_task_discussion($id)

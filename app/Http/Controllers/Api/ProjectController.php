@@ -354,14 +354,13 @@ class ProjectController extends Controller
                 'Project_document'=> $Project_document
             ]);
 
-        
+
     }
 
 
     public function destroy_project_documents($id)
     {
-        $user_auth = auth()->user();
-		if ($user_auth->can('project_details')){
+
 
             ProjectDocument::whereId($id)->update([
                 'deleted_at' => Carbon::now(),
@@ -369,8 +368,7 @@ class ProjectController extends Controller
 
             return response()->json(['success' => true]);
 
-        }
-        return abort('403', __('You are not authorized'));
+      
     }
 }
 
