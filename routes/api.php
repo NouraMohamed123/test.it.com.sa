@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\AttendancesController;
 use App\Http\Controllers\Api\DepartmentsController;
 use App\Http\Controllers\Api\TrainingSkillsController;
 use App\Http\Controllers\Api\EmployeeSessionController;
+use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\OfficeShiftController;
 use App\Http\Controllers\Api\PoliciesController;
 
@@ -182,6 +183,17 @@ Route::group([
     Route::post('/office_shifts', [OfficeShiftController::class, 'store']);
     Route::post('/office_shifts/{id}', [OfficeShiftController::class, 'update']);
     Route::delete('/office_shifts/{id}', [OfficeShiftController::class, 'destroy']);
+
+    //event
+    Route::get('/events', [EventController::class, 'index']);
+
+    Route::post('/events', [EventController::class, 'store']);
+
+    Route::post('/events/{id}', [EventController::class, 'update']);
+
+    Route::delete('/events/{id}', [EventController::class, 'destroy']);
+
+    Route::post('/events/delete/selection', [EventController::class, 'delete_by_selection']);
     // Route::post('office_shifts/delete_by_selection', [OfficeShiftController::class, 'delete_by_selection']);
     Route::post("office_shifts/delete/by_selection", [OfficeShiftController::class, 'delete_by_selection']);
 });
