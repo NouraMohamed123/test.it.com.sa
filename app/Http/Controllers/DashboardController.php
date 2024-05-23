@@ -96,14 +96,14 @@ class DashboardController extends Controller
         // Merge the two collections;
         $dates_expenses = $dates->merge($expenses);
 
-        
+
         $expenses_data = [];
         $days = [];
         foreach ($dates_expenses as $key => $value) {
             $expenses_data[] = $value;
             // $days[] = $key;
         }
-        
+
         // Merge the two collections;
         $dates_deposits = $dates->merge($deposits);
         $deposits_data = [];
@@ -145,7 +145,7 @@ class DashboardController extends Controller
             ])
             ->pluck('count', 'status_task');
 
-          
+
             return view('dashboard.dashboard', ([
                 'project_status' => $project_status,
                 'task_status' => $task_status,
@@ -174,9 +174,13 @@ class DashboardController extends Controller
 
     public function dashboard_employee()
     {
-        $user_auth = auth()->user();
-        $employee = Employee::with('company:id,name','department:id,department','office_shift')->findOrFail($user_auth->id);
 
+        $user_auth = auth()->user();
+
+        $employee = Employee::with('company','department','office_shift')->where('email',$user_auth->email)->first();
+       if(!$employee){
+         return 'user not found';
+       }
         // Date now
         $day_in_now = strtolower(Carbon::now()->format('l')) . '_in';
         $day_out_now = strtolower(Carbon::now()->format('l')) . '_out';
@@ -193,7 +197,7 @@ class DashboardController extends Controller
         $count_awards = Award::where('deleted_at', '=', null)
         ->where('employee_id', $user_auth->id)
         ->count();
-        
+
         $count_announcement = Announcement::where('start_date' , '<=' , now()->format('Y-m-d'))
         ->where('end_date' , '>=' , now()->format('Y-m-d'))
         ->where('deleted_at', '=', null)
@@ -203,7 +207,7 @@ class DashboardController extends Controller
         $count_tasks = EmployeeTask::where('employee_id', $user_auth->id)->count();
 
         $latest_projects = Project::where('deleted_at', '=', null)
-        ->with('client:id,username','assignedEmployees') 
+        ->with('client:id,username','assignedEmployees')
         ->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
         ->where('employee_id', $user_auth->id)
         ->take(5)
@@ -211,7 +215,7 @@ class DashboardController extends Controller
         ->get();
 
         $latest_tasks = Task::where('deleted_at', '=', null)
-        ->with('project:id,title','assignedEmployees') 
+        ->with('project:id,title','assignedEmployees')
         ->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
         ->where('employee_id', $user_auth->id)
         ->take(5)
@@ -244,22 +248,22 @@ class DashboardController extends Controller
     {
         $user_auth = auth()->user();
 
-        
+
         $latest_projects = Project::where('deleted_at', '=', null)
         ->where('client_id', $user_auth->id)
         ->take(5)
         ->orderBy('id', 'desc')
         ->get();
-        
+
         $client =  Client::with('projects')->findOrFail($user_auth->id);
-        
+
         $projects =  $client->projects;
         $project_id = $projects->pluck('id');
-        
+
         $count_projects = Project::where('client_id', $user_auth->id)
         ->where('deleted_at', '=', null)
         ->count();
-       
+
         $count_tasks = Task::where('deleted_at', '=', null)
         ->whereIn('project_id' , $project_id)
         ->count();

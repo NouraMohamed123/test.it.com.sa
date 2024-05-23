@@ -3,12 +3,15 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\JobsController;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\LeaveController;
 use App\Http\Controllers\Api\TasksController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Api\PoliciesController;
 use App\Http\Controllers\Api\TrainersController;
 use App\Http\Controllers\Api\TrainingController;
 use App\Http\Controllers\Api\Auth\AuthController;
@@ -19,10 +22,10 @@ use App\Http\Controllers\Api\AttendancesController;
 use App\Http\Controllers\Api\AwardController;
 use App\Http\Controllers\Api\AwardTypeController;
 use App\Http\Controllers\Api\DepartmentsController;
+use App\Http\Controllers\Api\OfficeShiftController;
 use App\Http\Controllers\Api\TrainingSkillsController;
 use App\Http\Controllers\Api\EmployeeSessionController;
 use App\Http\Controllers\Api\EventController;
-use App\Http\Controllers\Api\HolidayController;
 use App\Http\Controllers\Api\OfficeShiftController;
 use App\Http\Controllers\Api\PoliciesController;
 
@@ -53,6 +56,8 @@ Route::group([
     // 'prefix' => 'dashboard'
 
 ], function ($router) {
+      //roles
+      Route::get('/roles', [RoleController::class, 'index']);
     //------------------------------- Jobs -----------------------\\
     //----------------------------------------------------------------\\
 

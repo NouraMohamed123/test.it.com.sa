@@ -64,8 +64,8 @@ class EmployeesController extends Controller
 
             $roles = Role::where('deleted_at', '=', null)->get(['id', 'name']);
             $companies = Company::where('deleted_at', '=', null)->get(['id', 'name']);
-           
-         
+
+
             return view('employee.create_employee', compact('companies', 'roles'));
         }
         return abort('403', __('You are not authorized'));
@@ -128,8 +128,8 @@ class EmployeesController extends Controller
             ], [
                 'email.unique' => 'This Email already taken.',
             ]);
-            
-        
+
+
             if ($request->file('avatar')) {
                 $avatar = $request->file('avatar');
                 $avatar->store('uploads/avatar/', 'public');
@@ -187,7 +187,7 @@ class EmployeesController extends Controller
             $data['scene_image'] = $scene_image;
             $data['job_type'] = $request['job_type'];
             $data['contract_type'] = $request['contract_type'];
-           
+
             $user_data = [];
             $user_data['username'] = $request['firstname'] . ' ' . $request['lastname'];
             $user_data['email'] = $request->email;
@@ -195,16 +195,16 @@ class EmployeesController extends Controller
             $user_data['password'] = Hash::make($request['password']);
             $user_data['status'] = 1;
             $user_data['role_users_id'] = $request['role_users_id'];
-            
+
             \DB::transaction(function () use ($request , $user_data , $data) {
 
                 $user = User::create($user_data);
                 $user->syncRoles($request['role_users_id']);
 
                 // $data['id'] = $user->id;
-               
-                // $data['user_id'] = Auth::user()->id;
-        
+
+                 $data['user_id'] = $user->id;
+
                 Employee::create($data);
 
             }, 10);
@@ -412,7 +412,7 @@ class EmployeesController extends Controller
             ], [
                 'email.unique' => 'This Email already taken.',
             ]);
-            
+
             // if ($request->file('avatar')) {
             //     $avatar = $request->file('avatar');
             //     $avatar->store('uploads/avatar/', 'public');
@@ -505,11 +505,12 @@ class EmployeesController extends Controller
             $user_data['role_users_id'] = $request['role_users_id'];
 
             \DB::transaction(function () use ($request, $id, $user_data, $data) {
-
+                $user = User::find($id);
                 User::whereId($id)->update($user_data);
+                $data['user_id'] = $user->id;
                 Employee::find($id)->update($data);
 
-                $user = User::find($id);
+
                 $user->syncRoles($data['role_users_id']);
             }, 10);
 
