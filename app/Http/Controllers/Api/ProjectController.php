@@ -21,24 +21,56 @@ class ProjectController extends Controller
 {
     public function index()
     {
-
-        $count_not_started = Project::whereNull('deleted_at')
+        $user_auth = Auth::guard('api')->user();
+        if($user_auth->role_users_id == 5){
+            $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+            $count_not_started = Project::whereNull('deleted_at')
+            ->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
+            ->where('employee_id', $employee->id)
             ->where('status', 'not_started')
             ->count();
-        $count_in_progress = Project::whereNull('deleted_at')
-            ->where('status', 'progress')
-            ->count();
-        $count_cancelled = Project::whereNull('deleted_at')
-            ->where('status', 'cancelled')
-            ->count();
-        $count_completed = Project::whereNull('deleted_at')
-            ->where('status', 'completed')
+
+            $count_in_progress = Project::whereNull('deleted_at')->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
+            ->where('employee_id', $employee->id)
+                ->where('status', 'progress')
+                ->count();
+            $count_cancelled = Project::whereNull('deleted_at')->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
+            ->where('employee_id', $employee->id)
+                ->where('status', 'cancelled')
+                ->count();
+            $count_completed = Project::whereNull('deleted_at')->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
+            ->where('employee_id', $employee->id)
+                ->where('status', 'completed')
+                ->count();
+
+            $projects = Project::whereNull('deleted_at')->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
+            ->where('employee_id', $employee->id)
+                ->with('company:id,name', 'client:id,username')
+                ->orderBy('id', 'desc')
+                ->get();
+
+        }else{
+            dd(55);
+            $count_not_started = Project::whereNull('deleted_at')
+            ->where('status', 'not_started')
             ->count();
 
-        $projects = Project::whereNull('deleted_at')
-            ->with('company:id,name', 'client:id,username')
-            ->orderBy('id', 'desc')
-            ->get();
+            $count_in_progress = Project::whereNull('deleted_at')
+                ->where('status', 'progress')
+                ->count();
+            $count_cancelled = Project::whereNull('deleted_at')
+                ->where('status', 'cancelled')
+                ->count();
+            $count_completed = Project::whereNull('deleted_at')
+                ->where('status', 'completed')
+                ->count();
+
+            $projects = Project::whereNull('deleted_at')
+                ->with('company:id,name', 'client:id,username')
+                ->orderBy('id', 'desc')
+                ->get();
+
+        }
 
         return response()->json([
             'projects' => $projects,
@@ -88,6 +120,7 @@ class ProjectController extends Controller
     }
     public function show($id)
     {
+
         $project = Project::where('deleted_at', '=', null)->findOrFail($id);
         $discussions = ProjectDiscussion::where('project_id', $id)
             ->where('deleted_at', '=', null)
@@ -368,7 +401,7 @@ class ProjectController extends Controller
 
             return response()->json(['success' => true]);
 
-      
+
     }
 }
 

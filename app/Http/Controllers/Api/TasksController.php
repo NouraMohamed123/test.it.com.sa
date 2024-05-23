@@ -25,21 +25,45 @@ class TasksController extends Controller
     {
          $user_auth = Auth::guard('api')->user();
 		// if ($user_auth->can('task_view')){
+            $user_auth = Auth::guard('api')->user();
+            if($user_auth->role_users_id == 5){
+            $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
 
-            $count_not_started = Task::where('deleted_at', '=', null)
+            $count_not_started = Task::where('deleted_at', '=', null)->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
+           ->where('employee_id', $employee->id)
             ->where('status', '=', 'not_started')
             ->count();
-            $count_in_progress = Task::where('deleted_at', '=', null)
+            $count_in_progress = Task::where('deleted_at', '=', null)->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
+           ->where('employee_id', $employee->id)
             ->where('status', '=', 'progress')
             ->count();
-            $count_cancelled = Task::where('deleted_at', '=', null)
+            $count_cancelled = Task::where('deleted_at', '=', null)->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
+           ->where('employee_id', $employee->id)
             ->where('status', '=', 'cancelled')
             ->count();
-            $count_completed = Task::where('deleted_at', '=', null)
+            $count_completed = Task::where('deleted_at', '=', null)->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
+           ->where('employee_id', $employee->id)
             ->where('status', '=', 'completed')
             ->count();
+            $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title')>join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
+            ->where('employee_id', $employee->id)->orderBy('id', 'desc')->get();
+            }else{
+                $count_not_started = Task::where('deleted_at', '=', null)
+                ->where('status', '=', 'not_started')
+                ->count();
+                $count_in_progress = Task::where('deleted_at', '=', null)
+                ->where('status', '=', 'progress')
+                ->count();
+                $count_cancelled = Task::where('deleted_at', '=', null)
+                ->where('status', '=', 'cancelled')
+                ->count();
+                $count_completed = Task::where('deleted_at', '=', null)
+                ->where('status', '=', 'completed')
+                ->count();
 
-            $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title')->orderBy('id', 'desc')->get();
+                $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title')->orderBy('id', 'desc')->get();
+            }
+
            return response()->json(['success' => true, 'tasks' => $tasks,'count_not_started'=>$count_not_started,'count_in_progress'=>$count_in_progress,'count_cancelled'=>$count_cancelled,'count_completed'=>$count_completed]);
 
 
@@ -251,7 +275,7 @@ class TasksController extends Controller
 
             return response()->json(['success' => true]);
 
-        
+
     }
 
     public function destroy_task_discussion($id)

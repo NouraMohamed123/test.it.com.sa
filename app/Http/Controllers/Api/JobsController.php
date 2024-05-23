@@ -44,6 +44,7 @@ class JobsController extends Controller
     {
 
         $user_auth = Auth::guard('api')->user();
+
         // if ($user_auth->can('employee_view')) {
             $jops = Jop::where('deleted_at', '=', null)
             ->orderBy('id', 'desc')

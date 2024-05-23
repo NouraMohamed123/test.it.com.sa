@@ -187,9 +187,7 @@ class EmployeeController extends Controller
                 $user->syncRoles($request['role_users_id']);
 
                 // $data['id'] = $user->id;
-
-                // $data['user_id'] = Auth::user()->id;
-
+                $data['user_id'] = $user->id;
                 Employee::create($data);
 
             }, 10);
@@ -472,9 +470,11 @@ class EmployeeController extends Controller
             \DB::transaction(function () use ($request, $id, $user_data, $data) {
 
                 User::whereId($id)->update($user_data);
+                $user = User::find($id);
+                $data['user_id'] =  $user->id;
                 Employee::find($id)->update($data);
 
-                $user = User::find($id);
+
                 $user->syncRoles($data['role_users_id']);
             }, 10);
 
