@@ -205,7 +205,7 @@ class TravelController extends Controller
          $user_auth = auth()->user();
          if($user_auth->can('travel_delete')){
              $selectedIds = $request->selectedIds;
-     
+
              foreach ($selectedIds as $travel_id) {
                 Travel::whereId($travel_id)->update([
                     'deleted_at' => Carbon::now(),

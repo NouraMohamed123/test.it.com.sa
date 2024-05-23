@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Complaint;
+use App\Models\Employee;
+use App\Models\Company;
+use Carbon\Carbon;
+
 
 class ComplaintController extends Controller
 {
@@ -16,148 +21,83 @@ class ComplaintController extends Controller
     {
 
 
-            $complaints = Complaint::with('company:id,name','EmployeeFrom:id,username','EmployeeAgainst:id,username')
+        $complaints = Complaint::with('company:id,name', 'EmployeeFrom:id,username', 'EmployeeAgainst:id,username')
             ->where('deleted_at', '=', null)
             ->orderBy('id', 'desc')
             ->get();
-            return response()->json([
-                'complaints'       => $complaints,
-            ]);
-
-
-
-
+        return response()->json([
+            'success' => true,
+            'complaints' => $complaints,
+        ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $user_auth = auth()->user();
-		if ($user_auth->can('complaint_add')){
-
-            $companies = Company::where('deleted_at', '=', null)
-            ->orderBy('id', 'desc')
-            ->get(['id','name']);
-
-            return response()->json([
-                'companies'       => $companies,
-            ]);
-
-        }
-        return abort('403', __('You are not authorized'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $user_auth = auth()->user();
-		if ($user_auth->can('complaint_add')){
-
-            request()->validate([
-                'title'        => 'required|string|max:255',
-                'date'         => 'required',
-                'reason'         => 'required',
-                'company_id'  => 'required',
-                'employee_from'  => 'required',
-                'employee_against'  => 'required',
-            ]);
-
-            Complaint::create([
-                'company_id'     => $request['company_id'],
-                'employee_from'     => $request['employee_from'],
-                'employee_against'     => $request['employee_against'],
-                'title'        => $request['title'],
-                'date'         => $request['date'],
-                'time'         => $request['time'],
-                'reason'  => $request['reason'],
-                'description'  => $request['description'],
-            ]);
-
-            return response()->json(['success' => true]);
-
-        }
-        return abort('403', __('You are not authorized'));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
-    }
+        $complaint = Complaint::with('company:id,name', 'EmployeeFrom:id,username', 'EmployeeAgainst:id,username')
+            ->where('id', '=', $id)
+            ->where('deleted_at', '=', null)
+            ->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $user_auth = auth()->user();
-		if ($user_auth->can('complaint_edit')){
-
-            $companies = Company::where('deleted_at', '=', null)
-            ->orderBy('id', 'desc')
-            ->get(['id','name']);
-
+        if ($complaint) {
             return response()->json([
-                'companies'       => $companies,
+                'success' => true,
+                'data' => $complaint
             ]);
-
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Complaint not found or has been deleted'
+            ], 404);
         }
-        return abort('403', __('You are not authorized'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function store(Request $request)
+    {
+
+        request()->validate([
+            'title'        => 'required|string|max:255',
+            'date'         => 'required',
+            'reason'         => 'required',
+            'company_id'  => 'required',
+            'employee_from'  => 'required',
+            'employee_against'  => 'required',
+        ]);
+
+        Complaint::create([
+            'company_id'     => $request['company_id'],
+            'employee_from'     => $request['employee_from'],
+            'employee_against'     => $request['employee_against'],
+            'title'        => $request['title'],
+            'date'         => $request['date'],
+            'time'         => $request['time'],
+            'reason'  => $request['reason'],
+            'description'  => $request['description'],
+        ]);
+
+        return response()->json(['success' => true]);
+    }
     public function update(Request $request, $id)
     {
-        $user_auth = auth()->user();
-		if ($user_auth->can('complaint_edit')){
+        request()->validate([
+            'title'        => 'required|string|max:255',
+            'date'         => 'required',
+            'reason'         => 'required',
+            'company_id'  => 'required',
+            'employee_from'  => 'required',
+            'employee_against'  => 'required',
+        ]);
 
-            request()->validate([
-                'title'        => 'required|string|max:255',
-                'date'         => 'required',
-                'reason'         => 'required',
-                'company_id'  => 'required',
-                'employee_from'  => 'required',
-                'employee_against'  => 'required',
-            ]);
+        Complaint::whereId($id)->update([
+            'company_id'     => $request['company_id'],
+            'employee_from'     => $request['employee_from'],
+            'employee_against'     => $request['employee_against'],
+            'title'        => $request['title'],
+            'date'         => $request['date'],
+            'time'         => $request['time'],
+            'reason'  => $request['reason'],
+            'description'  => $request['description'],
+        ]);
 
-            Complaint::whereId($id)->update([
-                'company_id'     => $request['company_id'],
-                'employee_from'     => $request['employee_from'],
-                'employee_against'     => $request['employee_against'],
-                'title'        => $request['title'],
-                'date'         => $request['date'],
-                'time'         => $request['time'],
-                'reason'  => $request['reason'],
-                'description'  => $request['description'],
-            ]);
-
-            return response()->json(['success' => true]);
-
-        }
-        return abort('403', __('You are not authorized'));
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -168,34 +108,28 @@ class ComplaintController extends Controller
      */
     public function destroy($id)
     {
-        $user_auth = auth()->user();
-		if ($user_auth->can('complaint_delete')){
 
-            Complaint::whereId($id)->update([
-                'deleted_at' => Carbon::now(),
-            ]);
 
-            return response()->json(['success' => true]);
+        Complaint::whereId($id)->update([
+            'deleted_at' => Carbon::now(),
+        ]);
 
-        }
-        return abort('403', __('You are not authorized'));
+        return response()->json(['success' => true]);
     }
 
-         //-------------- Delete by selection  ---------------\\
 
-         public function delete_by_selection(Request $request)
-         {
-            $user_auth = auth()->user();
-            if($user_auth->can('complaint_delete')){
-                $selectedIds = $request->selectedIds;
+    //-------------- Delete by selection  ---------------\\
 
-                foreach ($selectedIds as $complaint_id) {
-                    Complaint::whereId($complaint_id)->update([
-                        'deleted_at' => Carbon::now(),
-                    ]);
-                }
-                return response()->json(['success' => true]);
-            }
-            return abort('403', __('You are not authorized'));
-         }
+    public function delete_by_selection(Request $request)
+    {
+
+        $selectedIds = $request->selectedIds;
+
+        foreach ($selectedIds as $complaint_id) {
+            Complaint::whereId($complaint_id)->update([
+                'deleted_at' => Carbon::now(),
+            ]);
+        }
+        return response()->json(['success' => true]);
+    }
 }

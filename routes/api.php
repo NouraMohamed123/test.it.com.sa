@@ -20,12 +20,14 @@ use App\Http\Controllers\Api\LeaveTypeController;
 use App\Http\Controllers\Api\AttendancesController;
 use App\Http\Controllers\Api\AwardController;
 use App\Http\Controllers\Api\AwardTypeController;
+use App\Http\Controllers\Api\ComplaintController;
 use App\Http\Controllers\Api\DepartmentsController;
 use App\Http\Controllers\Api\OfficeShiftController;
 use App\Http\Controllers\Api\TrainingSkillsController;
 use App\Http\Controllers\Api\EmployeeSessionController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\HolidayController;
+use App\Http\Controllers\Api\TravelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,8 +56,8 @@ Route::group([
     // 'prefix' => 'dashboard'
 
 ], function ($router) {
-      //roles
-      Route::get('/roles', [RoleController::class, 'index']);
+    //roles
+    Route::get('/roles', [RoleController::class, 'index']);
     //------------------------------- Jobs -----------------------\\
     //----------------------------------------------------------------\\
 
@@ -219,4 +221,18 @@ Route::group([
     Route::post('/award-types/{id}', [AwardTypeController::class, 'update']);
     Route::delete('/award-types/{id}', [AwardTypeController::class, 'destroy']);
     Route::post('/award-types/delete/selection', [AwardTypeController::class, 'delete_by_selection']);
+    // Complaint routes
+    Route::get('/complaints', [ComplaintController::class, 'index']);
+    Route::get('/complaints/{id}', [ComplaintController::class, 'show']);
+    Route::post('/complaints', [ComplaintController::class, 'store']);
+    Route::put('/complaints/{id}', [ComplaintController::class, 'update']);
+    Route::delete('/complaints/{id}', [ComplaintController::class, 'destroy']);
+    Route::post('/complaints/delete/selection', [ComplaintController::class, 'delete_by_selection']);
+    // Travel routes
+    Route::get('/travels', [TravelController::class, 'index']);
+    Route::get('/travels/{id}', [TravelController::class, 'show']);
+    Route::post('/travels', [TravelController::class, 'store']);
+    Route::put('/travels/{id}', [TravelController::class, 'update']);
+    Route::delete('/travels/{id}', [TravelController::class, 'destroy']);
+    Route::post('/travels/delete/selection', [TravelController::class, 'delete_by_selection']);
 });
