@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\JobsController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\LeaveController;
 use App\Http\Controllers\Api\TasksController;
 use App\Http\Controllers\Api\CompanyController;
@@ -26,8 +25,7 @@ use App\Http\Controllers\Api\OfficeShiftController;
 use App\Http\Controllers\Api\TrainingSkillsController;
 use App\Http\Controllers\Api\EmployeeSessionController;
 use App\Http\Controllers\Api\EventController;
-use App\Http\Controllers\Api\OfficeShiftController;
-use App\Http\Controllers\Api\PoliciesController;
+use App\Http\Controllers\Api\HolidayController;
 
 /*
 |--------------------------------------------------------------------------
