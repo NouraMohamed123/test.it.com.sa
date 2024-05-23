@@ -304,13 +304,13 @@
             @can('attendance_view')
                 <li class="nav-item">
                     <a class="{{ Route::currentRouteName() == 'daily_attendance' ? 'open' : '' }}"
-                        href="#">
+                        href="{{ route('daily_attendance') }}">
                         <i class="nav-icon i-Clock"></i>
                         <span class="item-name">{{ __('translate.Daily_Attendance') }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#"
+                    <a href="{{ route('attendances.index') }}"
                         class="{{ Route::currentRouteName() == 'attendances.index' ? 'open' : '' }}">
                         <i class="nav-icon i-Clock-4"></i>
                         <span class="item-name">{{ __('translate.Attendances') }}</span>
@@ -445,7 +445,7 @@
             @can('leave_view')
                 <li class="nav-item">
                     <a class="{{ Route::currentRouteName() == 'leave.index' ? 'open' : '' }}"
-                        href="#">
+                        href="{{ route('leave.index') }}">
                         <i class="nav-icon i-Wallet"></i>
                         <span class="item-name">{{ __('translate.Request_leave') }}</span>
                     </a>
@@ -455,7 +455,7 @@
             @can('leave_type')
                 <li class="nav-item">
                     <a class="{{ Route::currentRouteName() == 'leave_type.index' ? 'open' : '' }}"
-                        href="#">
+                        href="{{ route('leave_type.index') }}">
                         <i class="nav-icon i-Wallet"></i>
                         <span class="item-name">{{ __('translate.Leave_Type') }}</span>
                     </a>
@@ -512,7 +512,7 @@
 
             @can('event_view')
                 <li class="nav-item">
-                    <a href="#"
+                    <a href="{{ route('event.index') }}"
                         class="{{ Route::currentRouteName() == 'event.index' ? 'open' : '' }}">
                         <i class="nav-icon i-Clock-4"></i>
                         <span class="item-name">{{ __('translate.Events') }}</span>
@@ -523,7 +523,7 @@
             @can('holiday_view')
                 <li class="nav-item">
                     <a class="{{ Route::currentRouteName() == 'holiday.index' ? 'open' : '' }}"
-                        href="#">
+                        href="{{ route('holiday.index') }}">
                         <i class="nav-icon i-Christmas-Bell"></i>
                         <span class="item-name">{{ __('translate.Holidays') }}</span>
                     </a>
@@ -541,11 +541,11 @@
                     <ul class="submenu">
                         @can('award_view')
                             <li><a class="{{ Route::currentRouteName() == 'award.index' ? 'open' : '' }}"
-                                    href="#">{{ __('translate.Award_List') }}</a></li>
+                                    href="{{ route('award.index') }}">{{ __('translate.Award_List') }}</a></li>
                         @endcan
                         @can('award_type')
                             <li><a class="{{ Route::currentRouteName() == 'award_type.index' ? 'open' : '' }}"
-                                    href="#">{{ __('translate.Award_Type') }}</a></li>
+                                    href="{{ route('award_type.index') }}">{{ __('translate.Award_Type') }}</a></li>
                         @endcan
                     </ul>
                 </li>
@@ -554,7 +554,7 @@
             @can('complaint_view')
                 <li class="nav-item">
                     <a class="{{ Route::currentRouteName() == 'complaint.index' ? 'open' : '' }}"
-                        href="#">
+                        href="{{ route('complaint.index') }}">
                         <i class="nav-icon i-Danger"></i>
                         <span class="item-name">{{ __('translate.Complaints') }}</span>
                     </a>
@@ -572,11 +572,11 @@
                     <ul class="submenu">
                         @can('travel_view')
                             <li><a class="{{ Route::currentRouteName() == 'travel.index' ? 'open' : '' }}"
-                                    href="#">{{ __('translate.Travel_List') }}</a></li>
+                                    href="{{ route('travel.index') }}">{{ __('translate.Travel_List') }}</a></li>
                         @endcan
                         @can('arrangement_type')
                             <li><a class="{{ Route::currentRouteName() == 'arrangement_type.index' ? 'open' : '' }}"
-                                    href="#">{{ __('translate.Arrangement_Type') }}</a>
+                                    href="{{ route('arrangement_type.index') }}">{{ __('translate.Arrangement_Type') }}</a>
                             </li>
                         @endcan
                     </ul>
@@ -655,7 +655,7 @@
             @can('attendance_report')
                 <li class="nav-item ">
                     <a class="{{ Route::currentRouteName() == 'attendance_report_index' ? 'open' : '' }}"
-                        href="#">
+                        href="{{ route('attendance_report_index') }}">
                         <i class="nav-icon i-Wallet"></i>
                         <span class="item-name">{{ __('translate.Attendance_Report') }}</span>
                     </a>
@@ -665,7 +665,7 @@
             @can('employee_report')
                 <li class="nav-item ">
                     <a class="{{ Route::currentRouteName() == 'employee_report_index' ? 'open' : '' }}"
-                        href="#">
+                        href="{{ route('employee_report_index') }}">
                         <i class="nav-icon i-Wallet"></i>
                         <span class="item-name">{{ __('translate.Employee_Report') }}</span>
                     </a>
@@ -695,7 +695,7 @@
             @can('expense_report')
                 <li class="nav-item ">
                     <a class="{{ Route::currentRouteName() == 'expense_report_index' ? 'open' : '' }}"
-                        href="#">
+                        href="{{ route('expense_report_index') }}">
                         <i class="nav-icon i-Wallet"></i>
                         <span class="item-name">{{ __('translate.Expense_Report') }}</span>
                     </a>
@@ -705,7 +705,7 @@
             @can('deposit_report')
                 <li class="nav-item ">
                     <a class="{{ Route::currentRouteName() == 'deposit_report_index' ? 'open' : '' }}"
-                        href="#">
+                        href="{{ route('deposit_report_index') }}">
                         <i class="nav-icon i-Wallet"></i>
                         <span class="item-name">{{ __('translate.Deposit_Report') }}</span>
                     </a>
