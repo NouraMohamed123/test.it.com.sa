@@ -26,7 +26,6 @@ class LeaveController extends Controller
          $user_auth = Auth::guard('api')->user();
 		// if ($user_auth->can('leave_view')){
 
-            // if ($user_auth->can('attendance_view')){
             if($user_auth->role_users_id == 5){
             $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
             $leaves = Leave::

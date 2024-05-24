@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Complaint;
-use App\Models\Employee;
-use App\Models\Company;
 use Carbon\Carbon;
+use App\Models\Company;
+use App\Models\Employee;
+use App\Models\Complaint;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 
 class ComplaintController extends Controller
@@ -20,11 +21,19 @@ class ComplaintController extends Controller
     public function index()
     {
 
-
+        $user_auth = Auth::guard('api')->user();
+        if($user_auth->role_users_id == 5){
+          $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
         $complaints = Complaint::with('company:id,name', 'EmployeeFrom:id,username', 'EmployeeAgainst:id,username')
+            ->where('deleted_at', '=', null)->where('company_id',$employee->company->id)
+            ->orderBy('id', 'desc')
+            ->get();
+        }else{
+            $complaints = Complaint::with('company:id,name', 'EmployeeFrom:id,username', 'EmployeeAgainst:id,username')
             ->where('deleted_at', '=', null)
             ->orderBy('id', 'desc')
             ->get();
+        }
         return response()->json([
             'success' => true,
             'complaints' => $complaints,
