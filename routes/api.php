@@ -204,7 +204,7 @@ Route::group([
     Route::get('/holidays', [HolidayController::class, 'index']);
     Route::post('/holidays', [HolidayController::class, 'store']);
     Route::get('/holidays/{id}', [HolidayController::class, 'show']);
-    Route::put('/holidays/{id}', [HolidayController::class, 'update']);
+    Route::post('/holidays/{id}', [HolidayController::class, 'update']);
     Route::delete('/holidays/{id}', [HolidayController::class, 'destroy']);
     Route::post('/holidays/delete/selection', [HolidayController::class, 'delete_by_selection']);
     // Award routes
@@ -225,7 +225,7 @@ Route::group([
     Route::get('/complaints', [ComplaintController::class, 'index']);
     Route::get('/complaints/{id}', [ComplaintController::class, 'show']);
     Route::post('/complaints', [ComplaintController::class, 'store']);
-    Route::put('/complaints/{id}', [ComplaintController::class, 'update']);
+    Route::post('/complaints/{id}', [ComplaintController::class, 'update']);
     Route::delete('/complaints/{id}', [ComplaintController::class, 'destroy']);
     Route::post('/complaints/delete/selection', [ComplaintController::class, 'delete_by_selection']);
     // Travel routes
