@@ -178,9 +178,7 @@ class DashboardController extends Controller
         $user_auth = auth()->user();
 
         $employee = Employee::with('company','department','office_shift')->where('email',$user_auth->email)->first();
-       if(!$employee){
-         return 'user not found';
-       }
+
         // Date now
         $day_in_now = strtolower(Carbon::now()->format('l')) . '_in';
         $day_out_now = strtolower(Carbon::now()->format('l')) . '_out';
