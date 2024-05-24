@@ -2,19 +2,27 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Employee;
-use App\Models\Company;
-use App\Models\Policy;
 use Carbon\Carbon;
+use App\Models\Policy;
+use App\Models\Company;
+use App\Models\Employee;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PoliciesController extends Controller
 {
     public function index()
     {
+        $user_auth = Auth::guard('api')->user();
 
-        $policies = Policy::where('deleted_at', '=', null)->orderBy('id', 'desc')->paginate(50);
+        $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+        if($employee && $employee->type == 1){
+            $policies = Policy::where('deleted_at', '=', null)->where('company_id',$employee->company->id)->orderBy('id', 'desc')->paginate(50);
+        }else{
+            $policies = Policy::where('deleted_at', '=', null)->orderBy('id', 'desc')->paginate(50);
+        }
+
         return response()->json([
             'success' => true,
             'data' =>  $policies

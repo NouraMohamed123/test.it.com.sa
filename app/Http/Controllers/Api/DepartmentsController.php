@@ -2,25 +2,37 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Company;
-use App\Models\Department;
-use App\Models\Employee;
-use Carbon\Carbon;
 use DB;
+use Carbon\Carbon;
+use App\Models\Company;
+use App\Models\Employee;
+use App\Models\Department;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class DepartmentsController extends Controller
 {
     public function index()
     {
+        $user_auth = Auth::guard('api')->user();
+        $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
 
+        if($employee && $employee->type == 1){
         $department = Department::leftjoin('employees', 'employees.id', '=', 'departments.department_head')
+            ->join('companies', 'companies.id', '=', 'departments.company_id')->where('company_id',$employee->company->id)
+            ->where('departments.deleted_at', '=', null)
+            ->select('departments.*', 'employees.username AS employee_head', 'companies.name AS company_name')
+            ->orderBy('id', 'desc')
+            ->get();
+         } else{
+            $department = Department::leftjoin('employees', 'employees.id', '=', 'departments.department_head')
             ->join('companies', 'companies.id', '=', 'departments.company_id')
             ->where('departments.deleted_at', '=', null)
             ->select('departments.*', 'employees.username AS employee_head', 'companies.name AS company_name')
             ->orderBy('id', 'desc')
             ->get();
+         }
         return response()->json([
             'success' => true,
             'department' => $department
@@ -79,7 +91,7 @@ class DepartmentsController extends Controller
             ]);
             return response()->json(['success' => true]);
 
-        
+
     }
 
       //-------------- Delete by selection  ---------------\\
