@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Http\Controllers;
@@ -174,10 +175,8 @@ class DashboardController extends Controller
 
     public function dashboard_employee()
     {
-
         $user_auth = auth()->user();
-
-        $employee = Employee::with('company','department','office_shift')->where('email',$user_auth->email)->first();
+        $employee = Employee::with('company:id,name','department:id,department','office_shift')->findOrFail($user_auth->id);
 
         // Date now
         $day_in_now = strtolower(Carbon::now()->format('l')) . '_in';
