@@ -45,7 +45,7 @@ class TasksController extends Controller
            ->where('employee_id', $employee->id)
             ->where('status', '=', 'completed')
             ->count();
-            $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title')>join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
+            $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title')->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
             ->where('employee_id', $employee->id)->orderBy('id', 'desc')->get();
             }else{
                 $count_not_started = Task::where('deleted_at', '=', null)

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Travel;
-use App\Models\ArrangementType;
 use App\Models\Company;
 use App\Models\Employee;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
+use App\Models\ArrangementType;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class TravelController extends Controller
 {
@@ -19,8 +20,15 @@ class TravelController extends Controller
      */
     public function index()
     {
+        $user_auth = Auth::guard('api')->user();
+        if($user_auth->role_users_id == 5){
+          $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
         $travels = Travel::with('company:id,name', 'employee:id,username', 'arrangement_type:id,title')
+            ->where('deleted_at', '=', null)->where('employee_id', $employee->id)->orderBy('id', 'desc')->get();
+        }else{
+            $travels = Travel::with('company:id,name', 'employee:id,username', 'arrangement_type:id,title')
             ->where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
+        }
         return response()->json([
             'success' => true,
             'data' => $travels
