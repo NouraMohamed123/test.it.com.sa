@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\TrainingSkillsController;
 use App\Http\Controllers\Api\EmployeeSessionController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\HolidayController;
+use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\TravelController;
 
 /*
@@ -236,4 +237,14 @@ Route::group([
     Route::put('/travels/{id}', [TravelController::class, 'update']);
     Route::delete('/travels/{id}', [TravelController::class, 'destroy']);
     Route::post('/travels/delete/selection', [TravelController::class, 'delete_by_selection']);
+
+    //report
+    Route::get('attendance-report', [ReportController::class, 'attendance_report_index']);
+    Route::get('employee-report', [ReportController::class, 'employee_report_index']);
+    Route::get('project-report', [ReportController::class, 'project_report_index']);
+    Route::get('task-report', [ReportController::class, 'task_report_index']);
+    Route::get('expense-report', [ReportController::class, 'expense_report_index']);
+    Route::get('deposit-report', [ReportController::class, 'deposit_report_index']);
+    Route::post('fetch-department', [ReportController::class, 'fetchDepartment']);
+    Route::post('fetch-designation', [ReportController::class, 'fetchDesignation']);
 });

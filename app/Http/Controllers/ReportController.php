@@ -27,7 +27,8 @@ class ReportController extends Controller
 
     /* Attendance report */
 
-    public function attendance_report_index(Request $request){
+    public function attendance_report_index(Request $request)
+    {
 
         $user_auth = auth()->user();
 		if ($user_auth->can('attendance_report')){
@@ -47,7 +48,7 @@ class ReportController extends Controller
                 ->whereBetween('date', array($start_date, $end_date))
                 ->with('company:id,name','employee:id,username')
                 ->orderBy('id', 'desc');
-                
+
                 //Multiple Filter
                 $attendances_Filtred = $helpers->filter($attendances, $columns, $param, $request)->get();
                 return Datatables::of($attendances_Filtred)
@@ -65,7 +66,7 @@ class ReportController extends Controller
 
     /* Employee report */
     public function employee_report_index(Request $request){
-        
+
         $user_auth = auth()->user();
 		if ($user_auth->can('employee_report')){
 
@@ -75,7 +76,7 @@ class ReportController extends Controller
                 $helpers = new helpers();
                 $param = array(0 => '=' , 1=> '=' , 2=> '=');
                 $columns = array(0 => 'company_id' , 1 => 'department_id' , 2 => 'designation_id');
-                
+
                 $employees = Employee::where('deleted_at', '=', null)
                 ->with('company:id,name','department:id,department','designation:id,designation','office_shift:id,name')
                 ->orderBy('id', 'desc');
@@ -106,12 +107,12 @@ class ReportController extends Controller
                 $helpers = new helpers();
                 $param = array(0 => 'like' , 1=> '=' , 2=> '=' , 3=> 'like' , 4=> 'like');
                 $columns = array(0 => 'title' , 1 => 'client_id' , 2 => 'company_id' , 3 => 'priority' , 4 => 'status');
-                
+
                 $projects = Project::where('deleted_at', '=', null)
                 ->with('company:id,name','client:id,username')->orderBy('id', 'desc');
                 //Multiple Filter
                 $projects_Filtred = $helpers->filter($projects, $columns, $param, $request)->get();
-        
+
                 return Datatables::of($projects_Filtred)
                         ->addIndexColumn()
                         ->make(true);
@@ -123,7 +124,7 @@ class ReportController extends Controller
         return abort('403', __('You are not authorized'));
     }
 
-  
+
 
 
     /* Task report */
@@ -139,11 +140,11 @@ class ReportController extends Controller
                 $helpers = new helpers();
                 $param = array(0 => 'like' , 1=> '=' , 2=> '=' , 3=> 'like' , 4=> 'like');
                 $columns = array(0 => 'title' , 1 => 'project_id' , 2 => 'company_id' , 3 => 'priority' , 4 => 'status');
-                
+
                 $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title')->orderBy('id', 'desc');
                 //Multiple Filter
                 $tasks_Filtred = $helpers->filter($tasks, $columns, $param, $request)->get();
-        
+
                 return Datatables::of($tasks_Filtred)
                         ->addIndexColumn()
                         ->make(true);
@@ -234,12 +235,12 @@ class ReportController extends Controller
 
 
     public function fetchDepartment(Request $request){
-            
+
         $value = $request->get('value');
         $dependent  = $request->get('dependent');
         $data = Department::where('company_id' ,$value)->where('deleted_at', '=', null)->groupBy('department')->get();
         $output = '';
-        
+
         foreach ($data as $row)
         {
             $output .= '<option value=' . $row->id . '>' . $row->$dependent . '</option>';
@@ -254,7 +255,7 @@ class ReportController extends Controller
         $designation_name  = $request->get('designation_name');
         $data = Designation::where('department_id' ,$value)->where('deleted_at', '=', null)->groupBy('designation')->get();
         $output = '';
-        
+
         foreach ($data as $row)
         {
             $output .= '<option value=' . $row->id . '>' . $row->$designation_name . '</option>';
@@ -263,5 +264,5 @@ class ReportController extends Controller
         return $output;
     }
 
-    
+
 }
