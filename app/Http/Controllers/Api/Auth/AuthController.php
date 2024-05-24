@@ -26,9 +26,9 @@ class AuthController extends Controller
                 'message' => 'Invalid email or password',
             ], 401);
         }
-        $user = auth()->guard('api')->user();
-        $id = $user->id;
-        $name = $user->name;
+
+        $user = User::with('RoleUser.permissions')->where('id', Auth::guard('api')->user()->id)->first();
+
 
         return response()->json([
             'access_token' => $token,
