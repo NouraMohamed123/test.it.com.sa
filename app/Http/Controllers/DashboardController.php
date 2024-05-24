@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -174,13 +173,9 @@ class DashboardController extends Controller
 
     public function dashboard_employee()
     {
-
         $user_auth = auth()->user();
+        $employee = Employee::with('company:id,name','department:id,department','office_shift')->findOrFail($user_auth->id);
 
-        $employee = Employee::with('company','department','office_shift')->where('email',$user_auth->email)->first();
-       if(!$employee){
-         return 'user not found';
-       }
         // Date now
         $day_in_now = strtolower(Carbon::now()->format('l')) . '_in';
         $day_out_now = strtolower(Carbon::now()->format('l')) . '_out';

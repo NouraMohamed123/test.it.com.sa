@@ -23,12 +23,21 @@ class TrainingController extends Controller
     public function index()
     {
           $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('training_view')){
-
+          if($user_auth->role_users_id == 5){
+            $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+            $trainings = Training::where('deleted_at', '=', null)
+            ->with('company:id,name','trainer:id,name','TrainingSkill:id,training_skill')
+            ->join('employee_training', 'training.id', '=', 'employee_training.training_id')->where('employee_id', $employee->id)
+            ->orderBy('id', 'desc')
+            ->get();
+            // if ($user_auth->can('training_view')){
+        } else{
             $trainings = Training::where('deleted_at', '=', null)
             ->with('company:id,name','trainer:id,name','TrainingSkill:id,training_skill')
             ->orderBy('id', 'desc')
             ->get();
+        }
+
             return response()->json(['success' => true, 'trainings' => $trainings]);
 
         // }

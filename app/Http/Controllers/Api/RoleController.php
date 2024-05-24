@@ -11,7 +11,7 @@ class RoleController extends Controller
 {
     public function index(Request $request)
     {
-        $roles = Role::with('permissions')->where('guard_name','api')->paginate($request->get('per_page', 50));
+        $roles = Role::with('permissions')->where('guard_name','api')->get(['id','name']);
         return response()->json(['success' => true,'roles' => $roles]);
     }
 

@@ -21,13 +21,24 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function me(Request $request)
+    {
+
+        $user = User::with('RoleUser.permissions')->where('id', Auth::guard('api')->user()->id)->first();
+
+        return response()->json([
+
+            'user' => $user,
+
+        ]);
+    }
     public function index()
     {
            $user_auth = Auth::guard('api')->user();
 		// if ($user_auth->can('user_view')){
 
-            $roles = Role::where('guard_name', 'api')->where('deleted_at', '=', null)->where('id', '!=' , 3)->get(['id','name']);
-            $users = User::with('RoleUser')->orderBy('id', 'desc')->get();
+            $roles = Role::where('guard_name', 'api')->where('deleted_at', '=', null)->get(['id','name']);
+            $users = User::with('RoleUser.permissions')->orderBy('id', 'desc')->get();
 
             return response()->json(['success' => true,'roles' => $roles,'users'=>$users]);
 

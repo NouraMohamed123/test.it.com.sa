@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Employee;
-use App\Models\Award;
-use App\Models\AwardType;
-use App\Models\Company;
-use App\Models\Department;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use File;
+use Carbon\Carbon;
+use App\Models\Award;
+use App\Models\Company;
+use App\Models\Employee;
+use App\Models\AwardType;
+use App\Models\Department;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AwardController extends Controller
 {
@@ -23,7 +24,25 @@ class AwardController extends Controller
      */
     public function index()
     {
+        $user_auth = Auth::guard('api')->user();
 
+            if($user_auth->role_users_id == 5){
+                $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+
+                $awards = Award::
+                join('companies','companies.id','=','awards.company_id')
+                ->join('departments','departments.id','=','awards.department_id')
+                ->join('employees','employees.id','=','awards.employee_id')
+                ->join('award_types','award_types.id','=','awards.award_type_id')
+                ->where('awards.deleted_at' , '=', null)->where('employee_id', $employee->id)
+                ->select('awards.*',
+                'employees.username AS employee_name', 'employees.id AS employee_id',
+                'award_types.title AS award_type_title', 'award_types.id AS award_type_id',
+                'companies.name AS company_name', 'companies.id AS company_id',
+                'departments.department AS department_name', 'departments.id AS department_id')
+                ->orderBy('id', 'desc')
+                ->get();
+            }else{
                 $awards = Award::
                 join('companies','companies.id','=','awards.company_id')
                 ->join('departments','departments.id','=','awards.department_id')
@@ -37,7 +56,7 @@ class AwardController extends Controller
                 'departments.department AS department_name', 'departments.id AS department_id')
                 ->orderBy('id', 'desc')
                 ->get();
-
+            }
                 return response()->json([
                     'success' => true ,
                     'data'=> $awards
@@ -130,7 +149,7 @@ class AwardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
- 
+
     /**
      * Show the form for editing the specified resource.
      *

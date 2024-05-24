@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Employee;
-use App\Models\Holiday;
-use App\Models\Company;
 use Carbon\Carbon;
+use App\Models\Company;
+use App\Models\Holiday;
+use App\Models\Employee;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class HolidayController extends Controller
 {
@@ -18,8 +19,14 @@ class HolidayController extends Controller
      */
     public function index()
     {
+        $user_auth = Auth::guard('api')->user();
+        if($user_auth->role_users_id == 5){
+          $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+         $holidays = Holiday::where('deleted_at', '=', null)->where('company_id',$employee->company->id)->orderBy('id', 'desc')->paginate(50);
+        }else{
+            $holidays = Holiday::where('deleted_at', '=', null)->orderBy('id', 'desc')->paginate(50);
 
-        $holidays = Holiday::where('deleted_at', '=', null)->orderBy('id', 'desc')->paginate(50);
+        }
         return response()->json([
             'success' => true,
             'data' => $holidays

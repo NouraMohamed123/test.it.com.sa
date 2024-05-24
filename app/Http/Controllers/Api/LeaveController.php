@@ -26,12 +26,14 @@ class LeaveController extends Controller
          $user_auth = Auth::guard('api')->user();
 		// if ($user_auth->can('leave_view')){
 
+            if($user_auth->role_users_id == 5){
+            $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
             $leaves = Leave::
             join('companies','companies.id','=','leaves.company_id')
             ->join('departments','departments.id','=','leaves.department_id')
             ->join('employees','employees.id','=','leaves.employee_id')
             ->join('leave_types','leave_types.id','=','leaves.leave_type_id')
-            ->where('leaves.deleted_at' , '=', null)
+            ->where('leaves.deleted_at' , '=', null)->where('employee_id',$employee->id)
             ->select('leaves.*',
             'employees.username AS employee_name', 'employees.id AS employee_id',
             'leave_types.title AS leave_type_title', 'leave_types.id AS leave_type_id',
@@ -39,6 +41,21 @@ class LeaveController extends Controller
             'departments.department AS department_name', 'departments.id AS department_id')
             ->orderBy('id', 'desc')
             ->get();
+            }else{
+                $leaves = Leave::
+                join('companies','companies.id','=','leaves.company_id')
+                ->join('departments','departments.id','=','leaves.department_id')
+                ->join('employees','employees.id','=','leaves.employee_id')
+                ->join('leave_types','leave_types.id','=','leaves.leave_type_id')
+                ->where('leaves.deleted_at' , '=', null)
+                ->select('leaves.*',
+                'employees.username AS employee_name', 'employees.id AS employee_id',
+                'leave_types.title AS leave_type_title', 'leave_types.id AS leave_type_id',
+                'companies.name AS company_name', 'companies.id AS company_id',
+                'departments.department AS department_name', 'departments.id AS department_id')
+                ->orderBy('id', 'desc')
+                ->get();
+            }
             return response()->json(['success' => true, 'leaves' => $leaves]);
 
 
