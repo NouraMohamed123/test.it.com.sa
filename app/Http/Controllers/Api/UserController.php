@@ -21,6 +21,22 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function me(Request $request)
+    {
+        $user = Auth::guard('api')->user();
+
+        $roles = $user->roles;
+        $permissions = $roles->flatMap(function ($role) {
+            return $role->permissions->pluck('name');
+        });
+        return response()->json([
+
+            'user' => $user,
+            "roles" => $roles,
+            'permissions' => $permissions,
+
+        ]);
+    }
     public function index()
     {
            $user_auth = Auth::guard('api')->user();
