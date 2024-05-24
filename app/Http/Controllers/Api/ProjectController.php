@@ -89,7 +89,7 @@ class ProjectController extends Controller
         $request->validate([
             'title'           => 'required|string|max:255',
             'summary'         => 'required|string|max:255',
-            'client'          => 'required',
+
             'company_id'      => 'required',
             'assigned_to'     => 'required',
             'start_date'      => 'required',
@@ -104,7 +104,6 @@ class ProjectController extends Controller
             'start_date'       => $request['start_date'],
             'end_date'         => $request['end_date'],
             'company_id'       => $request['company_id'],
-            'client_id'        => $request['client'],
             'priority'         => $request['priority'],
             'status'           => $request['status'],
             'project_progress' => $request['project_progress'],
@@ -167,7 +166,6 @@ class ProjectController extends Controller
         $request->validate([
             'title'           => 'required|string|max:255',
             'summary'         => 'required|string|max:255',
-            'client'          => 'required',
             'company_id'      => 'required',
             'assigned_to'     => 'required',
             'start_date'      => 'required',
@@ -182,7 +180,6 @@ class ProjectController extends Controller
             'start_date'       => $request['start_date'],
             'end_date'         => $request['end_date'],
             'company_id'       => $request['company_id'],
-            'client_id'        => $request['client'],
             'priority'         => $request['priority'],
             'status'           => $request['status'],
             'project_progress' => $request['project_progress'],
