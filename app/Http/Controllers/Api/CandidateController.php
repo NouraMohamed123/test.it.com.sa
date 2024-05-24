@@ -43,15 +43,14 @@ class CandidateController extends Controller
     public function index()
     {
         $user_auth = Auth::guard('api')->user();
-        // if ($user_auth->can('employee_view')){
+
         $candidates = Candidate::with('jop')->where('deleted_at', '=', null)
         ->orderBy('id', 'desc')
         ->get();
 
         return response()->json(['success' => true, 'candidates' => $candidates]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
+
 
     }
     public function store(Request $request)

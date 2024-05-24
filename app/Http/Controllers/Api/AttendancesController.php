@@ -27,9 +27,8 @@ class AttendancesController extends Controller
     {
 
          $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('attendance_view')){
-            if($user_auth->role_users_id == 5){
-                $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+         $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+         if($employee && $employee->type == 1){
                 $attendances = Attendance::where('deleted_at', '=', null)->where('employee_id', $employee->id)->orderBy('id', 'desc')->get();
 
 
@@ -40,8 +39,7 @@ class AttendancesController extends Controller
             }
             return response()->json(['success' => true, 'attendances' => $attendances]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
+
     }
 
 

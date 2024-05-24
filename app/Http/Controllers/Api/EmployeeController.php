@@ -206,7 +206,7 @@ class EmployeeController extends Controller
     public function show($id)
     {
          $user_auth = Auth::guard('api')->user();
-        // if ($user_auth->can('employee_details')) {
+
 
             $employee = Employee::where('deleted_at', '=', null)->findOrFail($id);
             $experiences = EmployeeExperience::where('employee_id', $id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
@@ -312,8 +312,7 @@ class EmployeeController extends Controller
                     'trainings'
                 )
             );
-        // }
-        // return abort('403', __('You are not authorized'));
+
     }
 
 

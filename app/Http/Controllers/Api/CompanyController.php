@@ -20,7 +20,7 @@ class CompanyController extends Controller
     public function index()
     {
         $user_auth = Auth::guard('api')->user();
-        // if ($user_auth->can('company_view')){
+
 
         $companies = Company::where('deleted_at', '=', null)
             ->orderBy('id', 'desc')
@@ -28,8 +28,7 @@ class CompanyController extends Controller
         return response()->json(['success' => true, 'companies' => $companies]);
 
 
-        // }
-        // return abort('403', __('You are not authorized'));
+
     }
 
     public function store(Request $request)
@@ -91,6 +90,8 @@ class CompanyController extends Controller
             'trade_register' => $filename3,
             'email' => $request['email'],
             'phone' => $request['phone'],
+            'attendance_time'=>$request['attendance_time'],
+            'leave_time'=>$request['leave_time'],
 
         ]);
 
@@ -161,6 +162,8 @@ class CompanyController extends Controller
             'trade_register' => $filename3,
             'email' => $request['email'],
             'phone' => $request['phone'],
+            'attendance_time'=>$request['attendance_time'],
+            'leave_time'=>$request['leave_time'],
 
         ]);
 

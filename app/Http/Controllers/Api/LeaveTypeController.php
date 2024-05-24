@@ -18,14 +18,13 @@ class LeaveTypeController extends Controller
     public function index()
     {
       $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('leave_type')){
+
 
             $leave_types = LeaveType::where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
             return response()->json(['success' => true, 'leave_types' => $leave_types]);
 
 
-        // }
-        // return abort('403', __('You are not authorized'));
+
     }
 
     /**

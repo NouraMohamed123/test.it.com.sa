@@ -24,10 +24,9 @@ class TasksController extends Controller
     public function index()
     {
          $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('task_view')){
-            $user_auth = Auth::guard('api')->user();
-            if($user_auth->role_users_id == 5){
-            $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+         $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+
+            if($employee && $employee->type == 1){
 
             $count_not_started = Task::where('deleted_at', '=', null)->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
            ->where('employee_id', $employee->id)
@@ -68,8 +67,7 @@ class TasksController extends Controller
 
 
 
-        // }
-        // return abort('403', __('You are not authorized'));
+
     }
 
     public function tasks_kanban()
