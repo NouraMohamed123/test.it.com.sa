@@ -206,6 +206,7 @@ class AttendancesController extends Controller
                 'date'           => 'required',
                 'clock_in'      => 'required',
                 'clock_out'      => 'required',
+                'work_type'     => 'required',
             ]);
 
 
@@ -239,6 +240,7 @@ class AttendancesController extends Controller
                 $data['clock_in'] = $clock_in->format('H:i');
                 $data['clock_out'] = $clock_out->format('H:i');
                 $data['status'] = 'present';
+                $data['work_type'] =$request->work_type;
 
                 $work_duration = $clock_in->diff($clock_out)->format('%H:%I');
                 $data['total_work'] = $work_duration;
@@ -334,6 +336,7 @@ class AttendancesController extends Controller
                 'date'           => 'required',
                 'clock_in'      => 'required',
                 'clock_out'      => 'required',
+                'work_type'     => 'required',
             ]);
 
             $employee_id  = $request->employee_id;
@@ -364,7 +367,7 @@ class AttendancesController extends Controller
                 $data['clock_in'] = $clock_in->format('H:i');
                 $data['clock_out'] = $clock_out->format('H:i');
                 $data['status'] = 'present';
-
+                $data['work_type'] =$request->work_type;
                 $work_duration = $clock_in->diff($clock_out)->format('%H:%I');
                 $data['total_work'] = $work_duration;
                 $data['depart_early'] = '00:00';
