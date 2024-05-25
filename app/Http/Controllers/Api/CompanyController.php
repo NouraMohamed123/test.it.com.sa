@@ -55,6 +55,7 @@ class CompanyController extends Controller
             'trade_register' => 'nullable|max:255',
             'email' => 'nullable|string|email|max:255',
             'phone' => 'nullable|string|max:255',
+            'policy'=>'required',
 
         ]);
 
@@ -103,6 +104,7 @@ class CompanyController extends Controller
             'phone' => $request['phone'],
             'attendance_time'=>$request['attendance_time'],
             'leave_time'=>$request['leave_time'],
+            'policy'=>$request['policy'],
 
         ]);
 
@@ -125,6 +127,7 @@ class CompanyController extends Controller
             'trade_register' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255',
             'phone' => 'nullable|string|max:255',
+            'policy'=>'required',
 
         ]);
 
@@ -175,6 +178,8 @@ class CompanyController extends Controller
             'phone' => $request['phone'],
             'attendance_time'=>$request['attendance_time'],
             'leave_time'=>$request['leave_time'],
+            'policy'=>$request['policy'],
+
 
         ]);
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use File;
 use App\Models\User;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
@@ -30,6 +31,22 @@ class UserController extends Controller
 
             'data' => $user,
 
+        ]);
+    }
+    public function showPrivcy(Request $request)
+    {
+
+        $user_auth = Auth::guard('api')->user();
+        $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+        if($employee && $employee->type == 1){
+           $policy  =  $employee->company->policy;
+        }else{
+            return response()->json([
+                'message' => 'user not employee',
+            ]);
+        }
+        return response()->json([
+            'data' => $policy,
         ]);
     }
     public function index()

@@ -125,6 +125,7 @@ Route::group([
     //------------------------------- users --------------------------\\
     //----------------------------------------------------------------\\
     Route::get('/me', [UserController::class, 'me']);
+    Route::get('/show-privcy', [UserController::class, 'showPrivcy']);
     Route::get('users', [UserController::class, 'index']);
     Route::post('users', [UserController::class, 'store']);
     Route::post('/users/{user}', [UserController::class, 'update']);
