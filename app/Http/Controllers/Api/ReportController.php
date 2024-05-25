@@ -158,4 +158,17 @@ class ReportController extends Controller
             'data' => $deposits_Filtred
         ]);
     }
+    public function fetchDepartment(Request $request){
+
+        $value = $request->get('company_id');
+        $data = Department::where('company_id' ,$value)->where('deleted_at', '=', null)->groupBy('department')->get();
+        return $data;
+    }
+
+
+    public function fetchDesignation(Request $request){
+        $value = $request->get('department_id');
+        $data = Designation::where('department_id' ,$value)->where('deleted_at', '=', null)->groupBy('designation')->get();
+        return $data;
+    }
 }
