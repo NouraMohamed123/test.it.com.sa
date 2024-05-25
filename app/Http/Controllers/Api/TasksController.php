@@ -115,11 +115,11 @@ class TasksController extends Controller
             $request->validate([
                 'title'           => 'required|string|max:255',
                 'summary'         => 'required|string|max:255',
-                'project_id'      => 'required',
+                'project_id'      => 'nullable',
                 'start_date'      => 'required',
                 'end_date'        => 'required',
                 'status'          => 'required',
-                'company_id'      => 'required',
+                'company_id'      => 'nullable',
                 'priority'          => 'required',
             ]);
 
@@ -185,11 +185,11 @@ class TasksController extends Controller
             $request->validate([
                 'title'           => 'required|string|max:255',
                 'summary'         => 'required|string|max:255',
-                'project_id'      => 'required',
+                'project_id'      => 'nullable',
                 'start_date'      => 'required',
                 'end_date'        => 'required',
                 'status'          => 'required',
-                'company_id'      => 'required',
+                'company_id'      => 'nullable',
                 'priority'          => 'required',
             ]);
 

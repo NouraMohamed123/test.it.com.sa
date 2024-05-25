@@ -185,9 +185,6 @@ Route::group([
     Route::post('/leave_type/{leave_type}', [LeaveTypeController::class, 'update']);
     Route::delete('/leave_type/{leave_type}',  [LeaveTypeController::class, 'destroy']);
     Route::post("leave_type/delete/by_selection", [LeaveTypeController::class, 'delete_by_selection']);
-
-
-
     //policies
     Route::get('/policies', [PoliciesController::class, 'index']);
     Route::post('/policies', [PoliciesController::class, 'store']);
@@ -259,5 +256,5 @@ Route::group([
 
     Route::post('settings/{id}', [SettingController::class, 'update']);
 
-    
+
 });
