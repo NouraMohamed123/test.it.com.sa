@@ -38,7 +38,7 @@ class TrainingController extends Controller
             ->get();
         }
 
-            return response()->json(['success' => true, 'trainings' => $trainings]);
+            return response()->json(['success' => true, 'data' => $trainings]);
 
         // }
         // return abort('403', __('You are not authorized'));

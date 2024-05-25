@@ -48,7 +48,7 @@ class EmployeeController extends Controller
                 ->where('deleted_at', '=', null)
                 ->where('leaving_date', NULL)
                 ->get();
-                return response()->json(['success' => true, 'employees' => $employees]);
+                return response()->json(['success' => true, 'data' => $employees]);
 
         // }
         // return abort('403', __('You are not authorized'));

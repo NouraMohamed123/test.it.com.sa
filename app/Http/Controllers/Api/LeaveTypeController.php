@@ -21,7 +21,7 @@ class LeaveTypeController extends Controller
 
 
             $leave_types = LeaveType::where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
-            return response()->json(['success' => true, 'leave_types' => $leave_types]);
+            return response()->json(['success' => true, 'data' => $leave_types]);
 
 
 

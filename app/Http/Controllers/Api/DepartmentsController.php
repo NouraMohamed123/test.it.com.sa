@@ -35,7 +35,7 @@ class DepartmentsController extends Controller
          }
         return response()->json([
             'success' => true,
-            'department' => $department
+            'data' => $department
         ]);
     }
     public function store(Request $request)

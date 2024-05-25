@@ -63,7 +63,7 @@ class TasksController extends Controller
                 $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title')->orderBy('id', 'desc')->get();
             }
 
-           return response()->json(['success' => true, 'tasks' => $tasks,'count_not_started'=>$count_not_started,'count_in_progress'=>$count_in_progress,'count_cancelled'=>$count_cancelled,'count_completed'=>$count_completed]);
+           return response()->json(['success' => true, 'data' => $tasks,'count_not_started'=>$count_not_started,'count_in_progress'=>$count_in_progress,'count_cancelled'=>$count_cancelled,'count_completed'=>$count_completed]);
 
 
 

@@ -49,7 +49,7 @@ class JobsController extends Controller
             $jops = Jop::where('deleted_at', '=', null)
             ->orderBy('id', 'desc')
             ->get();
-            return response()->json(['success' => true,'jops' => $jops]);
+            return response()->json(['success' => true,'data' => $jops]);
 
 
     }

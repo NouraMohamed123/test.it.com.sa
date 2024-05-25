@@ -21,7 +21,7 @@ class TrainingSkillsController extends Controller
 
 
             $training_skills = TrainingSkill::where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
-            return response()->json(['success' => true, 'training_skills' => $training_skills]);
+            return response()->json(['success' => true, 'data' => $training_skills]);
 
 
 

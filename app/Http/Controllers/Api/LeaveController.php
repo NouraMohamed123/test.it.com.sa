@@ -55,7 +55,7 @@ class LeaveController extends Controller
                 ->orderBy('id', 'desc')
                 ->get();
             }
-            return response()->json(['success' => true, 'leaves' => $leaves]);
+            return response()->json(['success' => true, 'data' => $leaves]);
 
 
         // }

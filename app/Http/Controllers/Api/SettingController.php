@@ -55,7 +55,7 @@ class SettingController extends Controller
 
         return response()->json([
             'success' => true,
-            'setting' => $setting,
+            'data' => $setting,
             'email_settings' => $email_settings,
             'currencies' => $currencies,
             'zones_array' => $zones_array

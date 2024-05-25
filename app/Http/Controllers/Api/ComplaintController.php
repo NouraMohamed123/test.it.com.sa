@@ -37,7 +37,7 @@ class ComplaintController extends Controller
         }
         return response()->json([
             'success' => true,
-            'complaints' => $complaints,
+            'data' => $complaints,
         ]);
     }
     public function show($id)

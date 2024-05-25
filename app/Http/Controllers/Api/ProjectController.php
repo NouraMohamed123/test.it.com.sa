@@ -73,7 +73,7 @@ class ProjectController extends Controller
         }
 
         return response()->json([
-            'projects' => $projects,
+            'data' => $projects,
             'count_not_started' => $count_not_started,
             'count_in_progress' => $count_in_progress,
             'count_cancelled' => $count_cancelled,

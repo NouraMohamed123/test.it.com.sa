@@ -28,7 +28,7 @@ class CompanyController extends Controller
         $companies = Company::where('deleted_at', '=', null)
             ->orderBy('id', 'desc')
             ->get();
-        return response()->json(['success' => true, 'companies' => $companies]);
+        return response()->json(['success' => true, 'data' => $companies]);
 
 
 

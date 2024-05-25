@@ -37,7 +37,7 @@ class AttendancesController extends Controller
                 ->where('employee_id', '=', $user_auth->id)->orderBy('id', 'desc')->get();
 
             }
-            return response()->json(['success' => true, 'attendances' => $attendances]);
+            return response()->json(['success' => true, 'data' => $attendances]);
 
 
     }

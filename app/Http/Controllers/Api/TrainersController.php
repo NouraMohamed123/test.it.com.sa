@@ -22,7 +22,7 @@ class TrainersController extends Controller
 		// if ($user_auth->can('trainer')){
 
             $trainers = Trainer::where('deleted_at', '=', null)->with('company:id,name')->orderBy('id', 'desc')->get();
-            return response()->json(['success' => true, 'trainers' => $trainers]);
+            return response()->json(['success' => true, 'data' => $trainers]);
 
         // }
         // return abort('403', __('You are not authorized'));
