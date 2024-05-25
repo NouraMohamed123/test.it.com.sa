@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use DB;
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Company;
+use App\Models\Employee;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +33,15 @@ class CompanyController extends Controller
 
 
     }
+    public function show($id)
+    {
+        $company = Company::findOrFail($id);
+        if(!empty($company->attendance_time))
+        return response()->json(['success' => true, 'company' => $company]);
 
+
+
+    }
     public function store(Request $request)
     {
         $user_auth = Auth::guard('api')->user();
@@ -219,5 +230,74 @@ class CompanyController extends Controller
             ->get(['id', 'name']);
 
         return response()->json($companies);
+    }
+    public function QuickEntry($id)
+    {
+        $company = Company::findOrFail($id);
+        $employee = Employee::where('company_id', $company->id)->first();
+
+        if (!$employee) {
+            return response()->json([
+                'message' => 'Not found employee for this company',
+            ], 401);
+        }
+
+        $user = $employee->user;
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Invalid email or password',
+            ], 401);
+        }
+        $token = auth()->guard('api')->login($user);
+        $user = User::with('RoleUser.permissions')->where('id', $user->id)->first();
+
+        return response()->json([
+            'access_token' => $token,
+            'data' => $user,
+            'expires_in' => auth()->guard('api')->factory()->getTTL() * 60,
+        ]);
+    }
+    public function verification_attendance()
+    {
+
+        $user_auth = Auth::guard('api')->user();
+        $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+        if (!empty($employee->company->attendance_time)) {
+            $attendanceTime = Carbon::parse($employee->company->attendance_time);
+            $currentTime = Carbon::now();
+            if ($attendanceTime->diffInMinutes($currentTime, false) > 10) {
+                return response()->json([
+                    'message' => 'closed',
+                ], 401);
+            }
+            return response()->json([
+                'message' => 'open',
+            ], 200);
+        }
+        return response()->json([
+            'status' => 'open',
+        ], 200);
+    }
+    public function verification_leave()
+    {
+
+        $user_auth = Auth::guard('api')->user();
+        $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+        if (!empty($employee->company->leave_time)) {
+            $attendanceTime = Carbon::parse($employee->company->leave_time);
+            $currentTime = Carbon::now();
+            if ($attendanceTime->diffInMinutes($currentTime, false) > 10) {
+                return response()->json([
+                    'status' => 'closed',
+                ], 401);
+            }
+            return response()->json([
+                'status' => 'open',
+            ], 200);
+        }
+        return response()->json([
+            'status' => 'open',
+        ], 200);
     }
 }

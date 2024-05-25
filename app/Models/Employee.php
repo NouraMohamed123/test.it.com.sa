@@ -36,7 +36,7 @@ class Employee extends Model
 	{
         return $this->hasone('Spatie\Permission\Models\Role','id',"role_users_id");
     }
-    
+
 
     public function company()
     {
@@ -58,7 +58,7 @@ class Employee extends Model
         return $this->hasOne('App\Models\OfficeShift', 'id', 'office_shift_id');
     }
 
-    
+
     public function attendance()
     {
         return $this->hasMany(Attendance::class);
@@ -70,5 +70,8 @@ class Employee extends Model
         ->select('id','employee_id','start_date','end_date','status')
         ->where('status' , 'approved');
     }
-
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
 }
