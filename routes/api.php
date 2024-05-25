@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\EmployeeSessionController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\HolidayController;
 use App\Http\Controllers\Api\ReportController;
+use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\TravelController;
 
 /*
@@ -118,7 +119,7 @@ Route::group([
     Route::delete("task_documents/{id}", [TasksController::class, 'destroy_task_documents']);
     //------------------------------- users --------------------------\\
     //----------------------------------------------------------------\\
-     Route::get('/me', [UserController::class, 'me']);
+    Route::get('/me', [UserController::class, 'me']);
     Route::get('users', [UserController::class, 'index']);
     Route::post('users', [UserController::class, 'store']);
     Route::post('/users/{user}', [UserController::class, 'update']);
@@ -247,4 +248,11 @@ Route::group([
     Route::get('deposit-report', [ReportController::class, 'deposit_report_index']);
     Route::post('fetch-department', [ReportController::class, 'fetchDepartment']);
     Route::post('fetch-designation', [ReportController::class, 'fetchDesignation']);
+
+    //setting
+    Route::get('settings', [SettingController::class, 'index']);
+
+    Route::put('settings/{id}', [SettingController::class, 'update']);
+
+    Route::post('settings/clear-cache', [SettingController::class, 'Clear_Cache']);
 });
