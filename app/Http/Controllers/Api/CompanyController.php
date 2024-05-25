@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use DB;
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Company;
+use App\Models\Employee;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -220,4 +223,32 @@ class CompanyController extends Controller
 
         return response()->json($companies);
     }
+    public function QuickEntry($id)
+    {
+        $company = Company::findOrFail($id);
+        $employee = Employee::where('company_id', $company->id)->first();
+
+        if (!$employee) {
+            return response()->json([
+                'message' => 'Not found employee for this company',
+            ], 401);
+        }
+
+        $user = $employee->user;
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Invalid email or password',
+            ], 401);
+        }
+        $token = auth()->guard('api')->login($user);
+        $user = User::with('RoleUser.permissions')->where('id', $user->id)->first();
+
+        return response()->json([
+            'access_token' => $token,
+            'data' => $user,
+            'expires_in' => auth()->guard('api')->factory()->getTTL() * 60,
+        ]);
+    }
+
 }

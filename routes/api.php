@@ -75,6 +75,7 @@ Route::group([
     Route::post('/companies/{company}', [CompanyController::class, 'update']);
     Route::delete('/companies/{company}', [CompanyController::class, 'destroy']);
     Route::post('companies/delete/by_selection', [CompanyController::class, 'delete_by_selection']);
+    Route::get('quick-entry-company/{id}', [CompanyController::class, 'QuickEntry']);
     //------------------------------- candidates -----------------------\\
     //----------------------------------------------------------------\\
     Route::get('candidates', [CandidateController::class, 'index']);
