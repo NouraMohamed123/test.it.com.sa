@@ -258,7 +258,7 @@ class CompanyController extends Controller
             'expires_in' => auth()->guard('api')->factory()->getTTL() * 60,
         ]);
     }
-    public function verification_attendance($id)
+    public function verification_attendance()
     {
 
         $user_auth = Auth::guard('api')->user();
@@ -275,8 +275,11 @@ class CompanyController extends Controller
                 'message' => 'open',
             ], 200);
         }
+        return response()->json([
+            'status' => 'open',
+        ], 200);
     }
-    public function verification_leave($id)
+    public function verification_leave()
     {
 
         $user_auth = Auth::guard('api')->user();
@@ -286,12 +289,15 @@ class CompanyController extends Controller
             $currentTime = Carbon::now();
             if ($attendanceTime->diffInMinutes($currentTime, false) > 10) {
                 return response()->json([
-                    'message' => 'closed',
+                    'status' => 'closed',
                 ], 401);
             }
             return response()->json([
-                'message' => 'open',
+                'status' => 'open',
             ], 200);
         }
+        return response()->json([
+            'status' => 'open',
+        ], 200);
     }
 }
