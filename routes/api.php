@@ -252,7 +252,7 @@ Route::group([
     //setting
     Route::get('settings', [SettingController::class, 'index']);
 
-    Route::put('settings/{id}', [SettingController::class, 'update']);
+    Route::post('settings/{id}', [SettingController::class, 'update']);
 
-    Route::post('settings/clear-cache', [SettingController::class, 'Clear_Cache']);
+    
 });

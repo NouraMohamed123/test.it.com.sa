@@ -65,97 +65,87 @@ class SettingController extends Controller
     public function update(Request $request, $id)
     {
 
+        try {
+            $request->validate([
+                'CompanyName'      => 'required|string|max:255',
+                'CompanyPhone'     => 'nullable|numeric',
+                'email'            => 'nullable|string|email|max:255',
+                'CompanyAdress'    => 'nullable|string',
+                'developed_by'     => 'nullable|string|max:255',
+                'footer'           => 'nullable|string|max:255',
+                'logo'             => 'nullable|image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
+                'currency_id'      => 'nullable',
+                'timezone'         => 'nullable',
+            ]);
 
-        $request->validate([
-            'CompanyName'      => 'required|string|max:255',
-            'CompanyPhone'     => 'nullable|numeric',
-            'email'            => 'required|string|email|max:255',
-            'CompanyAdress'    => 'required|string',
-            'developed_by'     => 'required|string|max:255',
-            'footer'           => 'required|string|max:255',
-            'logo'             => 'nullable|image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
-            'currency_id'      => 'required',
-            'timezone'         => 'required',
-        ]);
 
-        $setting = Setting::findOrFail($id);
-        $currentAvatar = $setting->logo;
+            $setting = Setting::findOrFail($id);
+            $currentAvatar = $setting->logo;
 
-        if ($request->logo != null) {
-            if ($request->logo != $currentAvatar) {
+            if ($request->logo != null) {
+                if ($request->logo != $currentAvatar) {
 
-                $image = $request->file('logo');
-                $filename = time() . '.' . $image->extension();
-                $image->move(public_path('/assets/images'), $filename);
-                $path = public_path() . '/assets/images';
+                    $image = $request->file('logo');
+                    $filename = time() . '.' . $image->extension();
+                    $image->move(public_path('/assets/images'), $filename);
+                    $path = public_path() . '/assets/images';
 
-                $userPhoto = $path . '/' . $currentAvatar;
-                if (file_exists($userPhoto)) {
-                    if ($setting->logo != 'logo-default.png') {
-                        @unlink($userPhoto);
+                    $userPhoto = $path . '/' . $currentAvatar;
+                    if (file_exists($userPhoto)) {
+                        if ($setting->logo != 'logo-default.png') {
+                            @unlink($userPhoto);
+                        }
                     }
+                } else {
+                    $filename = $currentAvatar;
                 }
             } else {
                 $filename = $currentAvatar;
             }
-        } else {
-            $filename = $currentAvatar;
+
+
+
+
+            if ($request['currency_id'] != 'null') {
+                $currency = $request['currency_id'];
+            } else {
+                $currency = null;
+            }
+
+            if ($request['default_language'] != 'null') {
+                $default_language = $request['default_language'];
+            } else {
+                $default_language = 'en';
+            }
+
+            Setting::whereId($id)->update([
+                'currency_id' => $currency,
+                'email' => $request['email'],
+                'CompanyName' => $request['CompanyName'],
+                'CompanyPhone' => $request['CompanyPhone'],
+                'CompanyAdress' => $request['CompanyAdress'],
+                'footer' => $request['footer'],
+                'developed_by' => $request['developed_by'],
+                'logo' => $filename,
+            ]);
+
+            $this->setEnvironmentValue([
+                'APP_TIMEZONE' => $request['timezone'] !== null ? '"' . $request['timezone'] . '"' : '"UTC"',
+            ]);
+
+            Artisan::call('config:cache');
+            Artisan::call('config:clear');
+
+
+            return response()->json(['success' => true, 'message' => 'Settings updated successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while updating settings', 'message' => $e->getMessage(),'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => $e->getTraceAsString()],500);
         }
-
-
-
-
-        if ($request['currency_id'] != 'null') {
-            $currency = $request['currency_id'];
-        } else {
-            $currency = null;
-        }
-
-        if ($request['default_language'] != 'null') {
-            $default_language = $request['default_language'];
-        } else {
-            $default_language = 'en';
-        }
-
-        Setting::whereId($id)->update([
-            'currency_id' => $currency,
-            'email' => $request['email'],
-            'CompanyName' => $request['CompanyName'],
-            'CompanyPhone' => $request['CompanyPhone'],
-            'CompanyAdress' => $request['CompanyAdress'],
-            'footer' => $request['footer'],
-            'developed_by' => $request['developed_by'],
-            'logo' => $filename,
-        ]);
-
-        $this->setEnvironmentValue([
-            'APP_TIMEZONE' => $request['timezone'] !== null ? '"' . $request['timezone'] . '"' : '"UTC"',
-        ]);
-
-        Artisan::call('config:cache');
-        Artisan::call('config:clear');
-
-        return response()->json(['success' => true]);
     }
 
 
-
-
-
-    //-------------- Clear_Cache ---------------\\
-
-    public function Clear_Cache(Request $request)
-    {
-        Artisan::call('cache:clear');
-        Artisan::call('view:clear');
-        Artisan::call('route:clear');
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Cache, view, and route cleared successfully.'
-        ]);
-    }
-    //-------------- Set Environment Value ---------------\\
 
     public function setEnvironmentValue(array $values)
     {
