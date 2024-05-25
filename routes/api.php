@@ -91,6 +91,7 @@ Route::group([
     Route::get('projects', [ProjectController::class, 'index']);
     Route::get('projects/{id}', [ProjectController::class, 'show']);
     Route::post('projects', [ProjectController::class, 'store']);
+    Route::post('projects/delete/{id}', [ProjectController::class, 'destroy']);
     Route::post('projects/{id}', [ProjectController::class, 'update']);
     Route::post('projects/delete/by_selection', [ProjectController::class, 'delete_by_selection']);
     Route::post('create/project/discussions', [ProjectController::class, 'Create_project_discussions']);
