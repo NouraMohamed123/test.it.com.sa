@@ -33,7 +33,15 @@ class CompanyController extends Controller
 
 
     }
+    public function show($id)
+    {
+        $company = Company::findOrFail($id);
+        if(!empty($company->attendance_time))
+        return response()->json(['success' => true, 'company' => $company]);
 
+
+
+    }
     public function store(Request $request)
     {
         $user_auth = Auth::guard('api')->user();
@@ -250,5 +258,40 @@ class CompanyController extends Controller
             'expires_in' => auth()->guard('api')->factory()->getTTL() * 60,
         ]);
     }
+    public function verification_attendance($id)
+    {
 
+        $user_auth = Auth::guard('api')->user();
+        $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+        if (!empty($employee->company->attendance_time)) {
+            $attendanceTime = Carbon::parse($employee->company->attendance_time);
+            $currentTime = Carbon::now();
+            if ($attendanceTime->diffInMinutes($currentTime, false) > 10) {
+                return response()->json([
+                    'message' => 'closed',
+                ], 401);
+            }
+            return response()->json([
+                'message' => 'open',
+            ], 200);
+        }
+    }
+    public function verification_leave($id)
+    {
+
+        $user_auth = Auth::guard('api')->user();
+        $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+        if (!empty($employee->company->leave_time)) {
+            $attendanceTime = Carbon::parse($employee->company->leave_time);
+            $currentTime = Carbon::now();
+            if ($attendanceTime->diffInMinutes($currentTime, false) > 10) {
+                return response()->json([
+                    'message' => 'closed',
+                ], 401);
+            }
+            return response()->json([
+                'message' => 'open',
+            ], 200);
+        }
+    }
 }
