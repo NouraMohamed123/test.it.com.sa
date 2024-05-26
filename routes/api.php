@@ -117,6 +117,7 @@ Route::group([
     //------------------------------- Task -----------------------\\
     //----------------------------------------------------------------\\
     Route::get('tasks', [TasksController::class, 'index']);
+    Route::get('tasks/{id}', [TasksController::class, 'show']);
     Route::post('tasks', [TasksController::class, 'store']);
     Route::post('/tasks/{task}', [TasksController::class, 'update']);
     Route::delete('/tasks/{task}', [TasksController::class, 'destroy']);
@@ -184,23 +185,27 @@ Route::group([
     //------------------------------- Request leave  -----------------------\\
     //----------------------------------------------------------------\\
     Route::get('leave', [LeaveController::class, 'index']);
+    Route::get('leave/{id}', [LeaveController::class, 'show']);
     Route::post('leave', [LeaveController::class, 'store']);
     Route::post('/leave/{leave}', [LeaveController::class, 'update']);
     Route::delete('/leave/{leave}',  [LeaveController::class, 'destroy']);
     Route::post("leave/delete/by_selection", [LeaveController::class, 'delete_by_selection']);
     Route::get('leave_type', [LeaveTypeController::class, 'index']);
+    Route::get('leave_type/{id}', [LeaveTypeController::class, 'show']);
     Route::post('leave_type', [LeaveTypeController::class, 'store']);
     Route::post('/leave_type/{leave_type}', [LeaveTypeController::class, 'update']);
     Route::delete('/leave_type/{leave_type}',  [LeaveTypeController::class, 'destroy']);
     Route::post("leave_type/delete/by_selection", [LeaveTypeController::class, 'delete_by_selection']);
     //policies
     Route::get('/policies', [PoliciesController::class, 'index']);
+    Route::get('/policies/{id}', [PoliciesController::class, 'show']);
     Route::post('/policies', [PoliciesController::class, 'store']);
     Route::put('/policies/{id}', [PoliciesController::class, 'update']);
     Route::delete('/policies/{id}', [PoliciesController::class, 'destroy']);
     Route::post('/policies/delete_by_selection', [PoliciesController::class, 'delete_by_selection']);
     //office_shifts
     Route::get('/office_shifts', [OfficeShiftController::class, 'index']);
+    Route::get('/office_shifts/{id}', [OfficeShiftController::class, 'show']);
     Route::post('/office_shifts', [OfficeShiftController::class, 'store']);
     Route::post('/office_shifts/{id}', [OfficeShiftController::class, 'update']);
     Route::delete('/office_shifts/{id}', [OfficeShiftController::class, 'destroy']);

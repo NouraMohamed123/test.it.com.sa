@@ -27,11 +27,26 @@ class LeaveTypeController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function show(Request $request, $id)
+    {
+        $leave = LeaveType::
+            where('id', $id)
+            ->whereNull('deleted_at')
+            ->first();
+
+            if ($leave) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $leave
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'leave not found'
+                ], 404);
+            }
+    }
+
     public function create()
     {
         //
@@ -68,10 +83,7 @@ class LeaveTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.

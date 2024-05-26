@@ -152,17 +152,20 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-         $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('task_details')){
-
-            $task = Task::where('deleted_at', '=', null)->findOrFail($id);
-            $discussions = TaskDiscussion::where('task_id' , $id)->where('deleted_at', '=', null)->with('User:id,username')->orderBy('id', 'desc')->get();
-            $documents = TaskDocument::where('task_id' , $id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
-
-            return view('task.task_details',
-                compact('task','discussions','documents')
-            );
-
+        $task = Task::where('id', $id)
+        ->where('deleted_at', null)
+        ->first();
+    if ($task) {
+        return response()->json([
+            'success' => true,
+            'data' => $task
+        ]);
+    } else {
+        return response()->json([
+            'success' => false,
+            'message' => 'task not found'
+        ], 404);
+    }
         // }
         // return abort('403', __('You are not authorized'));
 

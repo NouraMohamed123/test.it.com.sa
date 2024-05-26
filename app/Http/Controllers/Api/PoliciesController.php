@@ -16,10 +16,10 @@ class PoliciesController extends Controller
     {
         $user_auth = Auth::guard('api')->user();
 
-        $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-        if($employee && $employee->type == 1){
-            $policies = Policy::where('deleted_at', '=', null)->where('company_id',$employee->company->id)->orderBy('id', 'desc')->paginate(50);
-        }else{
+        $employee =  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+        if ($employee && $employee->type == 1) {
+            $policies = Policy::where('deleted_at', '=', null)->where('company_id', $employee->company->id)->orderBy('id', 'desc')->paginate(50);
+        } else {
             $policies = Policy::where('deleted_at', '=', null)->orderBy('id', 'desc')->paginate(50);
         }
 
@@ -27,6 +27,23 @@ class PoliciesController extends Controller
             'success' => true,
             'data' =>  $policies
         ]);
+    }
+    public function show(Request $request, $id)
+    {
+        $policy = Policy::where('id', $id)
+            ->where('deleted_at', null)
+            ->first();
+        if ($policy) {
+            return response()->json([
+                'success' => true,
+                'data' => $policy
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'policy not found'
+            ], 404);
+        }
     }
 
 
@@ -54,10 +71,7 @@ class PoliciesController extends Controller
     }
 
 
-    public function show($id)
-    {
-        //
-    }
+
 
 
     public function update(Request $request, $id)
