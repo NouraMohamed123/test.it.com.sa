@@ -108,7 +108,25 @@ class UserController extends Controller
         // return abort('403', __('You are not authorized'));
     }
 
+    public function show($id)
+    {
+        $user = User::with('RoleUser.permissions')
+            ->where('id', '=', $id)
+            ->where('deleted_at', '=', null)
+            ->first();
 
+        if ($user) {
+            return response()->json([
+                'success' => true,
+                'data' => $user
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'user not found or has been deleted'
+            ], 404);
+        }
+    }
     public function update(Request $request, $id)
     {
            $user_auth = Auth::guard('api')->user();

@@ -71,7 +71,9 @@ class TrainingSkillsController extends Controller
      */
     public function show($id)
     {
-        //
+        $training_skill =  TrainingSkill::where('deleted_at', '=', null)->findOrFail($id);
+        return response()->json(['success' => true, 'data' => $training_skill]);
+
     }
 
     /**
