@@ -35,12 +35,20 @@ class CompanyController extends Controller
     }
     public function show($id)
     {
-        $company = Company::findOrFail($id);
-        if(!empty($company->attendance_time))
-        return response()->json(['success' => true, 'company' => $company]);
+        $company = Company::where('id', $id)
+            ->first();
 
-
-
+        if ($company) {
+            return response()->json([
+                'success' => true,
+                'data' => $company
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Company not found'
+            ], 404);
+        }
     }
     public function store(Request $request)
     {

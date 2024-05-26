@@ -26,6 +26,26 @@ class OfficeShiftController extends Controller
 
 
     }
+    public function show(Request $request, $id)
+    {
+        $OfficeShift = OfficeShift::
+            where('id', $id)
+            ->whereNull('deleted_at')
+            ->first();
+
+            if ($OfficeShift) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $OfficeShift
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'OfficeShift not found'
+                ], 404);
+            }
+    }
+
 
 
     public function store(Request $request)
@@ -76,17 +96,7 @@ class OfficeShiftController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
+    
 
     /**
      * Update the specified resource in storage.

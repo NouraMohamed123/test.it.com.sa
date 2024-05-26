@@ -148,7 +148,7 @@ class ProjectController extends Controller
 
         return response()->json([
             'success' => true,
-            'project' => $project,
+            'data' => $project,
             'tasks' => $tasks,
             'companies' => $companies,
             'discussions' => $discussions,

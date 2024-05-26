@@ -38,6 +38,25 @@ class DepartmentsController extends Controller
             'data' => $department
         ]);
     }
+    public function show($id)
+{
+
+
+        $department = Department::with('company', 'employee')
+            ->where('id', $id)
+            ->first();
+        if ($department) {
+            return response()->json([
+                'success' => true,
+                'data' => $department
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'department not found'
+            ], 404);
+        }
+}
     public function store(Request $request)
     {
 

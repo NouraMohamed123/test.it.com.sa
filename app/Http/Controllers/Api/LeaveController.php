@@ -61,6 +61,25 @@ class LeaveController extends Controller
         // }
         // return abort('403', __('You are not authorized'));
     }
+    public function show(Request $request, $id)
+    {
+        $leave = Leave::
+            where('id', $id)
+            ->whereNull('deleted_at')
+            ->first();
+
+            if ($leave) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $leave
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'leave not found'
+                ], 404);
+            }
+    }
 
 
 
@@ -140,10 +159,7 @@ class LeaveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+
 
 
 

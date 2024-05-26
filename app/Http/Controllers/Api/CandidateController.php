@@ -83,8 +83,18 @@ class CandidateController extends Controller
 
     public function show($id)
     {
-        $user_auth = Auth::guard('api')->user();
+        $candidate = Candidate::with('jop')
+            ->where('id', $id)
+            ->first();
+
+        if ($candidate) {
+            return response()->json(['success' => true, 'data' => $candidate]);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Candidate not found'], 404);
+        }
     }
+
+
 
     public function update(Request $request, $id)
     {

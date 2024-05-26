@@ -53,7 +53,26 @@ class EmployeeController extends Controller
         // }
         // return abort('403', __('You are not authorized'));
     }
+    public function show(Request $request, $id)
+{
+    $employee = Employee::with('company:id,name', 'office_shift:id,name', 'department:id,department', 'designation:id,designation')
+        ->where('id', $id)
+        ->where('deleted_at', null)
+        ->where('leaving_date', null)
+        ->first();
 
+        if ($employee) {
+            return response()->json([
+                'success' => true,
+                'data' => $employee
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'employee not found'
+            ], 404);
+        }
+    }
 
 
     /**
@@ -203,117 +222,117 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-         $user_auth = Auth::guard('api')->user();
+    // public function show($id)
+    // {
+    //      $user_auth = Auth::guard('api')->user();
 
 
-            $employee = Employee::where('deleted_at', '=', null)->findOrFail($id);
-            $experiences = EmployeeExperience::where('employee_id', $id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
-            $documents = EmployeeDocument::where('employee_id', $id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
-            $accounts_bank = EmployeeAccount::where('employee_id', $id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
-            $companies = Company::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'name']);
-            $office_shifts = OfficeShift::where('company_id', $employee->company_id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'name']);
-            $departments = Department::where('company_id', $employee->company_id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'department']);
-            $designations = Designation::where('department_id', $employee->department_id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'designation']);
-            $roles = Role::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'name']);
+    //         $employee = Employee::where('deleted_at', '=', null)->findOrFail($id);
+    //         $experiences = EmployeeExperience::where('employee_id', $id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
+    //         $documents = EmployeeDocument::where('employee_id', $id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
+    //         $accounts_bank = EmployeeAccount::where('employee_id', $id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
+    //         $companies = Company::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'name']);
+    //         $office_shifts = OfficeShift::where('company_id', $employee->company_id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'name']);
+    //         $departments = Department::where('company_id', $employee->company_id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'department']);
+    //         $designations = Designation::where('department_id', $employee->department_id)->where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'designation']);
+    //         $roles = Role::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id', 'name']);
 
-            $leaves = Leave::where('employee_id', $id)
-                ->join('companies', 'companies.id', '=', 'leaves.company_id')
-                ->join('departments', 'departments.id', '=', 'leaves.department_id')
-                ->join('employees', 'employees.id', '=', 'leaves.employee_id')
-                ->join('leave_types', 'leave_types.id', '=', 'leaves.leave_type_id')
-                ->where('leaves.deleted_at', '=', null)
-                ->select(
-                    'leaves.*',
-                    'employees.username AS employee_name',
-                    'employees.id AS employee_id',
-                    'leave_types.title AS leave_type_title',
-                    'leave_types.id AS leave_type_id',
-                    'companies.name AS company_name',
-                    'companies.id AS company_id',
-                    'departments.department AS department_name',
-                    'departments.id AS department_id'
-                )
-                ->orderBy('id', 'desc')
-                ->get();
+    //         $leaves = Leave::where('employee_id', $id)
+    //             ->join('companies', 'companies.id', '=', 'leaves.company_id')
+    //             ->join('departments', 'departments.id', '=', 'leaves.department_id')
+    //             ->join('employees', 'employees.id', '=', 'leaves.employee_id')
+    //             ->join('leave_types', 'leave_types.id', '=', 'leaves.leave_type_id')
+    //             ->where('leaves.deleted_at', '=', null)
+    //             ->select(
+    //                 'leaves.*',
+    //                 'employees.username AS employee_name',
+    //                 'employees.id AS employee_id',
+    //                 'leave_types.title AS leave_type_title',
+    //                 'leave_types.id AS leave_type_id',
+    //                 'companies.name AS company_name',
+    //                 'companies.id AS company_id',
+    //                 'departments.department AS department_name',
+    //                 'departments.id AS department_id'
+    //             )
+    //             ->orderBy('id', 'desc')
+    //             ->get();
 
-            $awards = Award::where('employee_id', $id)
-                ->join('companies', 'companies.id', '=', 'awards.company_id')
-                ->join('departments', 'departments.id', '=', 'awards.department_id')
-                ->join('employees', 'employees.id', '=', 'awards.employee_id')
-                ->join('award_types', 'award_types.id', '=', 'awards.award_type_id')
-                ->where('awards.deleted_at', '=', null)
-                ->select(
-                    'awards.*',
-                    'employees.username AS employee_name',
-                    'employees.id AS employee_id',
-                    'award_types.title AS award_type_title',
-                    'award_types.id AS award_type_id',
-                    'companies.name AS company_name',
-                    'companies.id AS company_id',
-                    'departments.department AS department_name',
-                    'departments.id AS department_id'
-                )
-                ->orderBy('id', 'desc')
-                ->get();
+    //         $awards = Award::where('employee_id', $id)
+    //             ->join('companies', 'companies.id', '=', 'awards.company_id')
+    //             ->join('departments', 'departments.id', '=', 'awards.department_id')
+    //             ->join('employees', 'employees.id', '=', 'awards.employee_id')
+    //             ->join('award_types', 'award_types.id', '=', 'awards.award_type_id')
+    //             ->where('awards.deleted_at', '=', null)
+    //             ->select(
+    //                 'awards.*',
+    //                 'employees.username AS employee_name',
+    //                 'employees.id AS employee_id',
+    //                 'award_types.title AS award_type_title',
+    //                 'award_types.id AS award_type_id',
+    //                 'companies.name AS company_name',
+    //                 'companies.id AS company_id',
+    //                 'departments.department AS department_name',
+    //                 'departments.id AS department_id'
+    //             )
+    //             ->orderBy('id', 'desc')
+    //             ->get();
 
-            $travels = Travel::where('employee_id', $id)
-                ->with('company:id,name', 'employee:id,username', 'arrangement_type:id,title')
-                ->where('deleted_at', '=', null)
-                ->orderBy('id', 'desc')
-                ->get();
+    //         $travels = Travel::where('employee_id', $id)
+    //             ->with('company:id,name', 'employee:id,username', 'arrangement_type:id,title')
+    //             ->where('deleted_at', '=', null)
+    //             ->orderBy('id', 'desc')
+    //             ->get();
 
-            $complaints = Complaint::where('employee_from', $id)
-                ->with('company:id,name', 'EmployeeFrom:id,username', 'EmployeeAgainst:id,username')
-                ->where('deleted_at', '=', null)
-                ->orderBy('id', 'desc')
-                ->get();
+    //         $complaints = Complaint::where('employee_from', $id)
+    //             ->with('company:id,name', 'EmployeeFrom:id,username', 'EmployeeAgainst:id,username')
+    //             ->where('deleted_at', '=', null)
+    //             ->orderBy('id', 'desc')
+    //             ->get();
 
-            $tasks = Task::where('deleted_at', '=', null)
-                ->with('company:id,name', 'project:id,title', 'assignedEmployees')
-                ->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
-                ->where('employee_id', $id)
-                ->orderBy('id', 'desc')
-                ->get();
+    //         $tasks = Task::where('deleted_at', '=', null)
+    //             ->with('company:id,name', 'project:id,title', 'assignedEmployees')
+    //             ->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
+    //             ->where('employee_id', $id)
+    //             ->orderBy('id', 'desc')
+    //             ->get();
 
-            $projects = Project::where('deleted_at', '=', null)
-                ->with('company:id,name', 'client:id,username', 'assignedEmployees')
-                ->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
-                ->where('employee_id', $id)
-                ->orderBy('id', 'desc')
-                ->get();
+    //         $projects = Project::where('deleted_at', '=', null)
+    //             ->with('company:id,name', 'client:id,username', 'assignedEmployees')
+    //             ->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
+    //             ->where('employee_id', $id)
+    //             ->orderBy('id', 'desc')
+    //             ->get();
 
-            $trainings = Training::where('deleted_at', '=', null)
-                ->with('company:id,name', 'trainer:id,name', 'TrainingSkill:id,training_skill', 'assignedEmployees')
-                ->join('employee_training', 'trainings.id', '=', 'employee_training.training_id')
-                ->where('employee_id', $id)
-                ->orderBy('id', 'desc')
-                ->get();
+    //         $trainings = Training::where('deleted_at', '=', null)
+    //             ->with('company:id,name', 'trainer:id,name', 'TrainingSkill:id,training_skill', 'assignedEmployees')
+    //             ->join('employee_training', 'trainings.id', '=', 'employee_training.training_id')
+    //             ->where('employee_id', $id)
+    //             ->orderBy('id', 'desc')
+    //             ->get();
 
-            return view(
-                'employee.employee_details',
-                compact(
-                    'employee',
-                    'companies',
-                    'departments',
-                    'designations',
-                    'roles',
-                    'documents',
-                    'office_shifts',
-                    'experiences',
-                    'accounts_bank',
-                    'leaves',
-                    'awards',
-                    'travels',
-                    'complaints',
-                    'tasks',
-                    'projects',
-                    'trainings'
-                )
-            );
+    //         return view(
+    //             'employee.employee_details',
+    //             compact(
+    //                 'employee',
+    //                 'companies',
+    //                 'departments',
+    //                 'designations',
+    //                 'roles',
+    //                 'documents',
+    //                 'office_shifts',
+    //                 'experiences',
+    //                 'accounts_bank',
+    //                 'leaves',
+    //                 'awards',
+    //                 'travels',
+    //                 'complaints',
+    //                 'tasks',
+    //                 'projects',
+    //                 'trainings'
+    //             )
+    //         );
 
-    }
+    // }
 
 
     /**

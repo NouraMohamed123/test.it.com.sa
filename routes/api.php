@@ -64,6 +64,7 @@ Route::group([
     //----------------------------------------------------------------\\
 
     Route::get('jobs', [JobsController::class, 'index']);
+    Route::get('jobs/{id}', [JobsController::class, 'show']);
     Route::post('jobs', [JobsController::class, 'store']);
     Route::post('/jobs/{jop}', [JobsController::class, 'update']);
     Route::delete('/jobs/{jop}', [JobsController::class, 'destroy']);
@@ -71,6 +72,7 @@ Route::group([
     //------------------------------- Companies -----------------------\\
     //----------------------------------------------------------------\\
     Route::get('companies', [CompanyController::class, 'index']);
+    Route::get('companies/{id}', [CompanyController::class, 'show']);
     Route::post('companies', [CompanyController::class, 'store']);
     Route::post('/companies/{company}', [CompanyController::class, 'update']);
     Route::delete('/companies/{company}', [CompanyController::class, 'destroy']);
@@ -83,6 +85,7 @@ Route::group([
     //------------------------------- candidates -----------------------\\
     //----------------------------------------------------------------\\
     Route::get('candidates', [CandidateController::class, 'index']);
+    Route::get('/candidates/{id}', [CandidateController::class, 'show']);
     Route::post('candidates', [CandidateController::class, 'store']);
     Route::post('/candidates/{candidate}', [CandidateController::class, 'update']);
     Route::delete('/candidates/{candidate}', [CandidateController::class, 'destroy']);
@@ -91,6 +94,7 @@ Route::group([
     Route::get('projects', [ProjectController::class, 'index']);
     Route::get('projects/{id}', [ProjectController::class, 'show']);
     Route::post('projects', [ProjectController::class, 'store']);
+    Route::post('projects/delete/{id}', [ProjectController::class, 'destroy']);
     Route::post('projects/{id}', [ProjectController::class, 'update']);
     Route::post('projects/delete/by_selection', [ProjectController::class, 'delete_by_selection']);
     Route::post('create/project/discussions', [ProjectController::class, 'Create_project_discussions']);
@@ -102,6 +106,7 @@ Route::group([
     Route::post('delete/project/documents/{id}', [ProjectController::class, 'destroy_project_documents']);
     //departments
     Route::get('departments', [DepartmentsController::class, 'index']);
+    Route::get('departments/{id}', [DepartmentsController::class, 'show']);
     Route::post('departments', [DepartmentsController::class, 'store']);
     Route::post('departments/{id}', [DepartmentsController::class, 'update']);
     Route::post('/delete/departments/{id}', [DepartmentsController::class, 'destroy']);
@@ -112,6 +117,7 @@ Route::group([
     //------------------------------- Task -----------------------\\
     //----------------------------------------------------------------\\
     Route::get('tasks', [TasksController::class, 'index']);
+    Route::get('tasks/{id}', [TasksController::class, 'show']);
     Route::post('tasks', [TasksController::class, 'store']);
     Route::post('/tasks/{task}', [TasksController::class, 'update']);
     Route::delete('/tasks/{task}', [TasksController::class, 'destroy']);
@@ -134,6 +140,7 @@ Route::group([
     //------------------------------- Employee --------------------------\\
     //--------------------------------------------------------------------\\
     Route::get('employees', [EmployeeController::class, 'index']);
+    Route::get('employees/{id}', [EmployeeController::class, 'show']);
     Route::post('employees', [EmployeeController::class, 'store']);
     Route::post('/employees/{employee}', [EmployeeController::class, 'update']);
     Route::delete('/employees/{employee}',  [EmployeeController::class, 'destroy']);
@@ -147,6 +154,7 @@ Route::group([
     //--------------------------------------------------------------------\\
 
     Route::get('attendances', [AttendancesController::class, 'index']);
+    Route::get('attendances/{id}', [AttendancesController::class, 'show']);
     Route::post('attendances', [AttendancesController::class, 'store']);
     Route::post('/attendances/{attendance}', [AttendancesController::class, 'update']);
     Route::delete('/attendances/{attendance}',  [AttendancesController::class, 'destroy']);
@@ -177,29 +185,34 @@ Route::group([
     //------------------------------- Request leave  -----------------------\\
     //----------------------------------------------------------------\\
     Route::get('leave', [LeaveController::class, 'index']);
+    Route::get('leave/{id}', [LeaveController::class, 'show']);
     Route::post('leave', [LeaveController::class, 'store']);
     Route::post('/leave/{leave}', [LeaveController::class, 'update']);
     Route::delete('/leave/{leave}',  [LeaveController::class, 'destroy']);
     Route::post("leave/delete/by_selection", [LeaveController::class, 'delete_by_selection']);
     Route::get('leave_type', [LeaveTypeController::class, 'index']);
+    Route::get('leave_type/{id}', [LeaveTypeController::class, 'show']);
     Route::post('leave_type', [LeaveTypeController::class, 'store']);
     Route::post('/leave_type/{leave_type}', [LeaveTypeController::class, 'update']);
     Route::delete('/leave_type/{leave_type}',  [LeaveTypeController::class, 'destroy']);
     Route::post("leave_type/delete/by_selection", [LeaveTypeController::class, 'delete_by_selection']);
     //policies
     Route::get('/policies', [PoliciesController::class, 'index']);
+    Route::get('/policies/{id}', [PoliciesController::class, 'show']);
     Route::post('/policies', [PoliciesController::class, 'store']);
     Route::put('/policies/{id}', [PoliciesController::class, 'update']);
     Route::delete('/policies/{id}', [PoliciesController::class, 'destroy']);
     Route::post('/policies/delete_by_selection', [PoliciesController::class, 'delete_by_selection']);
     //office_shifts
     Route::get('/office_shifts', [OfficeShiftController::class, 'index']);
+    Route::get('/office_shifts/{id}', [OfficeShiftController::class, 'show']);
     Route::post('/office_shifts', [OfficeShiftController::class, 'store']);
     Route::post('/office_shifts/{id}', [OfficeShiftController::class, 'update']);
     Route::delete('/office_shifts/{id}', [OfficeShiftController::class, 'destroy']);
 
     //event
     Route::get('/events', [EventController::class, 'index']);
+    Route::get('/events/{id}', [EventController::class, 'show']);
     Route::post('/events', [EventController::class, 'store']);
     Route::post('/events/{id}', [EventController::class, 'update']);
     Route::delete('/events/{id}', [EventController::class, 'destroy']);
