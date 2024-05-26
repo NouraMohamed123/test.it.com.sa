@@ -41,6 +41,19 @@ class AttendancesController extends Controller
 
 
     }
+    public function show($attendance_id)
+{
+    // Find the attendance record by ID
+    $attendance = Attendance::whereNull('deleted_at')->where('id', $attendance_id)->first();
+
+    // Check if the attendance record exists
+    if ($attendance) {
+        return response()->json(['success' => true, 'data' => $attendance]);
+    } else {
+        return response()->json(['success' => false, 'message' => 'Attendance record not found'], 404);
+    }
+}
+
 
 
 
@@ -310,10 +323,9 @@ class AttendancesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+
+
+
 
 
 

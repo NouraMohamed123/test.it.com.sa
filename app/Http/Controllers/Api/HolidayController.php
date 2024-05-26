@@ -33,12 +33,24 @@ class HolidayController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function show(Request $request, $id)
+    {
 
+            $holiday = Holiday::where('id', $id)
+                ->where('deleted_at', null)
+                ->first();
+                if ($holiday) {
+                    return response()->json([
+                        'success' => true,
+                        'data' => $holiday
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'holiday not found'
+                    ], 404);
+                }
+        }
 
 
 
@@ -65,22 +77,22 @@ class HolidayController extends Controller
     }
 
 
-    public function show($id)
-    {
-        $holiday = Holiday::find($id);
+    // public function show($id)
+    // {
+    //     $holiday = Holiday::find($id);
 
-        if ($holiday && $holiday->deleted_at === null) {
-            return response()->json([
-                'success' => true,
-                'data' => $holiday
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Holiday not found or has been deleted'
-            ], 404);
-        }
-    }
+    //     if ($holiday && $holiday->deleted_at === null) {
+    //         return response()->json([
+    //             'success' => true,
+    //             'data' => $holiday
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Holiday not found or has been deleted'
+    //         ], 404);
+    //     }
+    // }
 
 
 

@@ -105,8 +105,17 @@ class JobsController extends Controller
         // if ($user_auth->can('employee_details')) {
 
             $jop = Jop::findOrFail($id);
-            return response()->json(['success' => true,'data' => $jop]);
-
+            if ($jop) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $jop
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'jop not found'
+                ], 404);
+            }
         // }
         // return abort('403', __('You are not authorized'));
     }

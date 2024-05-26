@@ -28,6 +28,24 @@ class EventController extends Controller
 
 
     }
+    public function show(Request $request, $id)
+{
+    $event = Event::where('id', $id)
+        ->where('deleted_at', null)
+        ->first();
+
+        if ($event) {
+            return response()->json([
+                'success' => true,
+                'data' => $event
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'event not found'
+            ], 404);
+        }
+}
 
     /**
      * Show the form for creating a new resource.
@@ -75,7 +93,7 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-   
+
 
 
     public function update(Request $request, $id)
