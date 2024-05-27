@@ -191,7 +191,7 @@ class TasksController extends Controller
                 'summary'         => 'required|string|max:255',
                 'project_id'      => 'nullable',
                 'start_date'      => 'required',
-                'end_date'        => 'required',
+                'end_date'        => 'nullable',
                 'status'          => 'required',
                 'company_id'      => 'nullable',
                 'priority'          => 'required',

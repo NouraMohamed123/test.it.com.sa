@@ -169,7 +169,7 @@ class ProjectController extends Controller
             'company_id'      => 'required',
             'assigned_to'     => 'required',
             'start_date'      => 'required',
-            'end_date'        => 'required',
+            'end_date'        => 'nullable',
             'priority'        => 'required',
             'status'          => 'required',
         ]);
