@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\TravelController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -128,6 +129,8 @@ Route::group([
     Route::delete("task_discussions/{id}", [TasksController::class, 'destroy_task_discussion']);
     Route::post("task_documents", [TasksController::class, 'Create_task_documents']);
     Route::delete("task_documents/{id}", [TasksController::class, 'destroy_task_documents']);
+    //repeating
+     Route::post('repeating-task', [TasksController::class, 'repeating']);
     //------------------------------- users --------------------------\\
     //----------------------------------------------------------------\\
     Route::get('/me', [UserController::class, 'me']);

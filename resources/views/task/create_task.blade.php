@@ -213,10 +213,10 @@
             priority:"",
             task_progress:0,
             assigned_to:[],
-        }, 
+        },
     },
-   
-   
+
+
     methods: {
 
         Selected_Team(value) {
@@ -245,7 +245,7 @@
             }
         },
 
-        
+
         Selected_Priority(value) {
             if (value === null) {
                 this.task.priority = "";
@@ -261,16 +261,16 @@
             this.Get_employees_by_company(value);
         },
 
-            
+
         //---------------------- Get_employees_by_company ------------------------------\\
-        
+
         Get_employees_by_company(value) {
             axios
             .get("/Get_employees_by_company?id=" + value)
             .then(({ data }) => (this.employees = data));
         },
 
-        
+
         //------------------------ Create Task ---------------------------\\
         Create_Task() {
             var self = this;
@@ -289,7 +289,7 @@
                 task_progress: self.task.task_progress,
             }).then(response => {
                     self.SubmitProcessing = false;
-                    window.location.href = '/tasks'; 
+                    window.location.href = '/tasks';
                     toastr.success('{{ __('translate.Created_in_successfully') }}');
                     self.errors = {};
             })

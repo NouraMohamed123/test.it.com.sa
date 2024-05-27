@@ -97,7 +97,7 @@ class TaskController extends Controller
 
             $projects = Project::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id','title']);
             $companies = Company::where('deleted_at', '=', null)->orderBy('id', 'desc')->get(['id','name']);
-            
+
             return view('task.create_task', compact('projects','companies'));
 
         }
@@ -267,7 +267,7 @@ class TaskController extends Controller
          $user_auth = auth()->user();
          if($user_auth->can('task_delete')){
              $selectedIds = $request->selectedIds;
-     
+
              foreach ($selectedIds as $task_id) {
                 Task::whereId($task_id)->update([
                     'deleted_at' => Carbon::now(),
@@ -329,11 +329,11 @@ class TaskController extends Controller
 
             ]);
 
-            
+
             if ($request->hasFile('attachment')) {
 
                 $image = $request->file('attachment');
-                $attachment = time().'.'.$image->extension();  
+                $attachment = time().'.'.$image->extension();
                 $image->move(public_path('/assets/images/tasks/documents'), $attachment);
 
             } else {

@@ -10,6 +10,7 @@ use App\Models\Employee;
 use App\Models\EmployeeTask;
 use App\Models\TaskDocument;
 use Illuminate\Http\Request;
+use App\Models\ScheduledTask;
 use App\Models\TaskDiscussion;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -365,5 +366,25 @@ class TasksController extends Controller
         // }
         // return abort('403', __('You are not authorized'));
     }
+     public function repeating(Request $request){
+        $validatedData = $request->validate([
+            'task_id' => 'required|integer',
+            'repeat_type' => 'required|string',
+        ]);
 
+        ScheduledTask::updateOrCreate(
+            [
+                'task_id' => $validatedData['task_id']
+            ],
+            [
+                'repeat_type' => $validatedData['repeat_type']
+
+            ]
+        );
+
+        return response()->json(['message' => 'Scheduled task created or updated successfully.']);
+
+
+
+    }
 }
