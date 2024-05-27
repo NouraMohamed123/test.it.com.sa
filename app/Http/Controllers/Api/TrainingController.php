@@ -94,7 +94,8 @@ class TrainingController extends Controller
      */
     public function show($id)
     {
-        //
+        $training = Training::with('company','trainer','TrainingSkill')->where('deleted_at', '=', null)->findOrFail($id);
+        return response()->json(['success' => true, 'data' => $training]);
     }
 
     /**

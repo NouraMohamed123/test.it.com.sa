@@ -66,16 +66,16 @@ Route::group([
     Route::get('jobs', [JobsController::class, 'index']);
     Route::get('jobs/{id}', [JobsController::class, 'show']);
     Route::post('jobs', [JobsController::class, 'store']);
-    Route::post('/jobs/{jop}', [JobsController::class, 'update']);
-    Route::delete('/jobs/{jop}', [JobsController::class, 'destroy']);
+    Route::post('/jobs/{id}', [JobsController::class, 'update']);
+    Route::delete('/jobs/{id}', [JobsController::class, 'destroy']);
     Route::post('jobs/delete/by_selection', [JobsController::class, 'delete_by_selection']);
     //------------------------------- Companies -----------------------\\
     //----------------------------------------------------------------\\
     Route::get('companies', [CompanyController::class, 'index']);
     Route::get('companies/{id}', [CompanyController::class, 'show']);
     Route::post('companies', [CompanyController::class, 'store']);
-    Route::post('/companies/{company}', [CompanyController::class, 'update']);
-    Route::delete('/companies/{company}', [CompanyController::class, 'destroy']);
+    Route::post('/companies/{id}', [CompanyController::class, 'update']);
+    Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
     Route::post('companies/delete/by_selection', [CompanyController::class, 'delete_by_selection']);
     Route::get('quick-entry-company/{id}', [CompanyController::class, 'QuickEntry']);
     Route::get('verification-attendance', [CompanyController::class, 'verification_attendance']);
@@ -87,8 +87,8 @@ Route::group([
     Route::get('candidates', [CandidateController::class, 'index']);
     Route::get('/candidates/{id}', [CandidateController::class, 'show']);
     Route::post('candidates', [CandidateController::class, 'store']);
-    Route::post('/candidates/{candidate}', [CandidateController::class, 'update']);
-    Route::delete('/candidates/{candidate}', [CandidateController::class, 'destroy']);
+    Route::post('/candidates/{id}', [CandidateController::class, 'update']);
+    Route::delete('/candidates/{id}', [CandidateController::class, 'destroy']);
     Route::post('candidates/delete/by_selection', [CandidateController::class, 'delete_by_selection']);
     ////////////////project
     Route::get('projects', [ProjectController::class, 'index']);
@@ -119,8 +119,8 @@ Route::group([
     Route::get('tasks', [TasksController::class, 'index']);
     Route::get('tasks/{id}', [TasksController::class, 'show']);
     Route::post('tasks', [TasksController::class, 'store']);
-    Route::post('/tasks/{task}', [TasksController::class, 'update']);
-    Route::delete('/tasks/{task}', [TasksController::class, 'destroy']);
+    Route::post('/tasks/{id}', [TasksController::class, 'update']);
+    Route::delete('/tasks/{id}', [TasksController::class, 'destroy']);
     Route::post("tasks/delete/by_selection", [TasksController::class, 'delete_by_selection']);
     Route::post("update_task_status/{id}", [TasksController::class, 'update_task_status']);
     Route::get("tasks_kanban", [TasksController::class, 'tasks_kanban']);
@@ -133,17 +133,18 @@ Route::group([
     Route::get('/me', [UserController::class, 'me']);
     Route::get('/show-privcy', [UserController::class, 'showPrivcy']);
     Route::get('users', [UserController::class, 'index']);
+    Route::get('users/{id}', [UserController::class, 'show']);
     Route::post('users', [UserController::class, 'store']);
-    Route::post('/users/{user}', [UserController::class, 'update']);
-    Route::delete('/users/{user}',  [UserController::class, 'destroy']);
+    Route::post('/users/{id}', [UserController::class, 'update']);
+    Route::delete('/users/{id}',  [UserController::class, 'destroy']);
     Route::post('assignRole', [UserController::class, 'assignRole']);
     //------------------------------- Employee --------------------------\\
     //--------------------------------------------------------------------\\
     Route::get('employees', [EmployeeController::class, 'index']);
     Route::get('employees/{id}', [EmployeeController::class, 'show']);
     Route::post('employees', [EmployeeController::class, 'store']);
-    Route::post('/employees/{employee}', [EmployeeController::class, 'update']);
-    Route::delete('/employees/{employee}',  [EmployeeController::class, 'destroy']);
+    Route::post('/employees/{id}', [EmployeeController::class, 'update']);
+    Route::delete('/employees/{id}',  [EmployeeController::class, 'destroy']);
     Route::get("Get_employees_by_company", [EmployeeController::class, 'Get_employees_by_company']);
     Route::get("Get_employees_by_department", [EmployeeController::class, 'Get_employees_by_department']);
     Route::get("Get_office_shift_by_company", [EmployeeController::class, 'Get_office_shift_by_company']);
@@ -156,39 +157,42 @@ Route::group([
     Route::get('attendances', [AttendancesController::class, 'index']);
     Route::get('attendances/{id}', [AttendancesController::class, 'show']);
     Route::post('attendances', [AttendancesController::class, 'store']);
-    Route::post('/attendances/{attendance}', [AttendancesController::class, 'update']);
-    Route::delete('/attendances/{attendance}',  [AttendancesController::class, 'destroy']);
+    Route::post('/attendances/{id}', [AttendancesController::class, 'update']);
+    Route::delete('/attendances/{id}',  [AttendancesController::class, 'destroy']);
     Route::get("daily_attendance",  [AttendancesController::class, 'daily_attendance']);
     Route::post('attendance_by_employee/{id}', [EmployeeSessionController::class, 'attendance_by_employee']); ///not work
     Route::post("attendances/delete/by_selection",  [AttendancesController::class, 'delete_by_selection']);
     //------------------------------- training ----------------------\\
     //----------------------------------------------------------------\\
-    Route::resource('trainings', 'TrainingController');
+
     Route::get('trainings', [TrainingController::class, 'index']);
+    Route::get('trainings/{id}', [TrainingController::class, 'show']);
     Route::post('trainings', [TrainingController::class, 'store']);
-    Route::post('/trainings/{training}', [TrainingController::class, 'update']);
-    Route::delete('/trainings/{training}',  [TrainingController::class, 'destroy']);
+    Route::post('/trainings/{id}', [TrainingController::class, 'update']);
+    Route::delete('/trainings/{id}',  [TrainingController::class, 'destroy']);
     Route::post("trainings/delete/by_selection", "TrainingController@delete_by_selection");
 
     //------------------------------- trainers ----------------------\\
     Route::get('trainers', [TrainersController::class, 'index']);
+    Route::get('trainers/{id}', [TrainersController::class, 'show']);
     Route::post('trainers', [TrainersController::class, 'store']);
-    Route::post('/trainers/{trainer}', [TrainersController::class, 'update']);
-    Route::delete('/trainers/{trainer}',  [TrainersController::class, 'destroy']);
+    Route::post('/trainers/{id}', [TrainersController::class, 'update']);
+    Route::delete('/trainers/{id}',  [TrainersController::class, 'destroy']);
     Route::post("trainers/delete/by_selection", "TrainersController@delete_by_selection");
     //------------------------------- training_skills ----------------------\\
     Route::get('training_skills', [TrainingSkillsController::class, 'index']);
+    Route::get('training_skills/{id}', [TrainingSkillsController::class, 'show']);
     Route::post('training_skills', [TrainingSkillsController::class, 'store']);
-    Route::post('/training_skills/{trainer}', [TrainingSkillsController::class, 'update']);
-    Route::delete('/training_skills/{trainer}',  [TrainingSkillsController::class, 'destroy']);
+    Route::post('/training_skills/{id}', [TrainingSkillsController::class, 'update']);
+    Route::delete('/training_skills/{id}',  [TrainingSkillsController::class, 'destroy']);
     Route::post("training_skills/delete/by_selection", "TrainingSkillsController@delete_by_selection");
     //------------------------------- Request leave  -----------------------\\
     //----------------------------------------------------------------\\
     Route::get('leave', [LeaveController::class, 'index']);
     Route::get('leave/{id}', [LeaveController::class, 'show']);
     Route::post('leave', [LeaveController::class, 'store']);
-    Route::post('/leave/{leave}', [LeaveController::class, 'update']);
-    Route::delete('/leave/{leave}',  [LeaveController::class, 'destroy']);
+    Route::post('/leave/{id}', [LeaveController::class, 'update']);
+    Route::delete('/leave/{id}',  [LeaveController::class, 'destroy']);
     Route::post("leave/delete/by_selection", [LeaveController::class, 'delete_by_selection']);
     Route::get('leave_type', [LeaveTypeController::class, 'index']);
     Route::get('leave_type/{id}', [LeaveTypeController::class, 'show']);

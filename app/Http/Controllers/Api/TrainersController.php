@@ -19,13 +19,11 @@ class TrainersController extends Controller
     public function index()
     {
         $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('trainer')){
+
 
             $trainers = Trainer::where('deleted_at', '=', null)->with('company:id,name')->orderBy('id', 'desc')->get();
             return response()->json(['success' => true, 'data' => $trainers]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
     }
 
 
@@ -39,7 +37,7 @@ class TrainersController extends Controller
     public function store(Request $request)
     {
         $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('trainer')){
+
 
             request()->validate([
                 'name'      => 'required|string|max:255',
@@ -60,8 +58,6 @@ class TrainersController extends Controller
 
             return response()->json(['success' => true]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
     }
 
     /**
@@ -72,7 +68,8 @@ class TrainersController extends Controller
      */
     public function show($id)
     {
-        //
+        $Trainer =  Trainer::with('company')->where('deleted_at', '=', null)->findOrFail($id);
+        return response()->json(['success' => true, 'data' => $Trainer]);
     }
 
     /**
