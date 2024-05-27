@@ -281,7 +281,7 @@ Route::group([
     Route::post('designations', [DesignationsController::class, 'store']);
     Route::post('designations/{id}', [DesignationsController::class, 'update']);
     Route::delete('designations/{id}', [DesignationsController::class, 'destroy']);
-    Route::post('designations/delete_by_selection', [DesignationsController::class, 'delete_by_selection']);
+    Route::post('designations/delete/selection', [DesignationsController::class, 'delete_by_selection']);
     Route::post('designations/by_department', [DesignationsController::class, 'get_designations_by_department']);
 
 
