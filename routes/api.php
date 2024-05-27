@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\AwardController;
 use App\Http\Controllers\Api\AwardTypeController;
 use App\Http\Controllers\Api\ComplaintController;
 use App\Http\Controllers\Api\DepartmentsController;
+use App\Http\Controllers\Api\DesignationsController;
 use App\Http\Controllers\Api\OfficeShiftController;
 use App\Http\Controllers\Api\TrainingSkillsController;
 use App\Http\Controllers\Api\EmployeeSessionController;
@@ -273,6 +274,15 @@ Route::group([
     Route::get('settings', [SettingController::class, 'index']);
 
     Route::post('settings/{id}', [SettingController::class, 'update']);
+
+    //designation
+    Route::get('designations', [DesignationsController::class, 'index']);
+    Route::get('designations/{id}', [DesignationsController::class, 'show']);
+    Route::post('designations', [DesignationsController::class, 'store']);
+    Route::post('designations/{id}', [DesignationsController::class, 'update']);
+    Route::delete('designations/{id}', [DesignationsController::class, 'destroy']);
+    Route::post('designations/delete_by_selection', [DesignationsController::class, 'delete_by_selection']);
+    Route::post('designations/by_department', [DesignationsController::class, 'get_designations_by_department']);
 
 
 });
