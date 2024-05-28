@@ -34,6 +34,9 @@ class Kernel extends ConsoleKernel
             } elseif ($task->repeat_type === 'monthly') {
                 $schedule->command("task:repeat {$task->task_id} {$task->repeat_type}")->monthly();
             }
+            elseif ($task->repeat_type === 'daily') {
+                $schedule->command("task:repeat {$task->task_id} {$task->repeat_type}")->daily();
+            }
         }
     }
 
