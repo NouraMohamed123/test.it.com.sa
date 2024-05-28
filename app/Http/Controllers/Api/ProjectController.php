@@ -45,7 +45,7 @@ class ProjectController extends Controller
 
             $projects = Project::with('company','assignedEmployees')->whereNull('deleted_at')->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
             ->where('employee_id', $employee->id)
-                ->with('company:id,name')
+
                 ->orderBy('id', 'desc')
                 ->get();
 
@@ -66,7 +66,7 @@ class ProjectController extends Controller
                 ->count();
 
             $projects = Project::with('company','assignedEmployees')->whereNull('deleted_at')
-                ->with('company:id,name')
+
                 ->orderBy('id', 'desc')
                 ->get();
 
