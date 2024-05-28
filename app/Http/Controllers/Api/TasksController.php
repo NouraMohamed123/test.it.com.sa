@@ -61,7 +61,7 @@ class TasksController extends Controller
                 ->where('status', '=', 'completed')
                 ->count();
 
-                $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title')->orderBy('id', 'desc')->get();
+                $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title','assignedEmployees')->orderBy('id', 'desc')->get();
             }
 
            return response()->json(['success' => true, 'data' => $tasks,'count_not_started'=>$count_not_started,'count_in_progress'=>$count_in_progress,'count_cancelled'=>$count_cancelled,'count_completed'=>$count_completed]);
@@ -112,7 +112,7 @@ class TasksController extends Controller
     {
          $user_auth = Auth::guard('api')->user();
 		// if ($user_auth->can('task_add')){
-
+// dd($request->all()); //
             $request->validate([
                 'title'           => 'required|string|max:255',
                 'summary'         => 'required|string|max:255',

@@ -22,10 +22,7 @@ class Project extends Model
         'company_id'  => 'integer',
     ];
 
-    public function client()
-    {
-        return $this->hasOne('App\Models\Client', 'id', 'client_id');
-    }
+
 
     public function company()
     {
