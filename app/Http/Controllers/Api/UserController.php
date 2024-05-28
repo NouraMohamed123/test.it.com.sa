@@ -186,7 +186,14 @@ class UserController extends Controller
                 'password'  => $pass,
                 'status'    => $request['status'],
             ]);
+            //remove role
+            $get_user = User::find($request->user_id);
+            $get_user->removeRole($get_user->role_users_id);
 
+            User::whereId($id)->update([
+                'role_users_id' => $request->role_id,
+            ]);
+            $user->assignRole($request->role_id);
             return response()->json(['success' => true]);
 
         // }
@@ -218,7 +225,7 @@ class UserController extends Controller
     public function assignRole(Request $request)
     {
            $user_auth = Auth::guard('api')->user();
-        // if ($user_auth->can('group_permission') && $user_auth->role_users_id == 1 && $request->role_id != 3){
+
 
             //remove role
             $get_user = User::find($request->user_id);
@@ -233,8 +240,7 @@ class UserController extends Controller
 
             return response()->json(['success' => true]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
+
     }
 
 
