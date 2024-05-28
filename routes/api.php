@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ArrangementTypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\JobsController;
@@ -283,6 +284,14 @@ Route::group([
     Route::delete('designations/{id}', [DesignationsController::class, 'destroy']);
     Route::post('designations/delete/selection', [DesignationsController::class, 'delete_by_selection']);
     Route::get('designations/department', [DesignationsController::class, 'get_designations_by_department']);
+
+    //arrangement-types
+    Route::get('arrangement/types', [ArrangementTypeController::class, 'index']);
+    Route::post('arrangement/types', [ArrangementTypeController::class, 'store']);
+    Route::get('arrangement/types/{id}', [ArrangementTypeController::class, 'show']);
+    Route::post('arrangement/types/{id}', [ArrangementTypeController::class, 'update']);
+    Route::delete('arrangement/types/{id}', [ArrangementTypeController::class, 'destroy']);
+    Route::post('delete/arrangement/selection', [ArrangementTypeController::class, 'delete_by_selection']);
 
 
 });

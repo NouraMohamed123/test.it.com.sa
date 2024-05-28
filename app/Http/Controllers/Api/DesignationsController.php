@@ -161,6 +161,7 @@ class DesignationsController extends Controller
         ->orderBy('id', 'desc')
         ->get();
 
+
         return response()->json([
             'success' => true,
             'data' => $designations
