@@ -77,7 +77,7 @@ class UserController extends Controller
                 'password_confirmation' => 'required',
                 'avatar'    => 'nullable|image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
                 'status'    => 'required',
-                'role_id'=>'required',
+                'role_id'=>'required|exists:roles,id',
             ]);
 
             if ($request->hasFile('avatar')) {
@@ -99,8 +99,8 @@ class UserController extends Controller
                 'role_users_id'   => $request['role_id'],
                 'status'    => $request['status'],
             ]);
-
-            $user->assignRole($request['role_id']);
+            $role = Role::findById($request['role_id']);
+            $user->assignRole($role);
 
             return response()->json(['success' => true]);
 
