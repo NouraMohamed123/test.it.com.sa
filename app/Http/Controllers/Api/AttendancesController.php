@@ -31,8 +31,7 @@ class AttendancesController extends Controller
          if($employee && $employee->type == 3){
                 $attendances = Attendance::where('deleted_at', '=', null)->where('employee_id', $employee->id)->orderBy('id', 'desc')->get();
             }else{
-                $attendances = Attendance::where('deleted_at', '=', null)
-                ->where('employee_id', '=', $user_auth->id)->orderBy('id', 'desc')->get();
+                $attendances = Attendance::where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
 
             }
             return response()->json(['success' => true, 'data' => $attendances]);
