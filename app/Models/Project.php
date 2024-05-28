@@ -12,7 +12,7 @@ class Project extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'title','company_id','client_id','summary','start_date','end_date','priority',
+        'title','company_id','summary','start_date','end_date','priority',
         'description','project_progress','status','project_note',
 
     ];
