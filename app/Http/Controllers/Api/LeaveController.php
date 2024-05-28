@@ -26,7 +26,7 @@ class LeaveController extends Controller
          $user_auth = Auth::guard('api')->user();
 
             $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-            if($employee && $employee->type == 1){
+            if($employee && $employee->type == 3){
             $leaves = Leave::
             join('companies','companies.id','=','leaves.company_id')
             ->join('departments','departments.id','=','leaves.department_id')

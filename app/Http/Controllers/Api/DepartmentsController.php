@@ -18,7 +18,7 @@ class DepartmentsController extends Controller
         $user_auth = Auth::guard('api')->user();
         $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
 
-        if($employee && $employee->type == 1){
+        if($employee && $employee->type == 3){
         $department = Department::leftjoin('employees', 'employees.id', '=', 'departments.department_head')
             ->join('companies', 'companies.id', '=', 'departments.company_id')->where('company_id',$employee->company->id)
             ->where('departments.deleted_at', '=', null)

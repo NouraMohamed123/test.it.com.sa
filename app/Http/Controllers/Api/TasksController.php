@@ -10,6 +10,7 @@ use App\Models\Employee;
 use App\Models\EmployeeTask;
 use App\Models\TaskDocument;
 use Illuminate\Http\Request;
+use App\Models\ScheduledTask;
 use App\Models\TaskDiscussion;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class TasksController extends Controller
          $user_auth = Auth::guard('api')->user();
          $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
 
-            if($employee && $employee->type == 1){
+            if($employee && $employee->type == 3){
 
             $count_not_started = Task::where('deleted_at', '=', null)->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
            ->where('employee_id', $employee->id)
@@ -60,7 +61,7 @@ class TasksController extends Controller
                 ->where('status', '=', 'completed')
                 ->count();
 
-                $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title')->orderBy('id', 'desc')->get();
+                $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title','assignedEmployees')->orderBy('id', 'desc')->get();
             }
 
            return response()->json(['success' => true, 'data' => $tasks,'count_not_started'=>$count_not_started,'count_in_progress'=>$count_in_progress,'count_cancelled'=>$count_cancelled,'count_completed'=>$count_completed]);
@@ -111,7 +112,7 @@ class TasksController extends Controller
     {
          $user_auth = Auth::guard('api')->user();
 		// if ($user_auth->can('task_add')){
-
+// dd($request->all()); //
             $request->validate([
                 'title'           => 'required|string|max:255',
                 'summary'         => 'required|string|max:255',
@@ -365,5 +366,25 @@ class TasksController extends Controller
         // }
         // return abort('403', __('You are not authorized'));
     }
+     public function repeating(Request $request){
+        $validatedData = $request->validate([
+            'task_id' => 'required|integer',
+            'repeat_type' => 'required|string',
+        ]);
 
+        ScheduledTask::updateOrCreate(
+            [
+                'task_id' => $validatedData['task_id']
+            ],
+            [
+                'repeat_type' => $validatedData['repeat_type']
+
+            ]
+        );
+
+        return response()->json(['message' => 'Scheduled task created or updated successfully.']);
+
+
+
+    }
 }
