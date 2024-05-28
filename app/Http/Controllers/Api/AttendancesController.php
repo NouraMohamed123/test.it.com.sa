@@ -28,7 +28,7 @@ class AttendancesController extends Controller
 
          $user_auth = Auth::guard('api')->user();
          $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-         if($employee && $employee->type == 1){
+         if($employee && $employee->type == 3){
                 $attendances = Attendance::where('deleted_at', '=', null)->where('employee_id', $employee->id)->orderBy('id', 'desc')->get();
 
 

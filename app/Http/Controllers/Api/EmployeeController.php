@@ -42,7 +42,7 @@ class EmployeeController extends Controller
     {
 
          $user_auth = Auth::guard('api')->user();
-        // if ($user_auth->can('employee_view')) {
+
 
             $employees = Employee::with('company:id,name', 'office_shift:id,name', 'department:id,department', 'designation:id,designation')
                 ->where('deleted_at', '=', null)
@@ -50,8 +50,6 @@ class EmployeeController extends Controller
                 ->get();
                 return response()->json(['success' => true, 'data' => $employees]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
     }
     public function show(Request $request, $id)
 {
@@ -84,8 +82,7 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
          $user_auth = Auth::guard('api')->user();
-        // if ($user_auth->can('employee_add')) {
-         // dd($request->all());
+
 
             $this->validate($request, [
                 'firstname'      => 'required|string|max:255',
@@ -201,7 +198,7 @@ class EmployeeController extends Controller
             $user_data['role_users_id'] = $request['role_users_id'];
 
             \DB::transaction(function () use ($request , $user_data , $data) {
-
+                 $user_data['type'] = 3;
                 $user = User::create($user_data);
                 $user->syncRoles($request['role_users_id']);
 
@@ -486,7 +483,7 @@ class EmployeeController extends Controller
             $user_data['role_users_id'] = $request['role_users_id'];
 
             \DB::transaction(function () use ($request, $id, $user_data, $data) {
-
+                $user_data['type'] = 3;
                 User::whereId($id)->update($user_data);
                 $user = User::find($id);
                 $data['user_id'] =  $user->id;

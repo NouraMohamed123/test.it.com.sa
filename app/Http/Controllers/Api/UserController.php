@@ -38,7 +38,7 @@ class UserController extends Controller
 
         $user_auth = Auth::guard('api')->user();
         $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-        if($employee && $employee->type == 1){
+        if($employee && $employee->type == 3){
            $policy  =  $employee->company->policy;
         }else{
             return response()->json([

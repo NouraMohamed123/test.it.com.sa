@@ -23,7 +23,7 @@ class ProjectController extends Controller
     {
         $user_auth = Auth::guard('api')->user();
         $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-        if($employee && $employee->type == 1){
+        if($employee && $employee->type == 3){
             $count_not_started = Project::whereNull('deleted_at')
             ->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
             ->where('employee_id', $employee->id)
