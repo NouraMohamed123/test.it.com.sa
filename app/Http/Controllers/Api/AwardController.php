@@ -32,8 +32,9 @@ class AwardController extends Controller
                 join('companies','companies.id','=','awards.company_id')
                 ->join('departments','departments.id','=','awards.department_id')
                 ->join('employees','employees.id','=','awards.employee_id')
+                ->where('employee_id', $employee->id)
                 ->join('award_types','award_types.id','=','awards.award_type_id')
-                ->where('awards.deleted_at' , '=', null)->where('employee_id', $employee->id)
+                ->where('awards.deleted_at' , '=', null)
                 ->select('awards.*',
                 'employees.username AS employee_name', 'employees.id AS employee_id',
                 'award_types.title AS award_type_title', 'award_types.id AS award_type_id',

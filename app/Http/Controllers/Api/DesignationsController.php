@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\Company;
+use App\Models\Employee;
+use App\Models\Department;
 use App\Models\Designation;
 use Illuminate\Http\Request;
-use App\Models\Company;
-use App\Models\Department;
-use Carbon\Carbon;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class DesignationsController extends Controller
 {
@@ -19,11 +21,20 @@ class DesignationsController extends Controller
     public function index()
     {
 
-
+        $user_auth = Auth::guard('api')->user();
+        $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+        if($employee && $employee->type == 3){
+            $designations = Designation::with('department')
+            ->where('deleted_at', '=', null)->where('company_id',$employee->company->id)
+            ->orderBy('id', 'desc')
+            ->get();
+        }else{
             $designations = Designation::with('department')
             ->where('deleted_at', '=', null)
             ->orderBy('id', 'desc')
             ->get();
+        }
+
             return response()->json([
                 'success' => true,
                 'data' => $designations

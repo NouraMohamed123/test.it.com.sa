@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Carbon\Carbon;
 use App\Models\Company;
 use App\Models\Trainer;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -18,10 +19,15 @@ class TrainersController extends Controller
      */
     public function index()
     {
-        $user_auth = Auth::guard('api')->user();
+            $user_auth = Auth::guard('api')->user();
+            $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+            if($employee && $employee->type == 3){
+            $trainers = Trainer::where('deleted_at', '=', null)->with('company:id,name')->where('company_id',$employee->company->id)->orderBy('id', 'desc')->get();
 
+            }else{
+                $trainers = Trainer::where('deleted_at', '=', null)->with('company:id,name')->orderBy('id', 'desc')->get();
 
-            $trainers = Trainer::where('deleted_at', '=', null)->with('company:id,name')->orderBy('id', 'desc')->get();
+            }
             return response()->json(['success' => true, 'data' => $trainers]);
 
     }
