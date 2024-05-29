@@ -596,4 +596,83 @@ class EmployeeController extends Controller
 
         return response()->json($office_shifts);
     }
+
+    public function import(Request $request)
+{
+
+        $request->validate([
+            'employees' => 'required|array',
+            'employees.*.firstname' => 'required|string|max:255',
+            'employees.*.lastname' => 'required|string|max:255',
+            'employees.*.country' => 'required|string|max:255',
+            'employees.*.gender' => 'required',
+            'employees.*.phone' => 'required',
+            'employees.*.company_id' => 'required',
+            'employees.*.department_id' => 'required',
+            'employees.*.designation_id' => 'required',
+            'employees.*.office_shift_id' => 'required',
+            'employees.*.role_users_id' => 'required',
+            'employees.*.email' => 'required|string|email|max:255|unique:users',
+            'employees.*.password' => 'required|string|min:6|confirmed',
+            'employees.*.password_confirmation' => 'required',
+            'employees.*.fourth_name' => 'required|string',
+            'employees.*.start_trial_date' => 'required|date',
+            'employees.*.end_trial_date' => 'required|date',
+            'employees.*.job_description' => 'required|string',
+            'employees.*.language_level' => 'required|string',
+            'employees.*.specialization' => 'required|string',
+            'employees.*.educational_qualification' => 'required|string',
+            'employees.*.supervisor_name' => 'required|string|max:192',
+            'employees.*.social_enterprises_date' => 'required|date',
+            'employees.*.contract_expiry_date' => 'required|date',
+            'employees.*.medical_insurance_joining' => 'required|date',
+            'employees.*.medical_insurance_expiry' => 'required|date',
+            'employees.*.platform_contract_joining' => 'required|date',
+            'employees.*.platform_contract_expiry' => 'required|date',
+            'employees.*.date_of_birth_hijri' => 'required|date',
+            'employees.*.weekend_days' => 'required|string',
+            'employees.*.annual_leave_days' => 'required|string',
+            'employees.*.monthly_working_days' => 'required|string',
+            'employees.*.required_to_attend' => 'required|boolean',
+            'employees.*.marital_status' => 'required|string|in:single,married,divorced,widowed',
+            'employees.*.has_special_needs' => 'required|boolean',
+            'employees.*.disability_type' => 'nullable|string',
+            'employees.*.scene_image' => 'nullable|image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
+            'employees.*.job_type' => 'required|string',
+            'employees.*.contract_type' => 'required|string',
+        ]);
+
+        $createdEmployees = [];
+
+        foreach ($request->employees as $employeeData) {
+            $avatar = 'no_avatar.png';
+            $user_data = [
+                'username' => $employeeData['firstname'] . ' ' . $employeeData['lastname'],
+                'email' => $employeeData['email'],
+                'avatar' => $avatar,
+                'password' => Hash::make($employeeData['password']),
+                'status' => 1,
+                'role_users_id' => $employeeData['role_users_id'],
+            ];
+
+            $data = array_merge($employeeData, [
+                'username' => $employeeData['firstname'] . ' ' . $employeeData['lastname'],
+                'avatar' => $avatar,
+                'scene_image' => 'no_avatar.png',
+            ]);
+
+            \DB::transaction(function () use ($user_data, $data, &$createdEmployees) {
+                $user = User::create($user_data);
+                $user->syncRoles($data['role_users_id']);
+                $data['user_id'] = $user->id;
+                $employee = Employee::create($data);
+                $createdEmployees[] = $employee;
+            });
+        }
+
+        return response()->json(['success' => true, 'data' => $createdEmployees]);
+
+
+}
+
 }

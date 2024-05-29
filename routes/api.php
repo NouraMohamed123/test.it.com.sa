@@ -83,7 +83,7 @@ Route::group([
     Route::get('quick-entry-company/{id}', [CompanyController::class, 'QuickEntry']);
     Route::get('verification-attendance', [CompanyController::class, 'verification_attendance']);
     Route::get('verification-leave', [CompanyController::class, 'verification_leave']);
-
+    Route::post('import-companies', [CompanyController::class, 'import']);
 
     //------------------------------- candidates -----------------------\\
     //----------------------------------------------------------------\\
@@ -143,6 +143,7 @@ Route::group([
     Route::post('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}',  [UserController::class, 'destroy']);
     Route::post('assignRole', [UserController::class, 'assignRole']);
+    Route::post('import-user', [UserController::class, 'import']);
     //------------------------------- Employee --------------------------\\
     //--------------------------------------------------------------------\\
     Route::get('employees', [EmployeeController::class, 'index']);
@@ -155,7 +156,7 @@ Route::group([
     Route::get("Get_office_shift_by_company", [EmployeeController::class, 'Get_office_shift_by_company']);
     // Route::put("update_social_profile/{id}",  [EmployeeController::class, 'update_social_profile']);
     Route::post("employees/delete/by_selection", [EmployeeController::class, 'delete_by_selection']);
-
+    Route::post('import-employees', [EmployeeController::class, 'import']);
     //------------------------------- Attendances ------------------------\\
     //--------------------------------------------------------------------\\
 

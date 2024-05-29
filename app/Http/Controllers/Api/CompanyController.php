@@ -313,4 +313,49 @@ class CompanyController extends Controller
             'status' => 'open',
         ], 200);
     }
+    public function import(Request $request)
+{
+    $user_auth = Auth::guard('api')->user();
+
+    $request->validate([
+        'companies' => 'required|array',
+        'companies.*.name' => 'required|string|max:255',
+        'companies.*.status' => 'required|in:active,inactive',
+        'companies.*.tax_number' => 'required|string|max:255',
+        'companies.*.email' => 'nullable|string|email|max:255',
+        'companies.*.phone' => 'nullable|string|max:255',
+        'companies.*.policy' => 'required|string|max:65535',
+    ]);
+
+    $createdCompanies = [];
+
+    foreach ($request->companies as $companyData) {
+        $filename = 'no_avatar.png';
+        $filename1 = 'no_avatar.png';
+        $filename2 = 'no_avatar.png';
+        $filename3 = 'no_avatar.png';
+
+
+        $company = Company::create([
+            'name' => $companyData['name'],
+            'logo' => $filename,
+            'status' => $companyData['status'],
+            'tax_number' => $companyData['tax_number'],
+            'tax_number_photo' => $filename1,
+            'job_classification' => $filename2,
+            'trade_register' => $filename3,
+            'email' => $companyData['email'],
+            'phone' => $companyData['phone'],
+            'attendance_time' => $companyData['attendance_time'] ?? null,
+            'leave_time' => $companyData['leave_time'] ?? null,
+            'policy' => $companyData['policy'],
+        ]);
+
+        $createdCompanies[] = $company;
+    }
+
+    return response()->json(['success' => true, 'data' => $createdCompanies]);
+
+}
+
 }

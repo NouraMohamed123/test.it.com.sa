@@ -258,4 +258,44 @@ class UserController extends Controller
     //      $role->syncPermissions($all_permissions);
     //  }
 
+    public function import(Request $request)
+{
+    $user_auth = Auth::guard('api')->user();
+
+
+    $request->validate([
+        'users' => 'required|array',
+        'users.*.username'  => 'required|string|max:255',
+        'users.*.email'     => 'required|string|email|max:255|unique:users',
+        'users.*.password'  => 'required|string|min:6|confirmed',
+        'users.*.password_confirmation' => 'required',
+        'users.*.avatar'    => 'nullable|image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
+        'users.*.status'    => 'required',
+        'users.*.role_id' => 'required|exists:roles,id',
+    ]);
+
+    $createdUsers = [];
+
+    foreach ($request->users as $userData) {
+
+
+        $user = User::create([
+            'username'  => $userData['username'],
+            'email'     => $userData['email'],
+            'avatar'    => 'no_avatar.png',
+            'password'  => Hash::make($userData['password']),
+            'role_users_id' => $userData['role_id'],
+            'status'    => $userData['status'],
+        ]);
+
+        $role = Role::findById($userData['role_id']);
+        $user->assignRole($role);
+
+        $createdUsers[] = $user;
+    }
+
+    return response()->json(['success' => true, 'data' => $createdUsers]);
+
+}
+
 }
