@@ -48,34 +48,37 @@ class RoleController extends Controller
     //     ]);
     // }
     public function store(Request $request)
-{
-    // Validate the request data
-    $validator = Validator::make($request->all(), [
-        'name' => 'required|string|max:255|unique:roles,name',
-        'permissions' => 'required|array',
-        'permissions.*' => 'exists:permissions,name', // Ensure each permission exists
-    ]);
+    {
 
-    // Check if the validation fails
-    if ($validator->fails()) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:roles,name',
+            'permissions' => 'required|array',
+            'permissions.*' => 'exists:permissions,name',
+        ]);
+
+        // Check if the validation fails
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+
+        // Create the new role
+        $role = Role::create(['name' => $request->input('name')]);
+
+        // Sync the permissions with the role
+        $syncedPermissions = $role->syncPermissions($request->input('permissions'));
+
+
+        // Return a successful response
         return response()->json([
-            'message' => 'Validation error',
-            'errors' => $validator->errors(),
-        ], 422);
+            'message' => 'Role created successfully',
+            'data' => $role,
+        ]);
     }
 
-    // Create the new role
-    $role = Role::create(['name' => $request->input('name')]);
-
-    // Sync the permissions with the role
-    $role->syncPermissions($request->input('permissions'));
-
-    // Return a successful response
-    return response()->json([
-        'message' => 'Role created successfully',
-        'data' => $role,
-    ]);
-}
 
 
     /**
