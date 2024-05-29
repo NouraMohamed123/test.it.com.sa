@@ -267,6 +267,7 @@ Route::group([
     //report
     Route::get('attendance-report', [ReportController::class, 'attendance_report_index']);
     Route::get('employee-report', [ReportController::class, 'employee_report_index']);
+    Route::get('leave-report', [ReportController::class, 'leave_report_index']);
     Route::get('project-report', [ReportController::class, 'project_report_index']);
     Route::get('task-report', [ReportController::class, 'task_report_index']);
     Route::get('expense-report', [ReportController::class, 'expense_report_index']);

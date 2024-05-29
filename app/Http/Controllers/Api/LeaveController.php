@@ -145,7 +145,7 @@ class LeaveController extends Controller
                 $employee_leave_info->remaining_leave = $employee_leave_info->remaining_leave - $days_diff;
                 $employee_leave_info->update();
             }
-            dd($leave_data);
+
             Leave::create($leave_data);
 
             return response()->json(['success' => true ,'isvalid' => true]);
