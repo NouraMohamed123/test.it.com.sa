@@ -1,7 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
 
 class RoleSeeder extends Seeder
 {
@@ -16,23 +19,12 @@ class RoleSeeder extends Seeder
 	    DB::table('roles')->insert(
             array(
                 [
-                    'id'    => 1,
-                    'name'  => 'Super Admin',
+
+                    'name'  => 'Super',
                     'description' => 'Super Admin',
-                    'guard_name' => 'web',
+                    'guard_name' => 'api',
                 ],
-                [
-                    'id'    => 2,
-                    'name'  => 'Employee',
-                    'description' => 'Employee Access',
-                    'guard_name' => 'web',
-                ],
-                [
-                    'id'    => 3,
-                    'name'  => 'Client',
-                    'description' => 'Client Access',
-                    'guard_name' => 'web',
-                ],
+
             )
         );
     }
