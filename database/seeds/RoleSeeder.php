@@ -18,12 +18,12 @@ class RoleSeeder extends Seeder
     {
         // Insert some stuff
         $superRole = Role::create([
-            'name' => 'Super2',
+            'name' => 'Super3',
             'description' => 'Admin1',
             'guard_name' => 'api',
         ]);
 
         $permissions = Permission::where('guard_name', 'api')->pluck('id')->toArray();
-           $superRole->syncPermissions($permissions);
+        $superRole->syncPermissions($permissions);
     }
 }
