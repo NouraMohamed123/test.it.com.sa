@@ -37,15 +37,16 @@ class CreateAdminUserSeeder extends Seeder
             'username' => 'admin1',
             'email' => 'admin@admin.com',
             'password' => bcrypt('12345689'), // Consider hashing passwords securely
-            'role_users_id' => 7,
+            'role_users_id' => 10,
             'status' => 1,
         ]);
 
         // Find the user by the inserted ID (assumed to be 7 here)
-        $user = User::findOrFail(7);
+        $user = User::where('email', 'admin@admin.com')->firstOrFail();
+
 
         // Ensure the role exists before assigning it
-        $role = Role::firstOrCreate(['name' => 'Admin']);
+        $role = Role::firstOrCreate(['name' => 'Super2']);
 
         // Assign the role to the user
         $user->assignRole($role->name);
