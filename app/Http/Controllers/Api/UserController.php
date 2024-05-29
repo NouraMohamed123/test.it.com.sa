@@ -77,7 +77,7 @@ class UserController extends Controller
                 'password_confirmation' => 'required',
                 'avatar'    => 'nullable|image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
                 'status'    => 'required',
-                'role_id'=>'required',
+                'role_id'=>'required|exists:roles,id',
             ]);
 
             if ($request->hasFile('avatar')) {
@@ -99,8 +99,8 @@ class UserController extends Controller
                 'role_users_id'   => $request['role_id'],
                 'status'    => $request['status'],
             ]);
-
-            $user->assignRole($request['role_id']);
+            $role = Role::findById($request['role_id']);
+            $user->assignRole($role);
 
             return response()->json(['success' => true]);
 
@@ -186,7 +186,14 @@ class UserController extends Controller
                 'password'  => $pass,
                 'status'    => $request['status'],
             ]);
+            //remove role
+            $get_user = User::find($request->user_id);
+            $get_user->removeRole($get_user->role_users_id);
 
+            User::whereId($id)->update([
+                'role_users_id' => $request->role_id,
+            ]);
+            $user->assignRole($request->role_id);
             return response()->json(['success' => true]);
 
         // }
@@ -218,7 +225,7 @@ class UserController extends Controller
     public function assignRole(Request $request)
     {
            $user_auth = Auth::guard('api')->user();
-        // if ($user_auth->can('group_permission') && $user_auth->role_users_id == 1 && $request->role_id != 3){
+
 
             //remove role
             $get_user = User::find($request->user_id);
@@ -233,8 +240,7 @@ class UserController extends Controller
 
             return response()->json(['success' => true]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
+
     }
 
 
@@ -251,5 +257,45 @@ class UserController extends Controller
     //      $role = Role::find(1);
     //      $role->syncPermissions($all_permissions);
     //  }
+
+    public function import(Request $request)
+{
+    $user_auth = Auth::guard('api')->user();
+
+
+    $request->validate([
+        'users' => 'required|array',
+        'users.*.username'  => 'required|string|max:255',
+        'users.*.email'     => 'required|string|email|max:255|unique:users',
+        'users.*.password'  => 'required|string|min:6|confirmed',
+        'users.*.password_confirmation' => 'required',
+        'users.*.avatar'    => 'nullable|image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
+        'users.*.status'    => 'required',
+        'users.*.role_id' => 'required|exists:roles,id',
+    ]);
+
+    $createdUsers = [];
+
+    foreach ($request->users as $userData) {
+
+
+        $user = User::create([
+            'username'  => $userData['username'],
+            'email'     => $userData['email'],
+            'avatar'    => 'no_avatar.png',
+            'password'  => Hash::make($userData['password']),
+            'role_users_id' => $userData['role_id'],
+            'status'    => $userData['status'],
+        ]);
+
+        $role = Role::findById($userData['role_id']);
+        $user->assignRole($role);
+
+        $createdUsers[] = $user;
+    }
+
+    return response()->json(['success' => true, 'data' => $createdUsers]);
+
+}
 
 }

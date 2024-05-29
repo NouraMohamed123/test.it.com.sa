@@ -18,6 +18,8 @@ use App\Models\ExpenseCategory;
 use App\Models\Account;
 use App\Models\PaymentMethod;
 use App\Models\DepositCategory;
+use App\Models\Holiday;
+use App\Models\Leave;
 use Carbon\Carbon;
 use DB;
 use App\utils\helpers;
@@ -52,24 +54,55 @@ class ReportController extends Controller
     }
     public function employee_report_index(Request $request)
     {
-
-
-        $helpers = new helpers();
-        $param = array(0 => '=', 1 => '=', 2 => '=');
-        $columns = array(0 => 'company_id', 1 => 'department_id', 2 => 'designation_id');
-
-        $employees = Employee::where('deleted_at', '=', null)
-            ->with('company:id,name', 'department:id,department', 'designation:id,designation', 'office_shift:id,name')
-            ->orderBy('id', 'desc');
-
-        // Multiple Filter
-        $employees_Filtred = $helpers->filter($employees, $columns, $param, $request)->get();
+        $employees = Employee::where('deleted_at', null)
+            ->orderByDesc('id')
+            ->select('id', 'username', 'joining_date', 'platform_contract_joining', 'start_trial_date', 'end_trial_date', 'educational_qualification', 'specialization', 'job_description', 'country', 'address', 'gender', 'birth_date', 'phone', 'email', 'status', 'has_special_needs', 'disability_type')
+            ->get();
 
         return response()->json([
             'success' => true,
-            'data' => $employees_Filtred
+            'data' => $employees
         ]);
     }
+    public function leave_report_index(Request $request)
+    {
+        $leaves = Leave::whereNull('leaves.deleted_at')
+            ->orderByDesc('leaves.id')
+            ->with([
+                'leave_type:id,title',
+                'employee:id,username,joining_date,social_enterprises_date'
+            ])
+            ->select(
+                'leaves.id',
+                'leaves.start_date',
+                'leaves.days',
+                'leaves.status',
+                'leaves.leave_type_id', // Needed to join with leave_types
+                'leaves.employee_id'    // Needed to join with employees
+            )
+            ->get();
+
+        $leaves->transform(function ($leave) {
+            return [
+                'id' => $leave->id,
+                'start_date' => $leave->start_date,
+                'days' => $leave->days,
+                'status' => $leave->status,
+                'leave_type' => $leave->leave_type ? $leave->leave_type->title : null,
+
+                'username' => $leave->employee ? $leave->employee->username : null,
+                'joining_date' => $leave->employee ? $leave->employee->joining_date : null,
+                'social_enterprises_date' => $leave->employee ? $leave->employee->social_enterprises_date : null
+
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $leaves
+        ]);
+    }
+
     public function project_report_index(Request $request)
     {
 
@@ -158,17 +191,19 @@ class ReportController extends Controller
             'data' => $deposits_Filtred
         ]);
     }
-    public function fetchDepartment(Request $request){
+    public function fetchDepartment(Request $request)
+    {
 
         $value = $request->get('company_id');
-        $data = Department::where('company_id' ,$value)->where('deleted_at', '=', null)->groupBy('department')->get();
+        $data = Department::where('company_id', $value)->where('deleted_at', '=', null)->groupBy('department')->get();
         return $data;
     }
 
 
-    public function fetchDesignation(Request $request){
+    public function fetchDesignation(Request $request)
+    {
         $value = $request->get('department_id');
-        $data = Designation::where('department_id' ,$value)->where('deleted_at', '=', null)->groupBy('designation')->get();
+        $data = Designation::where('department_id', $value)->where('deleted_at', '=', null)->groupBy('designation')->get();
         return $data;
     }
 }

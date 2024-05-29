@@ -92,7 +92,7 @@ class LeaveController extends Controller
     public function store(Request $request)
     {
          $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('leave_add')){
+
 
             request()->validate([
                 'employee_id'      => 'required',
@@ -136,6 +136,7 @@ class LeaveController extends Controller
             $leave_data['status'] = $request['status'];
 
             $employee_leave_info = Employee::find($request->employee_id);
+
             if($days_diff > $employee_leave_info->remaining_leave)
             {
                 return response()->json(['remaining_leave' => "remaining leaves are insufficient", 'isvalid' => false]);
@@ -149,8 +150,7 @@ class LeaveController extends Controller
 
             return response()->json(['success' => true ,'isvalid' => true]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
+
     }
 
     /**

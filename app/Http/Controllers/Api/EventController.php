@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Event;
-use App\Models\Employee;
-use App\Models\Company;
-use App\Models\Department;
 use Carbon\Carbon;
+use App\Models\Event;
+use App\Models\Company;
+use App\Models\Employee;
+use App\Models\Department;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -19,8 +20,14 @@ class EventController extends Controller
      */
     public function index()
     {
-
+        $user_auth = Auth::guard('api')->user();
+        $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+        if($employee && $employee->type == 3){
+            $events = Event::where('deleted_at', '=', null)->where('company_id',$employee->company->id)->orderBy('id', 'desc')->paginate(50);
+        }else{
             $events = Event::where('deleted_at', '=', null)->orderBy('id', 'desc')->paginate(50);
+
+        }
             return response()->json([
                 'success' => true ,
                 'data'=> $events
