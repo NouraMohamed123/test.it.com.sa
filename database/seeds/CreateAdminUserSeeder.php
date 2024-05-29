@@ -35,8 +35,8 @@ class CreateAdminUserSeeder extends Seeder
         // Insert admin user into the database
         DB::table('users')->insert([
             'username' => 'admin1',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('123456'), // Consider hashing passwords securely
+            'email' => 'admin@admin.com',
+            'password' => bcrypt('12345689'), // Consider hashing passwords securely
             'role_users_id' => 7,
             'status' => 1,
         ]);

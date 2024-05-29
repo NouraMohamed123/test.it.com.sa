@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RoleSeeder extends Seeder
 {
@@ -16,16 +17,13 @@ class RoleSeeder extends Seeder
     public function run()
     {
         // Insert some stuff
-	    DB::table('roles')->insert(
-            array(
-                [
+        $superRole = Role::create([
+            'name' => 'Super2',
+            'description' => 'Admin1',
+            'guard_name' => 'api',
+        ]);
 
-                    'name'  => 'Super',
-                    'description' => 'Super Admin',
-                    'guard_name' => 'api',
-                ],
-
-            )
-        );
+        $permissions = Permission::where('guard_name', 'api')->pluck('id')->toArray();
+           $superRole->syncPermissions($permissions);
     }
 }
