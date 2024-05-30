@@ -29,7 +29,15 @@ class DesignationsController extends Controller
             ->where('deleted_at', '=', null)->where('company_id',$employee->company->id)
             ->orderBy('id', 'desc')
             ->get();
-        }else{
+        }elseif($user_auth->type == 2){
+            $designations = Designation::with('department')
+            ->where('deleted_at', '=', null)->where('company_id',$user_auth->company->id)
+            ->orderBy('id', 'desc')
+            ->get();
+
+
+        }
+        else{
             $designations = Designation::with('department')
             ->where('deleted_at', '=', null)
             ->orderBy('id', 'desc')

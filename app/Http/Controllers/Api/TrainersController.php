@@ -24,7 +24,11 @@ class TrainersController extends Controller
              $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
             $trainers = Trainer::where('deleted_at', '=', null)->with('company:id,name')->where('company_id',$employee->company->id)->orderBy('id', 'desc')->get();
 
-            }else{
+            }elseif($user_auth->type == 2){
+                $trainers = Trainer::where('deleted_at', '=', null)->with('company:id,name')->where('company_id',$user_auth->company->id)->orderBy('id', 'desc')->get();
+
+            }
+            else{
                 $trainers = Trainer::where('deleted_at', '=', null)->with('company:id,name')->orderBy('id', 'desc')->get();
 
             }

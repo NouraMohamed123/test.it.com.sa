@@ -27,7 +27,13 @@ class OfficeShiftController extends Controller
         ->with(['company'])->where('company_id',$employee->company->id)
         ->orderBy('id', 'desc')
         ->paginate(50);
-        }else{
+        }elseif($user_auth->type == 2){
+            $office_shifts = OfficeShift::where('deleted_at', '=', null)
+            ->with(['company'])->where('company_id',$user_auth->company->id)
+            ->orderBy('id', 'desc')
+            ->paginate(50);
+        }
+        else{
             $office_shifts = OfficeShift::where('deleted_at', '=', null)
             ->with(['company'])
             ->orderBy('id', 'desc')

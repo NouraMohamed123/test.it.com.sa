@@ -28,7 +28,15 @@ class ComplaintController extends Controller
             ->where('deleted_at', '=', null)->where('company_id',$employee->company->id)
             ->orderBy('id', 'desc')
             ->get();
-        }else{
+        }elseif($user_auth->type == 2){
+            $complaints = Complaint::with('company:id,name', 'EmployeeFrom:id,username', 'EmployeeAgainst:id,username')
+            ->where('deleted_at', '=', null)->where('company_id',$user_auth->company->id)
+            ->orderBy('id', 'desc')
+            ->get();
+
+
+        }
+        else{
             $complaints = Complaint::with('company:id,name', 'EmployeeFrom:id,username', 'EmployeeAgainst:id,username')
             ->where('deleted_at', '=', null)
             ->orderBy('id', 'desc')
