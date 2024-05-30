@@ -21,7 +21,7 @@ class TravelController extends Controller
     public function index()
     {
         $user_auth = Auth::guard('api')->user();
-        if($user_auth->type == 3){
+        if($user_auth->type == 3  && $user_auth->type == 2){
          $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
         $travels = Travel::with('company:id,name', 'employee:id,username', 'arrangement_type:id,title')
             ->where('deleted_at', '=', null)->where('employee_id', $employee->id)->orderBy('id', 'desc')->get();

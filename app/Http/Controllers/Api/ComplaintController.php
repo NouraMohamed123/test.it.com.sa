@@ -22,7 +22,7 @@ class ComplaintController extends Controller
     {
 
         $user_auth = Auth::guard('api')->user();
-        if($user_auth->type == 3){
+        if($user_auth->type == 3  && $user_auth->type == 2){
         $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
         $complaints = Complaint::with('company:id,name', 'EmployeeFrom:id,username', 'EmployeeAgainst:id,username')
             ->where('deleted_at', '=', null)->where('company_id',$employee->company->id)
