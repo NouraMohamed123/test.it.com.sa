@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\Employee;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -244,7 +245,7 @@ class CompanyController extends Controller
 
         return response()->json($companies);
     }
-    public function QuickEntry($id)
+    public function QuickEntry(Request $request ,$id)
     {
         $company = Company::findOrFail($id);
         $employee = Employee::where('company_id', $company->id)->first();
@@ -263,13 +264,23 @@ class CompanyController extends Controller
             ], 401);
         }
         $token = auth()->guard('api')->login($user);
-        $user = User::with('RoleUser.permissions')->where('id', $user->id)->first();
+        $user = User::where('id', $user->id)->first();
+        $role = Role::with('permissions')->where('id', $user->role_users_id)->first();
+
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
+        $permissions = $role->permissions->pluck('name');
+
 
         return response()->json([
             'access_token' => $token,
-            'data' => $user,
-            'expires_in' => auth()->guard('api')->factory()->getTTL() * 60,
+            "data" => $user,
+            "roles" => $role,
+            'permissions' => $permissions,
+            'expires_in' => JWTAuth::factory()->getTTL() * 60,
         ]);
+
     }
     public function verification_attendance()
     {
