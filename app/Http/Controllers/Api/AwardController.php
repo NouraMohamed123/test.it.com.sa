@@ -41,7 +41,25 @@ class AwardController extends Controller
                 'departments.department AS department_name', 'departments.id AS department_id')
                 ->orderBy('id', 'desc')
                 ->get();
-            }else{
+            } elseif($user_auth->type == 2){
+                $awards = Award::
+                join('companies','companies.id','=','awards.company_id')
+                ->where('company_id', $user_auth->company->id)
+                ->join('departments','departments.id','=','awards.department_id')
+                ->join('employees','employees.id','=','awards.employee_id')
+
+                ->join('award_types','award_types.id','=','awards.award_type_id')
+                ->where('awards.deleted_at' , '=', null)
+                ->select('awards.*',
+                'employees.username AS employee_name', 'employees.id AS employee_id',
+                'award_types.title AS award_type_title', 'award_types.id AS award_type_id',
+                'companies.name AS company_name', 'companies.id AS company_id',
+                'departments.department AS department_name', 'departments.id AS department_id')
+                ->orderBy('id', 'desc')
+                ->get();
+
+            }
+            else{
                 $awards = Award::
                 join('companies','companies.id','=','awards.company_id')
                 ->join('departments','departments.id','=','awards.department_id')
