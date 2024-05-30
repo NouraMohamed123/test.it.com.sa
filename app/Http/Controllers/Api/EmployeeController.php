@@ -51,7 +51,7 @@ class EmployeeController extends Controller
                 ->where('leaving_date', NULL)
                 ->get();
         }elseif($user_auth->type == 2){
-            dd( $user_auth->company->id);
+
             $employees = Employee::with('company:id,name', 'office_shift:id,name', 'department:id,department', 'designation:id,designation')
             ->where('deleted_at', '=', null)
             ->where('company_id', '=', $user_auth->company->id)
