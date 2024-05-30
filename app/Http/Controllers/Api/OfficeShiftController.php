@@ -18,11 +18,14 @@ class OfficeShiftController extends Controller
     {
 
 
-            $office_shifts = OfficeShift::where('deleted_at', '=', null)->orderBy('id', 'desc')->paginate(50);
-            return response()->json([
-                'success' => true,
-                'data' =>  $office_shifts
-            ]);
+        $office_shifts = OfficeShift::where('deleted_at', '=', null)
+        ->with(['company']) // Replace 'relation1', 'relation2' with actual relation names
+        ->orderBy('id', 'desc')
+        ->paginate(50);
+        return response()->json([
+            'success' => true,
+            'data' => $office_shifts
+        ]);
 
 
     }
@@ -31,6 +34,7 @@ class OfficeShiftController extends Controller
         $OfficeShift = OfficeShift::
             where('id', $id)
             ->whereNull('deleted_at')
+            ->with(['company'])
             ->first();
 
             if ($OfficeShift) {
@@ -96,7 +100,7 @@ class OfficeShiftController extends Controller
 
     }
 
-    
+
 
     /**
      * Update the specified resource in storage.
