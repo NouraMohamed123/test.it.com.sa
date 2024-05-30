@@ -112,7 +112,7 @@ class ReportController extends Controller
         $columns = array(0 => 'title', 1 => 'client_id', 2 => 'company_id', 3 => 'priority', 4 => 'status');
 
         $projects = Project::where('deleted_at', '=', null)
-            ->with('company:id,name', 'client:id,username')
+            ->with('company:id,name')
             ->orderBy('id', 'desc');
 
         // Multiple Filter
