@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\AppUsers;
 use App\Models\User;
+use App\Models\AppUsers;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -27,12 +28,20 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user = User::with('RoleUser.permissions')->where('id', Auth::guard('api')->user()->id)->first();
+        $user = User::where('id', Auth::guard('api')->user()->id)->first();
+        $role = Role::with('permissions')->where('id', $user->role_users_id)->first();
+
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
+        $permissions = $role->permissions->pluck('name');
 
 
         return response()->json([
             'access_token' => $token,
             "data" => $user,
+            "roles" => $role,
+            'permissions' => $permissions,
             'expires_in' => JWTAuth::factory()->getTTL() * 60,
         ]);
     }

@@ -9,9 +9,11 @@ use App\Models\Company;
 use App\Models\Employee;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class CompanyController extends Controller
 {
@@ -244,7 +246,7 @@ class CompanyController extends Controller
 
         return response()->json($companies);
     }
-    public function QuickEntry($id)
+    public function QuickEntry(Request $request ,$id)
     {
         $company = Company::findOrFail($id);
         $employee = Employee::where('company_id', $company->id)->first();
@@ -263,13 +265,23 @@ class CompanyController extends Controller
             ], 401);
         }
         $token = auth()->guard('api')->login($user);
-        $user = User::with('RoleUser.permissions')->where('id', $user->id)->first();
+        $user = User::where('id', $user->id)->first();
+        $role = Role::with('permissions')->where('id', $user->role_users_id)->first();
+
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
+        $permissions = $role->permissions->pluck('name');
+
 
         return response()->json([
             'access_token' => $token,
-            'data' => $user,
-            'expires_in' => auth()->guard('api')->factory()->getTTL() * 60,
+            "data" => $user,
+            "roles" => $role,
+            'permissions' => $permissions,
+            'expires_in' => JWTAuth::factory()->getTTL() * 60,
         ]);
+
     }
     public function verification_attendance()
     {
@@ -357,5 +369,42 @@ class CompanyController extends Controller
     return response()->json(['success' => true, 'data' => $createdCompanies]);
 
 }
+public function store_admin(Request $request)
+{
+     $user_auth = Auth::guard('api')->user();
+    $request->validate([
+        'username'  => 'required|string|max:255',
+        'email'     => 'required|string|email|max:255|unique:users',
+        'password'  => 'required|string|min:6|confirmed',
+        'password_confirmation' => 'required',
+        'avatar'    => 'nullable|image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
+        'status'    => 'required',
+        'role_id'=>'required|exists:roles,id',
+        'company_id'    => 'required',
+    ]);
 
+    if ($request->hasFile('avatar')) {
+        $image = $request->file('avatar');
+        $filename = time().'.'.$image->extension();
+        $image->move(public_path('/assets/images/users'), $filename);
+
+    } else {
+        $filename = 'no_avatar.png';
+    }
+    $user = User::create([
+        'username'  => $request['username'],
+        'email'     => $request['email'],
+        'avatar'    => $filename,
+        'password'  => Hash::make($request['password']),
+        'role_users_id'   => $request['role_id'],
+        'status'    => $request['status'],
+        'type' => 2,
+        'company_id' => $request['company_id'],
+    ]);
+    $role = Role::findById($request['role_id']);
+    $user->assignRole($role);
+
+    return response()->json(['success' => true]);
+
+}
 }

@@ -25,11 +25,18 @@ class UserController extends Controller
     public function me(Request $request)
     {
 
-        $user = User::with('RoleUser.permissions')->where('id', Auth::guard('api')->user()->id)->first();
+        $user = User::where('id', Auth::guard('api')->user()->id)->first();
+        $role = Role::with('permissions')->where('id', $user->role_users_id)->first();
 
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
+        $permissions = $role->permissions->pluck('name');
         return response()->json([
 
             'data' => $user,
+            "roles" => $role,
+            'permissions' => $permissions,
 
         ]);
     }

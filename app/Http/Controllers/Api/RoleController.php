@@ -55,8 +55,6 @@ class RoleController extends Controller
             'permissions' => 'required|array',
             'permissions.*' => 'exists:permissions,name',
         ]);
-
-        // Check if the validation fails
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation error',
@@ -64,15 +62,8 @@ class RoleController extends Controller
             ], 422);
         }
 
-
-        // Create the new role
         $role = Role::create(['name' => $request->input('name')]);
-
-        // Sync the permissions with the role
         $syncedPermissions = $role->syncPermissions($request->input('permissions'));
-
-
-        // Return a successful response
         return response()->json([
             'message' => 'Role created successfully',
             'data' => $role,
@@ -81,20 +72,6 @@ class RoleController extends Controller
 
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    // public function show(Role $role)
-    // {
-    //     $role =  Role::with('permissions')->where('id', $role->id)->first();
-
-    //     return response()->json($role);
-
-
-    // }
     public function show($id)
     {
 
@@ -103,7 +80,7 @@ class RoleController extends Controller
         if (!$role) {
             return response()->json(['message' => 'Role not found'], 404);
         }
-        $permissions = $role->permissions?->pluck('name');
+        $permissions = $role->permissions->pluck('name');
 
 
         return response()->json([
@@ -121,22 +98,42 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'permissions' => 'required',
+            'name' => 'required|string|max:255',
+            'permissions' => 'required|array',
+            'permissions.*' => 'exists:permissions,name',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
 
+        $role = Role::with('permissions')->where('id', $id)->first();
+
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
+        $role->update(['name' => $request->input('name')]);
+
+        // Sync the role's permissions
         $role->syncPermissions($request->input('permissions'));
-        $role->update(['name' => $request->name]);
 
+        // Return the updated role with its permissions
         return response()->json([
-            'data' => $role,
-            'message' => 'Role update successfully',
+            'data' => [
+                'id' => $role->id,
+                'name' => $role->name,
+                'permissions' => $role->permissions->pluck('name')->toArray(),
+            ],
+            'message' => 'Role updated successfully',
         ], 200);
     }
+
 
 
     public function destroy(Role $role)

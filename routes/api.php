@@ -84,11 +84,11 @@ Route::group([
     Route::post('/companies/{id}', [CompanyController::class, 'update']);
     Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
     Route::post('companies/delete/by_selection', [CompanyController::class, 'delete_by_selection']);
-    Route::get('quick-entry-company/{id}', [CompanyController::class, 'QuickEntry']);
+    Route::post('quick-entry-company/{id}', [CompanyController::class, 'QuickEntry']);
     Route::get('verification-attendance', [CompanyController::class, 'verification_attendance']);
     Route::get('verification-leave', [CompanyController::class, 'verification_leave']);
     Route::post('import-companies', [CompanyController::class, 'import']);
-
+    Route::post('company-user', [CompanyController::class, 'store_admin']);
     //------------------------------- candidates -----------------------\\
     //----------------------------------------------------------------\\
     Route::get('candidates', [CandidateController::class, 'index']);
@@ -148,6 +148,7 @@ Route::group([
     Route::delete('/users/{id}',  [UserController::class, 'destroy']);
     Route::post('assignRole', [UserController::class, 'assignRole']);
     Route::post('import-user', [UserController::class, 'import']);
+
     //------------------------------- Employee --------------------------\\
     //--------------------------------------------------------------------\\
     Route::get('employees', [EmployeeController::class, 'index']);
