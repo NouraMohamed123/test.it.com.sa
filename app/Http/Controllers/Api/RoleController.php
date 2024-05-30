@@ -98,7 +98,7 @@ class RoleController extends Controller
     public function show($id)
     {
 
-        $role = Role::with('permissions')->where('id', $role->id)->first();
+        $role = Role::with('permissions')->where('id', $id)->first();
 
         if (!$role) {
             return response()->json(['message' => 'Role not found'], 404);
