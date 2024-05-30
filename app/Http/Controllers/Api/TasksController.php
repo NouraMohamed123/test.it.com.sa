@@ -111,6 +111,7 @@ class TasksController extends Controller
     public function store(Request $request)
     {
          $user_auth = Auth::guard('api')->user();
+
             $request->validate([
                 'title'           => 'required|string|max:255',
                 'summary'         => 'required|string|max:255',
@@ -120,7 +121,11 @@ class TasksController extends Controller
                 'status'          => 'required',
                 'priority'          => 'required',
             ]);
-
+            if($user_auth->type = 2){
+                $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+                $request['company_id'] =  $employee->company->id;
+                $request['project_id'] = $employee->project->id;
+                }
             $task = Task::create([
                 'title'            => $request['title'],
                 'summary'          => $request['summary'],

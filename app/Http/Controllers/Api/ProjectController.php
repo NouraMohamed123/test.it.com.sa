@@ -84,20 +84,21 @@ class ProjectController extends Controller
     }
     public function store(Request $request)
     {
-
-
+        $user_auth = Auth::guard('api')->user();
         $request->validate([
             'title'           => 'required|string|max:255',
             'summary'         => 'required|string|max:255',
-
-            'company_id'      => 'required',
+            'company_id'      => 'nullable',
             'assigned_to'     => 'required',
             'start_date'      => 'required',
             'end_date'        => 'required',
             'priority'        => 'required',
             'status'          => 'required',
         ]);
-
+        if($user_auth->type = 2){
+            $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
+            $request['company_id'] =  $employee->company->id;
+         }
         $project  = Project::create([
             'title'            => $request['title'],
             'summary'          => $request['summary'],
