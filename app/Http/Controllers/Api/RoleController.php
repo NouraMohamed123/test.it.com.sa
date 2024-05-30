@@ -98,10 +98,10 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|string|max:255',
             'permissions' => 'required|array',
             'permissions.*' => 'exists:permissions,name',
         ]);
@@ -112,15 +112,28 @@ class RoleController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
+
+        $role = Role::with('permissions')->where('id', $id)->first();
+
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
         $role->update(['name' => $request->input('name')]);
-        $syncedPermissions = $role->syncPermissions($request->input('permissions'));
 
+        // Sync the role's permissions
+        $role->syncPermissions($request->input('permissions'));
 
+        // Return the updated role with its permissions
         return response()->json([
-            'data' => $role,
-            'message' => 'Role update successfully',
+            'data' => [
+                'id' => $role->id,
+                'name' => $role->name,
+                'permissions' => $role->permissions->pluck('name')->toArray(),
+            ],
+            'message' => 'Role updated successfully',
         ], 200);
     }
+
 
 
     public function destroy(Role $role)
