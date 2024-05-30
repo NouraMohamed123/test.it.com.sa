@@ -61,13 +61,13 @@ class DesignationsController extends Controller
             request()->validate([
                 'designation'   => 'required|string|max:255',
                 'company_id'   => 'required',
-                'department'    => 'required',
+                'department_id'    => 'required',
             ]);
 
             Designation::create([
                 'designation'   => $request['designation'],
                 'company_id'        => $request['company_id'],
-                'department_id' => $request['department'],
+                'department_id' => $request['department_id'],
             ]);
 
             return response()->json(['success' => true]);
@@ -116,13 +116,13 @@ class DesignationsController extends Controller
             request()->validate([
                 'designation'   => 'required|string|max:255',
                 'company_id'   => 'required',
-                'department'    => 'required',
+                'department_id'    => 'required',
             ]);
 
             Designation::whereId($id)->update([
                 'designation'   => $request['designation'],
                 'company_id'        => $request['company_id'],
-                'department_id' => $request['department'],
+                'department_id' => $request['department_id'],
             ]);
 
             return response()->json(['success' => true]);
