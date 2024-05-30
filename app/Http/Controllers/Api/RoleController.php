@@ -97,13 +97,15 @@ class RoleController extends Controller
     // }
     public function show(Role $role)
     {
-        // Fetch the role with its permissions
+
         $role = Role::with('permissions')->where('id', $role->id)->first();
 
-        // Extract permissions from the role
-        $permissions = $role->permissions->pluck('name');
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
+        $permissions = $role->permissions?->pluck('name');
 
-        // Return the role ID, name, and permissions as JSON
+
         return response()->json([
             'id' => $role->id,
             'name' => $role->name,

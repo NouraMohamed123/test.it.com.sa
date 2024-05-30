@@ -111,8 +111,6 @@ class TasksController extends Controller
     public function store(Request $request)
     {
          $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('task_add')){
-// dd($request->all()); //
             $request->validate([
                 'title'           => 'required|string|max:255',
                 'summary'         => 'required|string|max:255',
@@ -120,7 +118,6 @@ class TasksController extends Controller
                 'start_date'      => 'required',
                 'end_date'        => 'required',
                 'status'          => 'required',
-                'company_id'      => 'nullable',
                 'priority'          => 'required',
             ]);
 
@@ -141,8 +138,7 @@ class TasksController extends Controller
 
             return response()->json(['success' => true]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
+
     }
 
     /**
@@ -167,8 +163,7 @@ class TasksController extends Controller
             'message' => 'task not found'
         ], 404);
     }
-        // }
-        // return abort('403', __('You are not authorized'));
+
 
     }
 
@@ -184,7 +179,7 @@ class TasksController extends Controller
     public function update(Request $request, $id)
     {
          $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('task_edit')){
+
 
             $request->validate([
                 'title'           => 'required|string|max:255',
@@ -215,8 +210,7 @@ class TasksController extends Controller
 
             return response()->json(['success' => true]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
+
     }
 
     /**
@@ -228,7 +222,7 @@ class TasksController extends Controller
     public function destroy($id)
     {
          $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('task_delete')){
+
 
             Task::whereId($id)->update([
                 'deleted_at' => Carbon::now(),
@@ -236,8 +230,7 @@ class TasksController extends Controller
 
             return response()->json(['success' => true]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
+
     }
 
       //-------------- Delete by selection  ---------------\\
@@ -245,7 +238,7 @@ class TasksController extends Controller
       public function delete_by_selection(Request $request)
       {
           $user_auth = Auth::guard('api')->user();
-        //  if($user_auth->can('task_delete')){
+
              $selectedIds = $request->selectedIds;
 
              foreach ($selectedIds as $task_id) {
@@ -254,8 +247,7 @@ class TasksController extends Controller
                 ]);
              }
              return response()->json(['success' => true]);
-        //  }
-        //  return abort('403', __('You are not authorized'));
+
       }
 
 
@@ -283,7 +275,7 @@ class TasksController extends Controller
     public function destroy_task_discussion($id)
     {
          $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('task_details')){
+
 
 
             TaskDiscussion::whereId($id)->update([
@@ -292,14 +284,13 @@ class TasksController extends Controller
 
             return response()->json(['success' => true]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
+
     }
 
     public function Create_task_documents(Request $request)
     {
          $user_auth = Auth::guard('api')->user();
-		// if ($user_auth->can('task_details')){
+
 
             $request->validate([
                 'title'         => 'required|string|max:255',
@@ -327,8 +318,6 @@ class TasksController extends Controller
 
             return response()->json(['success' => true]);
 
-        // }
-        // return abort('403', __('You are not authorized'));
     }
 
 
