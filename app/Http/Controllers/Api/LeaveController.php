@@ -23,10 +23,9 @@ class LeaveController extends Controller
      */
     public function index()
     {
-         $user_auth = Auth::guard('api')->user();
-
+            $user_auth = Auth::guard('api')->user();
+            if($user_auth->type == 3){
             $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-            if($employee && $employee->type == 3){
             $leaves = Leave::
             join('companies','companies.id','=','leaves.company_id')
             ->join('departments','departments.id','=','leaves.department_id')

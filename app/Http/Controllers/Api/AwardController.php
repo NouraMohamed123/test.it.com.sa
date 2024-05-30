@@ -25,9 +25,8 @@ class AwardController extends Controller
     public function index()
     {
         $user_auth = Auth::guard('api')->user();
-        $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-        if($employee && $employee->type == 3){
-
+            if($user_auth->type == 3){
+                $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
                 $awards = Award::
                 join('companies','companies.id','=','awards.company_id')
                 ->join('departments','departments.id','=','awards.department_id')

@@ -25,10 +25,8 @@ class TasksController extends Controller
     public function index()
     {
          $user_auth = Auth::guard('api')->user();
-         $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-
-            if($employee && $employee->type == 3){
-
+         if($user_auth->type == 3){
+             $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
             $count_not_started = Task::where('deleted_at', '=', null)->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
            ->where('employee_id', $employee->id)
             ->where('status', '=', 'not_started')

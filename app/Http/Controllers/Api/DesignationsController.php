@@ -22,8 +22,9 @@ class DesignationsController extends Controller
     {
 
         $user_auth = Auth::guard('api')->user();
+        if($user_auth->type == 3){
         $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-        if($employee && $employee->type == 3){
+
             $designations = Designation::with('department')
             ->where('deleted_at', '=', null)->where('company_id',$employee->company->id)
             ->orderBy('id', 'desc')

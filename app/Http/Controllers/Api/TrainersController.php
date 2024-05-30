@@ -20,8 +20,8 @@ class TrainersController extends Controller
     public function index()
     {
             $user_auth = Auth::guard('api')->user();
-            $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-            if($employee && $employee->type == 3){
+            if($user_auth->type == 3){
+             $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
             $trainers = Trainer::where('deleted_at', '=', null)->with('company:id,name')->where('company_id',$employee->company->id)->orderBy('id', 'desc')->get();
 
             }else{

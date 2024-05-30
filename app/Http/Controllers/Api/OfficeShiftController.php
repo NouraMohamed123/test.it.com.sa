@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\OfficeShift;
-use Illuminate\Http\Request;
 use DateTime;
 use Carbon\Carbon;
+use App\Models\Employee;
+use App\Models\OfficeShift;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
 class OfficeShiftController extends Controller
 {
     /**
@@ -17,11 +20,19 @@ class OfficeShiftController extends Controller
     public function index()
     {
 
-
+        $user_auth = Auth::guard('api')->user();
+        if($user_auth->type == 3){
+        $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
         $office_shifts = OfficeShift::where('deleted_at', '=', null)
-        ->with(['company']) // Replace 'relation1', 'relation2' with actual relation names
+        ->with(['company'])->where('company_id',$employee->company->id)
         ->orderBy('id', 'desc')
         ->paginate(50);
+        }else{
+            $office_shifts = OfficeShift::where('deleted_at', '=', null)
+            ->with(['company'])
+            ->orderBy('id', 'desc')
+            ->paginate(50);
+        }
         return response()->json([
             'success' => true,
             'data' => $office_shifts

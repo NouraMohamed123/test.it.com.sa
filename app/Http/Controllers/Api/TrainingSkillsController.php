@@ -17,7 +17,7 @@ class TrainingSkillsController extends Controller
      */
     public function index()
     {
-            $user_auth = Auth::guard('api')->user();
+
 
 
             $training_skills = TrainingSkill::where('deleted_at', '=', null)->orderBy('id', 'desc')->get();

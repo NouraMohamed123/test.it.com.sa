@@ -43,10 +43,8 @@ class EmployeeController extends Controller
     {
 
         $user_auth = Auth::guard('api')->user();
-        $employee =  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-
-        if ($employee && $employee->type == 3) {
-
+        if($user_auth->type == 3){
+            $employee =  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
             $employees = Employee::with('company:id,name', 'office_shift:id,name', 'department:id,department', 'designation:id,designation')
                 ->where('deleted_at', '=', null)
                 ->where('company_id', '=', $employee->company->id)
