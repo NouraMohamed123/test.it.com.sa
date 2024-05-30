@@ -80,7 +80,7 @@ class RoleController extends Controller
         if (!$role) {
             return response()->json(['message' => 'Role not found'], 404);
         }
-        $permissions = $role->permissions?->pluck('name');
+        $permissions = $role->permissions->pluck('name');
 
 
         return response()->json([
