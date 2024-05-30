@@ -55,8 +55,6 @@ class RoleController extends Controller
             'permissions' => 'required|array',
             'permissions.*' => 'exists:permissions,name',
         ]);
-
-        // Check if the validation fails
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation error',
@@ -64,15 +62,8 @@ class RoleController extends Controller
             ], 422);
         }
 
-
-        // Create the new role
         $role = Role::create(['name' => $request->input('name')]);
-
-        // Sync the permissions with the role
         $syncedPermissions = $role->syncPermissions($request->input('permissions'));
-
-
-        // Return a successful response
         return response()->json([
             'message' => 'Role created successfully',
             'data' => $role,
@@ -81,20 +72,6 @@ class RoleController extends Controller
 
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    // public function show(Role $role)
-    // {
-    //     $role =  Role::with('permissions')->where('id', $role->id)->first();
-
-    //     return response()->json($role);
-
-
-    // }
     public function show($id)
     {
 
@@ -125,12 +102,19 @@ class RoleController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'permissions' => 'required',
+            'permissions' => 'required|array',
+            'permissions.*' => 'exists:permissions,name',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+        $role->update(['name' => $request->input('name')]);
+        $syncedPermissions = $role->syncPermissions($request->input('permissions'));
 
-        $role->syncPermissions($request->input('permissions'));
-        $role->update(['name' => $request->name]);
 
         return response()->json([
             'data' => $role,
