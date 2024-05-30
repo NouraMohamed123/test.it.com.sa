@@ -248,16 +248,16 @@ class CompanyController extends Controller
     }
     public function QuickEntry(Request $request ,$id)
     {
-        $company = Company::findOrFail($id);
-        $employee = Employee::where('company_id', $company->id)->first();
 
-        if (!$employee) {
+        $user = User::where('company_id', $id)->first();
+
+        if (!$user) {
             return response()->json([
-                'message' => 'Not found employee for this company',
+                'message' => 'Not found user for this company',
             ], 401);
         }
 
-        $user = $employee->user;
+
 
         if (!$user) {
             return response()->json([
@@ -265,7 +265,7 @@ class CompanyController extends Controller
             ], 401);
         }
         $token = auth()->guard('api')->login($user);
-        $user = User::where('id', $user->id)->first();
+
         $role = Role::with('permissions')->where('id', $user->role_users_id)->first();
 
         if (!$role) {
