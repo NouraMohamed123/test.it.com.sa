@@ -23,7 +23,7 @@ class TrainingController extends Controller
     public function index()
     {
           $user_auth = Auth::guard('api')->user();
-          if($user_auth->type == 3  && $user_auth->type == 2){
+          if($user_auth->type == 3){
             $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
             $trainings = Training::where('deleted_at', '=', null)
             ->with('company:id,name','trainer:id,name','TrainingSkill:id,training_skill')
