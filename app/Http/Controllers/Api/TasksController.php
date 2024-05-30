@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Company;
 use App\Models\Project;
 use App\Models\Employee;
@@ -120,9 +121,8 @@ class TasksController extends Controller
                 'priority'          => 'required',
             ]);
             if($user_auth->type = 2){
-                $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-                $request['company_id'] =  $employee->company->id;
-                $request['project_id'] = $employee->project->id;
+              $user = User::where('id', Auth::guard('api')->user()->id)->first();
+                $request['company_id'] = $user->company->id;
                 }
             $task = Task::create([
                 'title'            => $request['title'],

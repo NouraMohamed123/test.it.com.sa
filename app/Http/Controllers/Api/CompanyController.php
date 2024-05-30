@@ -13,6 +13,7 @@ use Spatie\Permission\Models\Role;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class CompanyController extends Controller
 {
@@ -368,5 +369,42 @@ class CompanyController extends Controller
     return response()->json(['success' => true, 'data' => $createdCompanies]);
 
 }
+public function store_admin(Request $request)
+{
+     $user_auth = Auth::guard('api')->user();
+    $request->validate([
+        'username'  => 'required|string|max:255',
+        'email'     => 'required|string|email|max:255|unique:users',
+        'password'  => 'required|string|min:6|confirmed',
+        'password_confirmation' => 'required',
+        'avatar'    => 'nullable|image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
+        'status'    => 'required',
+        'role_id'=>'required|exists:roles,id',
+        'company_id'    => 'required',
+    ]);
 
+    if ($request->hasFile('avatar')) {
+        $image = $request->file('avatar');
+        $filename = time().'.'.$image->extension();
+        $image->move(public_path('/assets/images/users'), $filename);
+
+    } else {
+        $filename = 'no_avatar.png';
+    }
+    $user = User::create([
+        'username'  => $request['username'],
+        'email'     => $request['email'],
+        'avatar'    => $filename,
+        'password'  => Hash::make($request['password']),
+        'role_users_id'   => $request['role_id'],
+        'status'    => $request['status'],
+        'type' => 2,
+        'company_id' => $request['company_id'],
+    ]);
+    $role = Role::findById($request['role_id']);
+    $user->assignRole($role);
+
+    return response()->json(['success' => true]);
+
+}
 }

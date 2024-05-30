@@ -62,4 +62,8 @@ class User extends Authenticatable implements JWTSubject
 	{
         return $this->hasone('Spatie\Permission\Models\Role','id',"role_users_id");
 	}
+    public function company()
+    {
+        return $this->hasOne('App\Models\Company', 'id', 'company_id');
+    }
 }

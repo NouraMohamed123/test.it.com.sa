@@ -96,8 +96,8 @@ class ProjectController extends Controller
             'status'          => 'required',
         ]);
         if($user_auth->type = 2){
-            $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
-            $request['company_id'] =  $employee->company->id;
+            $user = User::where('id', Auth::guard('api')->user()->id)->first();
+            $request['company_id'] = $user->company->id;
          }
         $project  = Project::create([
             'title'            => $request['title'],
