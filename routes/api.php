@@ -63,7 +63,7 @@ Route::group([
 ], function ($router) {
     //roles
     Route::get('/roles', [RoleController::class, 'index']);
-    Route::get('/roles/{id}', [RoleController::class, 'index']);
+    Route::get('/roles/{id}', [RoleController::class, 'show']);
     Route::post('/roles', [RoleController::class, 'store']);
     //------------------------------- Jobs -----------------------\\
     //----------------------------------------------------------------\\
