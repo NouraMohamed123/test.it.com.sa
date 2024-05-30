@@ -26,10 +26,17 @@ class CompanyController extends Controller
     {
         $user_auth = Auth::guard('api')->user();
 
-
-        $companies = Company::where('deleted_at', '=', null)
+        if($user_auth->type == 2){
+            $companies = Company::where('deleted_at', '=', null)->where('id', '=', $user_auth->company->id)
             ->orderBy('id', 'desc')
             ->get();
+
+        }else{
+            $companies = Company::where('deleted_at', '=', null)
+            ->orderBy('id', 'desc')
+            ->get();
+        }
+
         return response()->json(['success' => true, 'data' => $companies]);
 
 

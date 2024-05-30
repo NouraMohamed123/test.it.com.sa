@@ -17,6 +17,10 @@ class Company extends Model
     //     "name",'email','phone','country'
     // ];
 
+    public function users()
+    {
+        return $this->hasMany('App\Models\User');
 
+    }
 
 }
