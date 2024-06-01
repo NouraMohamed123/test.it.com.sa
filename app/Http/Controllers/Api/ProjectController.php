@@ -22,7 +22,7 @@ class ProjectController extends Controller
     public function index()
     {
         $user_auth = Auth::guard('api')->user();
-        if($user_auth->type == 3){
+        if($user_auth->type == 3 ){
             $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
             $count_not_started = Project::whereNull('deleted_at')
             ->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
@@ -49,7 +49,33 @@ class ProjectController extends Controller
                 ->orderBy('id', 'desc')
                 ->get();
 
-        }else{
+        } elseif($user_auth->type == 2){
+            $count_not_started = Project::whereNull('deleted_at')
+            ->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
+             ->where('company_id', $user_auth->company->id)
+            ->where('status', 'not_started')
+            ->count();
+
+            $count_in_progress = Project::whereNull('deleted_at')->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
+             ->where('company_id', $user_auth->company->id)
+                ->where('status', 'progress')
+                ->count();
+            $count_cancelled = Project::whereNull('deleted_at')->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
+             ->where('company_id', $user_auth->company->id)
+                ->where('status', 'cancelled')
+                ->count();
+            $count_completed = Project::whereNull('deleted_at')->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
+             ->where('company_id', $user_auth->company->id)
+                ->where('status', 'completed')
+                ->count();
+            $projects = Project::with('company','assignedEmployees')->whereNull('deleted_at')->join('employee_project', 'projects.id', '=', 'employee_project.project_id')
+            ->where('company_id', $user_auth->company->id)
+
+                ->orderBy('id', 'desc')
+                ->get();
+
+        }
+        else{
 
             $count_not_started = Project::whereNull('deleted_at')
             ->where('status', 'not_started')

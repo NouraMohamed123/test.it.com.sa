@@ -15,10 +15,14 @@ class PoliciesController extends Controller
     public function index()
     {
         $user_auth = Auth::guard('api')->user();
-        if($user_auth->type == 3){
+        if($user_auth->type == 3  ){
             $employee =  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
             $policies = Policy::where('deleted_at', '=', null)->where('company_id', $employee->company->id)->orderBy('id', 'desc')->paginate(50);
-        } else {
+        } elseif($user_auth->type == 2){
+            $policies = Policy::where('deleted_at', '=', null)->where('company_id', $user_auth->company->id)->orderBy('id', 'desc')->paginate(50);
+
+        }
+        else {
             $policies = Policy::where('deleted_at', '=', null)->orderBy('id', 'desc')->paginate(50);
         }
 

@@ -21,13 +21,19 @@ class OfficeShiftController extends Controller
     {
 
         $user_auth = Auth::guard('api')->user();
-        if($user_auth->type == 3){
+        if($user_auth->type == 3 ){
         $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
         $office_shifts = OfficeShift::where('deleted_at', '=', null)
         ->with(['company'])->where('company_id',$employee->company->id)
         ->orderBy('id', 'desc')
         ->paginate(50);
-        }else{
+        }elseif($user_auth->type == 2){
+            $office_shifts = OfficeShift::where('deleted_at', '=', null)
+            ->with(['company'])->where('company_id',$user_auth->company->id)
+            ->orderBy('id', 'desc')
+            ->paginate(50);
+        }
+        else{
             $office_shifts = OfficeShift::where('deleted_at', '=', null)
             ->with(['company'])
             ->orderBy('id', 'desc')

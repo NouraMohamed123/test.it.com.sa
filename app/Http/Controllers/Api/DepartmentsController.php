@@ -16,7 +16,7 @@ class DepartmentsController extends Controller
     public function index()
     {
         $user_auth = Auth::guard('api')->user();
-        if($user_auth->type == 3){
+        if($user_auth->type == 3  ){
             $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
             $department = Department::leftjoin('employees', 'employees.id', '=', 'departments.department_head')
             ->join('companies', 'companies.id', '=', 'departments.company_id')->where('company_id',$employee->company->id)
@@ -24,7 +24,17 @@ class DepartmentsController extends Controller
             ->select('departments.*', 'employees.username AS employee_head', 'companies.name AS company_name')
             ->orderBy('id', 'desc')
             ->get();
-         } else{
+         }elseif($user_auth->type == 2){
+            $department = Department::leftjoin('employees', 'employees.id', '=', 'departments.department_head')
+            ->join('companies', 'companies.id', '=', 'departments.company_id')->where('company_id',$user_auth->company->id)
+            ->where('departments.deleted_at', '=', null)
+            ->select('departments.*', 'employees.username AS employee_head', 'companies.name AS company_name')
+            ->orderBy('id', 'desc')
+            ->get();
+
+
+        }
+          else{
             $department = Department::leftjoin('employees', 'employees.id', '=', 'departments.department_head')
             ->join('companies', 'companies.id', '=', 'departments.company_id')
             ->where('departments.deleted_at', '=', null)

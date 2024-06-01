@@ -24,7 +24,7 @@ class LeaveController extends Controller
     public function index()
     {
             $user_auth = Auth::guard('api')->user();
-            if($user_auth->type == 3){
+            if($user_auth->type == 3  ){
             $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
             $leaves = Leave::
             join('companies','companies.id','=','leaves.company_id')
@@ -39,7 +39,23 @@ class LeaveController extends Controller
             'departments.department AS department_name', 'departments.id AS department_id')
             ->orderBy('id', 'desc')
             ->get();
-            }else{
+            } elseif($user_auth->type == 2){
+                $leaves = Leave::
+            join('companies','companies.id','=','leaves.company_id')
+            ->join('departments','departments.id','=','leaves.department_id')
+            ->join('employees','employees.id','=','leaves.employee_id')
+            ->join('leave_types','leave_types.id','=','leaves.leave_type_id')
+            ->where('leaves.deleted_at' , '=', null)->where('company_id', $user_auth->company->id)
+            ->select('leaves.*',
+            'employees.username AS employee_name', 'employees.id AS employee_id',
+            'leave_types.title AS leave_type_title', 'leave_types.id AS leave_type_id',
+            'companies.name AS company_name', 'companies.id AS company_id',
+            'departments.department AS department_name', 'departments.id AS department_id')
+            ->orderBy('id', 'desc')
+            ->get();
+
+            }
+            else{
                 $leaves = Leave::
                 join('companies','companies.id','=','leaves.company_id')
                 ->join('departments','departments.id','=','leaves.department_id')

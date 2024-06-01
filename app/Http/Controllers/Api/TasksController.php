@@ -26,7 +26,7 @@ class TasksController extends Controller
     public function index()
     {
          $user_auth = Auth::guard('api')->user();
-         if($user_auth->type == 3){
+         if($user_auth->type == 3 ){
              $employee=  Employee::whereNull('deleted_at')->where('user_id', $user_auth->id)->first();
             $count_not_started = Task::where('deleted_at', '=', null)->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
            ->where('employee_id', $employee->id)
@@ -46,7 +46,28 @@ class TasksController extends Controller
             ->count();
             $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title')->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
             ->where('employee_id', $employee->id)->orderBy('id', 'desc')->get();
-            }else{
+            } elseif($user_auth->type == 2){
+
+                $count_not_started = Task::where('deleted_at', '=', null)->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
+               ->where('company_id', $user_auth->company->id)
+                 ->where('status', '=', 'not_started')
+                 ->count();
+                 $count_in_progress = Task::where('deleted_at', '=', null)->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
+               ->where('company_id', $user_auth->company->id)
+                 ->where('status', '=', 'progress')
+                 ->count();
+                 $count_cancelled = Task::where('deleted_at', '=', null)->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
+               ->where('company_id', $user_auth->company->id)
+                 ->where('status', '=', 'cancelled')
+                 ->count();
+                 $count_completed = Task::where('deleted_at', '=', null)->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
+               ->where('company_id', $user_auth->company->id)
+                 ->where('status', '=', 'completed')
+                 ->count();
+                 $tasks = Task::where('deleted_at', '=', null)->with('company:id,name','project:id,title')->join('employee_task', 'tasks.id', '=', 'employee_task.task_id')
+                ->where('company_id', $user_auth->company->id)->orderBy('id', 'desc')->get();
+            }
+            else{
                 $count_not_started = Task::where('deleted_at', '=', null)
                 ->where('status', '=', 'not_started')
                 ->count();
