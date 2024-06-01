@@ -204,10 +204,13 @@ class EmployeeController extends Controller
         $user_data['status'] = 1;
         $user_data['role_users_id'] = $request['role_users_id'];
 
+
+
         \DB::transaction(function () use ($request, $user_data, $data) {
             $user_data['type'] = 3;
             $user = User::create($user_data);
-            $user->syncRoles($request['role_users_id']);
+            $role = Role::findById($request['role_users_id']);
+            $user->assignRole($role);
 
             // $data['id'] = $user->id;
             $data['user_id'] = $user->id;
